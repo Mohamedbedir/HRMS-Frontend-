@@ -1,0 +1,142 @@
+src/
+└── app/
+    │
+    ├── core/
+    │   │
+    │   ├── guards/
+    │   │   ├── auth.guard.ts
+    │   │   ├── role.guard.ts
+    │   │   └── guest.guard.ts
+    │   │
+    │   ├── interceptors/
+    │   │   └── auth.interceptor.ts
+    │   │
+    │   ├── services/
+    │   │   ├── auth.service.ts
+    │   │   └── token.service.ts
+    │   │
+    │   ├── models/
+    │   │   ├── jwt-payload.ts
+    │   │   └── auth-response.ts
+    │   │
+    │   └── constants/
+    │       └── roles.ts
+    │
+    ├── shared/
+    │   │
+    │   ├── components/
+    │   │   ├── navbar/
+    │   │   ├── footer/
+    │   │   ├── loading/
+    │   │   ├── modal/
+    │   │   ├── pagination/
+    │   │   └── confirmation-dialog/
+    │   │
+    │   ├── directives/
+    │   │
+    │   ├── pipes/
+    │   │
+    │   └── models/
+    │       └── api-response.ts
+    │
+    ├── features/
+    │   │
+    │   ├── auth/
+    │   │   ├── pages/
+    │   │   │   ├── login/
+    │   │   │   └── register/
+    │   │   │
+    │   │   ├── models/
+    │   │   │   ├── login-request.ts
+    │   │   │   ├── login-response.ts
+    │   │   │   └── register-request.ts
+    │   │   │
+    │   │   └── services/
+    │   │       └── auth-api.service.ts
+    │   │
+    │   ├── dashboard/
+    │   │   ├── pages/
+    │   │   │   └── dashboard/
+    │   │   ├── components/
+    │   │   └── services/
+    │   │
+    │   ├── employees/
+    │   │   ├── pages/
+    │   │   │   ├── employee-list/
+    │   │   │   ├── employee-details/
+    │   │   │   ├── employee-create/
+    │   │   │   └── employee-edit/
+    │   │   │
+    │   │   ├── components/
+    │   │   │   ├── employee-card/
+    │   │   │   ├── employee-form/
+    │   │   │   └── employee-history/
+    │   │   │
+    │   │   ├── services/
+    │   │   │   └── employee.service.ts
+    │   │   │
+    │   │   └── models/
+    │   │       └── employee.ts
+    │   │
+    │   ├── departments/
+    │   │   ├── pages/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   └── models/
+    │   │
+    │   ├── positions/
+    │   │   ├── pages/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   └── models/
+    │   │
+    │   ├── attendance/
+    │   │   ├── pages/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   └── models/
+    │   │
+    │   ├── leave/
+    │   │   ├── pages/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   └── models/
+    │   │
+    │   ├── payroll/
+    │   │   ├── pages/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   └── models/
+    │   │
+    │   ├── performance/
+    │   │   ├── pages/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   └── models/
+    │   │
+    │   ├── recruitment/
+    │   │   ├── job-postings/
+    │   │   ├── candidates/
+    │   │   └── applications/
+    │   │
+    │   └── employee-documents/
+    │       ├── pages/
+    │       ├── components/
+    │       ├── services/
+    │       └── models/
+    │
+    ├── layouts/
+    │   │
+    │   ├── auth-layout/
+    │   │
+    │   ├── admin-layout/
+    │   │
+    │   ├── hr-layout/
+    │   │
+    │   ├── manager-layout/
+    │   │
+    │   ├── employee-layout/
+    │   │
+    │   └── recruiter-layout/
+    │
+    └── app.routes.ts
