@@ -1,1 +1,102 @@
-<p>login works!</p>
+<main class="login-page container-fluid min-vh-100 d-flex align-items-center justify-content-center p-3 p-lg-5">
+  <div class="login-shell row g-0 w-100 overflow-hidden rounded-4 shadow-lg">
+    <section class="login-visual col-lg-6 d-flex flex-column justify-content-between p-4 p-lg-5">
+      <a class="login-brand d-inline-flex align-items-center gap-2 text-decoration-none" href="/" aria-label="HRMS home">
+        <span class="brand-icon d-inline-flex align-items-center justify-content-center rounded-3">
+          <i class="bi bi-people-fill" aria-hidden="true"></i>
+        </span>
+        <span class="fw-semibold text-white">HRMS</span>
+      </a>
+
+      <div class="login-visual-content text-white">
+        <p class="eyebrow text-uppercase mb-2">People first. Work smarter.</p>
+        <h1 class="display-6 fw-semibold mb-3">Your people, all in one place.</h1>
+        <p class="visual-description mb-4">
+          A simpler way to manage your team, keep work moving, and focus on what matters.
+        </p>
+        <img class="login-illustration img-fluid" src="/login-illustration.svg" alt="HR team reviewing workforce data" />
+      </div>
+
+      <p class="visual-footer mb-0">A better workday starts here.</p>
+    </section>
+
+    <section class="login-form-panel col-lg-6 d-flex align-items-center justify-content-center p-4 p-md-5">
+      <div class="login-form-content w-100">
+        <div class="mb-4">
+          <p class="form-eyebrow text-uppercase mb-2">Welcome back</p>
+          <h2 class="fw-bold mb-2">Sign in to your account</h2>
+          <p class="text-secondary mb-0">Enter your details to continue to your workspace.</p>
+        </div>
+
+        @if (errorMessage) {
+        <div class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+        }
+
+        <form [formGroup]="loginform" (ngSubmit)="submit()">
+
+            <div class="mb-3">
+              <div class="form-floating">
+                <input type="email"
+                        [class.is-invalid]="email?.invalid && email.touched"
+                        [class.is-valid]="email?.valid && email.touched"
+                        placeholder="Enter your email"
+                        class="form-control" formControlName="email">
+
+                <label class="form-label">
+                    Email
+                </label>
+              </div>
+
+                @if ((email?.touched || email?.dirty) && email?.errors; as errors) {
+                        <div class="invalid-feedback d-block">
+                            @if (errors['required']) {
+                                <span>Email is required.</span>
+                            }
+                            @if (errors['email']) {
+                                <span>Enter a valid email address.</span>
+                            }
+                        </div>
+                    }
+
+            </div>
+
+            <div class="mb-3">
+              <div class="form-floating">
+                <input type="password"
+                [class.is-invalid]="password?.invalid && password.touched"
+                [class.is-valid]="password?.valid && password.touched"
+                placeholder="Enter your password"
+                class="form-control" formControlName="password">
+
+                <label class="form-label">
+                    Password
+                </label>
+              </div>
+
+                @if ((password?.touched || password?.dirty) && password?.errors; as errors) {
+                        <div class="invalid-feedback d-block">
+                            @if (errors['required']) {
+                                <span>Password is required.</span>
+                            }
+                        </div>
+                    }
+
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" [disabled]="loginform.invalid || isLoading">
+
+                @if (isLoading) {
+                Logging in...
+                } @else {
+                Login
+                }
+
+            </button>
+
+        </form>
+      </div>
+    </section>
+  </div>
+</main>

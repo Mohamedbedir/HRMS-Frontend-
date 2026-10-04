@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" fill="none">
+  <defs>
+    <linearGradient id="panel" x1="134" y1="52" x2="580" y2="425" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#EAF1FF"/>
+    </linearGradient>
+    <linearGradient id="shirt" x1="383" y1="246" x2="507" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#76A0FF"/>
+      <stop offset="1" stop-color="#4774D8"/>
+    </linearGradient>
+    <filter id="shadow" x="84" y="32" width="554" height="422" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+      <feOffset dy="12"/>
+      <feGaussianBlur stdDeviation="14"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix values="0 0 0 0 0.03 0 0 0 0 0.1 0 0 0 0 0.24 0 0 0 0.22 0"/>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+  <circle cx="365" cy="240" r="205" fill="#fff" fill-opacity=".06"/>
+  <circle cx="365" cy="240" r="164" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>
+  <g filter="url(#shadow)">
+    <rect x="112" y="70" width="496" height="350" rx="22" fill="url(#panel)"/>
+    <path d="M134 70h452a22 22 0 0 1 22 22v31H112V92a22 22 0 0 1 22-22Z" fill="#fff"/>
+    <circle cx="137" cy="96" r="5" fill="#F07C7C"/>
+    <circle cx="156" cy="96" r="5" fill="#F3C46C"/>
+    <circle cx="175" cy="96" r="5" fill="#69C7A1"/>
+    <rect x="206" y="89" width="117" height="14" rx="7" fill="#EDF1F8"/>
+    <rect x="143" y="148" width="190" height="20" rx="7" fill="#1C3158"/>
+    <rect x="143" y="179" width="130" height="10" rx="5" fill="#B9C5D9"/>
+    <rect x="143" y="220" width="185" height="146" rx="14" fill="#fff"/>
+    <rect x="160" y="239" width="76" height="9" rx="4.5" fill="#C4CEE0"/>
+    <path d="m164 329 30-33 27 16 45-48 40 36" stroke="#5480DF" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+    <circle cx="194" cy="296" r="5" fill="#5480DF"/>
+    <circle cx="221" cy="312" r="5" fill="#5480DF"/>
+    <circle cx="266" cy="264" r="5" fill="#5480DF"/>
+    <rect x="345" y="148" width="222" height="218" rx="14" fill="#fff"/>
+    <rect x="364" y="167" width="101" height="10" rx="5" fill="#C4CEE0"/>
+    <circle cx="399" cy="222" r="25" fill="#E7EDFC"/>
+    <path d="M387 223c0-8 5-14 12-14s12 6 12 14-5 14-12 14-12-6-12-14Z" fill="#E8B49A"/>
+    <path d="M378 255c3-13 11-20 21-20s18 7 21 20" fill="#6385D9"/>
+    <rect x="439" y="205" width="108" height="9" rx="4.5" fill="#657794"/>
+    <rect x="439" y="222" width="83" height="8" rx="4" fill="#D2D9E6"/>
+    <circle cx="399" cy="294" r="25" fill="#EAF5F1"/>
+    <path d="M387 294c0-8 5-14 12-14s12 6 12 14-5 14-12 14-12-6-12-14Z" fill="#D99C7D"/>
+    <path d="M378 326c3-13 11-20 21-20s18 7 21 20" fill="#4CA68F"/>
+    <rect x="439" y="277" width="108" height="9" rx="4.5" fill="#657794"/>
+    <rect x="439" y="294" width="74" height="8" rx="4" fill="#D2D9E6"/>
+    <rect x="439" y="311" width="95" height="8" rx="4" fill="#D2D9E6"/>
+  </g>
+  <g>
+    <circle cx="546" cy="104" r="39" fill="#fff"/>
+    <circle cx="546" cy="104" r="29" fill="#E7F6EF"/>
+    <path d="m533 104 9 9 18-20" stroke="#43A77F" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+  </g>
+  <g>
+    <rect x="83" y="334" width="139" height="82" rx="16" fill="#fff"/>
+    <circle cx="113" cy="375" r="18" fill="#EAF0FF"/>
+    <path d="M105 375h16m-8-8v16" stroke="#527BE0" stroke-linecap="round" stroke-width="3"/>
+    <rect x="140" y="361" width="62" height="8" rx="4" fill="#AAB8D1"/>
+    <rect x="140" y="378" width="43" height="7" rx="3.5" fill="#D4DCE9"/>
+  </g>
+  <g>
+    <circle cx="514" cy="372" r="29" fill="#E5B38E"/>
+    <path d="M485 371c1-24 14-38 34-36 17 1 25 13 25 32-8-4-15-12-18-19-9 11-23 17-41 17v6Z" fill="#263858"/>
+    <path d="M463 464c4-47 21-71 51-71s48 24 52 71H463Z" fill="url(#shirt)"/>
+    <path d="m500 400 15 18 15-18" stroke="#fff" stroke-opacity=".72" stroke-width="4"/>
+    <path d="M502 421h27l-13 43-14-43Z" fill="#fff" fill-opacity=".2"/>
+  </g>
+</svg>

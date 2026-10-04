@@ -1,1 +1,149 @@
-/* You can add global styles to this file, and also import other style files */
+/* Toastr renders in a global overlay, so its theme must be global as well. */
+#toast-container.toast-top-right {
+  top: 1.25rem;
+  right: 1.25rem;
+}
+
+#toast-container .ngx-toastr {
+  position: relative;
+  box-sizing: border-box;
+  width: min(390px, calc(100vw - 2rem));
+  margin: 0 0 0.75rem;
+  padding: 1rem 2.9rem 1rem 3.65rem;
+  overflow: hidden;
+  border: 1px solid #e5eaf2;
+  border-left: 4px solid #4779e3;
+  border-radius: 0.9rem;
+  background-color: #fff;
+  background-image: none;
+  color: #26344d;
+  opacity: 1;
+  box-shadow: 0 12px 34px rgba(25, 42, 73, 0.16);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+#toast-container .ngx-toastr:hover {
+  box-shadow: 0 16px 38px rgba(25, 42, 73, 0.2);
+  transform: translateY(-2px);
+}
+
+#toast-container .ngx-toastr::before {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf3ff;
+  color: #4779e3;
+  content: 'i';
+  font-size: 1rem;
+  font-weight: 700;
+  transform: translateY(-50%);
+}
+
+#toast-container .toast-success {
+  border-left-color: #24a477;
+}
+
+#toast-container .toast-success::before {
+  background: #e7f7f0;
+  color: #16855e;
+  content: '✓';
+}
+
+#toast-container .toast-error {
+  border-left-color: #df5360;
+}
+
+#toast-container .toast-error::before {
+  background: #fff0f1;
+  color: #cc3f4c;
+  content: '!';
+}
+
+#toast-container .toast-warning {
+  border-left-color: #e5a12b;
+}
+
+#toast-container .toast-warning::before {
+  background: #fff6e5;
+  color: #b7770c;
+  content: '!';
+}
+
+#toast-container .toast-info {
+  border-left-color: #4779e3;
+}
+
+#toast-container .toast-title {
+  margin-bottom: 0.2rem;
+  color: #1c2b45;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+#toast-container .toast-message {
+  color: #64718a;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+#toast-container .toast-close-button {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.65rem;
+  padding: 0;
+  color: #8792a5;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.8;
+  text-shadow: none;
+}
+
+#toast-container .toast-close-button:hover,
+#toast-container .toast-close-button:focus {
+  color: #26344d;
+  opacity: 1;
+}
+
+#toast-container .toast-progress {
+  height: 3px;
+  background-color: #4779e3;
+  opacity: 0.8;
+}
+
+#toast-container .toast-success .toast-progress {
+  background-color: #24a477;
+}
+
+#toast-container .toast-error .toast-progress {
+  background-color: #df5360;
+}
+
+#toast-container .toast-warning .toast-progress {
+  background-color: #e5a12b;
+}
+
+@media (max-width: 480px) {
+  #toast-container.toast-top-right {
+    top: 0.75rem;
+    right: 0.75rem;
+    left: 0.75rem;
+  }
+
+  #toast-container .ngx-toastr {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #toast-container .ngx-toastr {
+    transition: none;
+  }
+}
