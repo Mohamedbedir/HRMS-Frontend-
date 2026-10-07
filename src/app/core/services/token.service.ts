@@ -71,14 +71,34 @@ export class TokenService {
     return Number(payload.EmployeeId);
   }
 
+    getEmail(): string | null {
+
+    const payload = this.decodeToken();
+
+    if (!payload?.email)
+      return null;
+
+    return payload.email;
+  }
+
   getRoles(): string[] {
 
     const payload = this.decodeToken();
 
-    if (!payload?.role)
+    if (!payload)
       return [];
-    // check if role is arr or single value to return arr
-    return Array.isArray(payload.role) ? payload.role: [payload.role];
+
+    const roleClaims = [
+      payload.role,
+      payload.roles,
+      payload.Role,
+      payload.Roles,
+      payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+    ];
+
+    return roleClaims.flatMap(role =>
+      role ? (Array.isArray(role) ? role : [role]) : []
+    );
   }
 
   hasRole(role: string): boolean {

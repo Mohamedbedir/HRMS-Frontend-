@@ -4,6 +4,10 @@ export interface JwtPayload {
   EmployeeId?: string;
 
   role?: string | string[];
+  roles?: string | string[];
+  Role?: string | string[];
+  Roles?: string | string[];
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'?: string | string[];
 
   exp: number;
   iat: number;

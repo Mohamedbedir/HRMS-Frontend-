@@ -91,7 +91,16 @@
 .form-eyebrow {
   color: #5278c7;
 }
+.brand-logo {
+    width: 40px;
+    height: 40px;
 
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+}
 .login-form-content h2 {
   color: #17243d;
   font-size: clamp(1.6rem, 3vw, 2rem);

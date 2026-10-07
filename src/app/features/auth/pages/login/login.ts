@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from '@relynn/ngx-toastr';
+import { Roles } from '../../../../core/constants/roles';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -56,7 +57,10 @@ export class Login {
 
         this.isLoading = false;
         this.toastr.success('Login successful!', 'Success');
-        this.router.navigate(['auth/register']);
+        const destination = this.authService.hasRole(Roles.Admin)
+          ? ['/admin/dashboard']
+          : ['/dashboard'];
+        this.router.navigate(destination);
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
