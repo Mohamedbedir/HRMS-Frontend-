@@ -1,1 +1,225 @@
-<p>employees works!</p>
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+
+    <div class="d-flex flex-column flex-md-row
+           justify-content-between
+           align-items-md-center
+           gap-3 mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                Employees
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage and monitor organization employees.
+            </p>
+
+        </div>
+
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
+
+            <i class="bi bi-person-plus-fill me-2"></i>
+
+            Add Employee
+
+        </button>
+
+    </div>
+
+
+    <!-- Search + Filter -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-lg-6">
+
+                    <app-employee-search (searchChange)="onSearch($event)">
+                    </app-employee-search>
+
+                </div>
+
+
+                <div class="col-lg-6">
+
+                    <app-employee-filter (filterChange)="onFilterChange($event)">
+                    </app-employee-filter>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Results Header -->
+
+    @if (!isLoading && !hasError) {
+
+    <div class="d-flex justify-content-between
+             align-items-center mb-3">
+
+        <span class="text-muted">
+
+            {{ totalCount }} employees found
+
+        </span>
+
+        <span class="text-muted small">
+
+            Page {{ currentPage }} of {{ totalPages }}
+
+        </span>
+
+    </div>
+
+    }
+
+
+    <!-- Loading -->
+
+    @if (isLoading) {
+
+    <div class="row g-4">
+
+        @for (item of [1,2,3,4,5,6]; track item) {
+
+        <div class="col-xl-4 col-lg-6">
+
+            <div class="card border-0 shadow-sm placeholder-glow">
+
+                <div class="card-body">
+
+                    <div class="placeholder rounded-circle mb-3" style="width:52px;height:52px">
+                    </div>
+
+                    <div class="placeholder col-7 mb-2">
+                    </div>
+
+                    <div class="placeholder col-5 mb-3">
+                    </div>
+
+                    <div class="placeholder col-8 mb-2">
+                    </div>
+
+                    <div class="placeholder col-6">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+
+    <!-- Error -->
+
+    @if (hasError && !isLoading) {
+
+    <div class="text-center py-5">
+
+        <i class="bi bi-exclamation-triangle
+               text-danger fs-1">
+        </i>
+
+        <h5 class="mt-3">
+            Failed to load employees
+        </h5>
+
+        <p class="text-muted">
+            Something went wrong while loading employees.
+        </p>
+
+        <button class="btn btn-primary" (click)="loadEmployees()">
+
+            <i class="bi bi-arrow-clockwise me-2"></i>
+
+            Try Again
+
+        </button>
+
+    </div>
+
+    }
+
+
+    <!-- Employees -->
+
+    @if (!isLoading && !hasError) {
+
+    @if (employees().length > 0) {
+
+    <div class="row g-4">
+
+        @for (employee of employees(); track employee.id) {
+
+        <div class="col-xl-4 col-lg-6">
+
+            <app-employee-card [employee]="employee" (viewEmployee)="viewEmployee($event)"
+                (editEmployee)="editEmployee($event)">
+            </app-employee-card>
+
+        </div>
+
+        }
+
+    </div>
+
+
+    <!-- Pagination -->
+
+    <div class="mt-4">
+
+        <app-employee-pagination [currentPage]="currentPage" [totalPages]="totalPages"
+            [hasPreviousPage]="hasPreviousPage" [hasNextPage]="hasNextPage" (pageChange)="onPageChange($event)">
+        </app-employee-pagination>
+
+    </div>
+
+    }
+
+    @else {
+
+    <!-- Empty -->
+
+    <div class="text-center py-5">
+
+        <i class="bi bi-people
+                 text-muted fs-1">
+        </i>
+
+        <h5 class="mt-3">
+            No employees found
+        </h5>
+
+        <p class="text-muted">
+            Try changing your search or filters.
+        </p>
+
+    </div>
+
+    }
+
+    }
+
+</div>
+
+
+<app-employee-create-modal
+  (employeeCreated)="onEmployeeCreated()">
+</app-employee-create-modal>

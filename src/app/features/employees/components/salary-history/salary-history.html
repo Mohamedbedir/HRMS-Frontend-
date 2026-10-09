@@ -1,0 +1,45 @@
+<section class="card border-0 shadow-sm" aria-label="Salary History">
+    <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">Salary History</h5>
+
+        @if (isLoading()) {
+        <div class="text-center py-4" role="status">
+            <div class="spinner-border spinner-border-sm text-primary"></div>
+            <span class="visually-hidden">Loading salary history...</span>
+        </div>
+        } @else if (hasError()) {
+        <div class="alert alert-danger mb-0" role="alert">
+            Failed to load salary history. Please try again later.
+        </div>
+        } @else if (records().length === 0) {
+        <p class="text-muted mb-0">No salary history records found.</p>
+        } @else {
+        <div class="row g-3">
+            @for (record of records(); track record.id) {
+            <div class="col-12">
+                <div class="border rounded p-3">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="text-muted small">Salary</div>
+                            <strong>{{ record.salary | currency:'EGP':'symbol':'1.0-2':'en-EG' }}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-muted small">Start Date</div>
+                            <strong>{{ record.startDate | date:'dd MMM yyyy' }}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-muted small">End Date</div>
+                            <strong>{{ record.endDate | dateOrFallback }}</strong>
+                        </div>
+                        <div class="col-12">
+                            <div class="text-muted small">Reason</div>
+                            <strong>{{ record.reason || '—' }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</section>

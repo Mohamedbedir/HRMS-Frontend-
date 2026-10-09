@@ -1,0 +1,87 @@
+<div class="filter-container">
+
+    <div class="row g-3">
+
+        <!-- Status -->
+
+        <div class="col-md-4">
+
+            <label class="form-label">
+                Status
+            </label>
+
+            <select class="form-select" [(ngModel)]="status" (change)="applyFilters()">
+
+                <option value="">
+                    All Statuses
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Suspended">
+                    Suspended
+                </option>
+
+                <option value="Terminated">
+                    Terminated
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Order -->
+
+        <div class="col-md-4">
+
+            <label class="form-label">
+                Sort By
+            </label>
+
+            <select class="form-select" [(ngModel)]="orderBy" (change)="applyFilters()">
+
+                <option value="Id">
+                    Default Sorting
+                </option>
+
+                <option value="FirstName">
+                    First Name
+                </option>
+
+                <option value="LastName">
+                    Last Name
+                </option>
+
+                <option value="DepartmentName">
+                    Department
+                </option>
+
+                <option value="HireDate">
+                    Hire Date
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Reset -->
+
+        <div class="col-md-4 d-flex align-items-end">
+
+            <button type="button" class="btn btn-outline-secondary w-100" (click)="resetFilters()">
+
+                <i class="bi bi-arrow-counterclockwise me-2"></i>
+
+                Reset Filters
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

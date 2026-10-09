@@ -1,0 +1,385 @@
+<div class="container-fluid py-4">
+
+    <!-- Loading -->
+
+    @if (isLoading) {
+
+    <div class="text-center py-5">
+
+        <div class="spinner-border text-primary">
+        </div>
+
+        <p class="text-muted mt-3">
+            Loading employee...
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- Error -->
+
+    @if (hasError && !isLoading) {
+
+    <div class="text-center py-5">
+
+        <i class="bi bi-person-x text-danger display-4">
+        </i>
+
+        <h4 class="mt-3">
+            Employee not found
+        </h4>
+
+        <p class="text-muted">
+            We couldn't load the employee information.
+        </p>
+
+        <button class="btn btn-primary" (click)="goBack()">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back to Employees
+
+        </button>
+
+    </div>
+
+    }
+
+
+    @if (employee() && !isLoading && !hasError) {
+
+    <!-- Header -->
+
+    <div class="d-flex flex-column flex-md-row
+             justify-content-between
+             align-items-md-center
+             gap-3 mb-4">
+
+        <div>
+
+            <button class="btn btn-link text-decoration-none
+                 p-0 mb-2" (click)="goBack()">
+
+                <i class="bi bi-arrow-left me-2"></i>
+
+                Back to Employees
+
+            </button>
+
+            <h2 class="fw-bold mb-1">
+                Employee Details
+            </h2>
+
+        </div>
+
+
+        <button class="btn btn-primary" (click)="editEmployee()">
+
+            <i class="bi bi-pencil me-2"></i>
+
+            Edit Employee
+
+        </button>
+
+    </div>
+
+
+    <!-- Profile Header -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex flex-column flex-md-row
+                 align-items-md-center gap-3">
+
+                <!-- Avatar -->
+
+                <div class="employee-avatar">
+
+                    {{ initials }}
+
+                </div>
+
+
+                <!-- Info -->
+
+                <div class="flex-grow-1">
+
+                    <div class="d-flex flex-wrap
+                     align-items-center gap-2">
+
+                        <h3 class="fw-bold mb-0">
+
+                            {{ employee()!.firstName }}
+                            {{ employee()!.lastName }}
+
+                        </h3>
+
+                        <span class="badge rounded-pill px-3 py-2" [class]="statusClass">
+
+                            {{ employee()!.status }}
+
+                        </span>
+
+                    </div>
+
+                    <p class="text-muted mb-1 mt-1">
+
+                        {{ employee()!.positionTitle }}
+
+                    </p>
+
+                    <small class="text-muted">
+
+                        {{ employee()!.employeeNumber }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <ul class="nav nav-tabs mb-4" role="tablist" aria-label="Employee information">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="activeTab === 'overview'"
+                [attr.aria-selected]="activeTab === 'overview'" role="tab" type="button"
+                (click)="selectTab('overview')">
+                Employee Details
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="activeTab === 'employment-history'"
+                [attr.aria-selected]="activeTab === 'employment-history'" role="tab" type="button"
+                (click)="selectTab('employment-history')">
+                Employee History
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" [class.active]="activeTab === 'salary-history'"
+                [attr.aria-selected]="activeTab === 'salary-history'" role="tab" type="button"
+                (click)="selectTab('salary-history')">
+                Salary History
+            </button>
+        </li>
+    </ul>
+
+    @if (activeTab === 'overview') {
+    <div class="row g-4">
+        <!-- Personal Information -->
+
+        <div class="col-xl-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person me-2 text-primary">
+                        </i>
+
+                        Personal Information
+
+                    </h5>
+
+
+                    <div class="info-row">
+
+                        <span>Email</span>
+
+                        <strong>
+                            {{ employee()!.email }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Phone</span>
+
+                        <strong>
+                            {{ employee()!.phone }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Gender</span>
+
+                        <strong>
+                            {{ employee()!.gender }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Birth Date</span>
+
+                        <strong>
+
+                            @if (employee()!.birthDate) {
+
+                            {{ employee()!.birthDate | date:'dd MMM yyyy' }}
+
+                            }
+                            @else {
+
+                            —
+
+                            }
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Address</span>
+
+                        <strong>
+                            {{ employee()!.address }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Employment Information -->
+
+        <div class="col-xl-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-briefcase me-2 text-primary">
+                        </i>
+
+                        Employment Information
+
+                    </h5>
+
+
+                    <div class="info-row">
+
+                        <span>Department</span>
+
+                        <strong>
+                            {{ employee()!.departmentName }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Position</span>
+
+                        <strong>
+                            {{ employee()!.positionTitle }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Manager</span>
+
+                        <strong>
+
+                            @if (employee()!.managerName?.trim()) {
+
+                            {{ employee()!.managerName }}
+
+                            }
+                            @else {
+
+                            No Manager
+
+                            }
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Hire Date</span>
+
+                        <strong>
+
+                            {{ employee()!.hireDate | date:'dd MMM yyyy' }}
+
+                        </strong>
+
+                    </div>
+
+
+                     <div class="info-row">
+
+                        <span>Termination Date</span>
+
+                        <strong>
+
+                            {{ employee()!.terminationDate | dateOrFallback }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span>Salary</span>
+
+                        <strong>
+
+                            {{ employee()!.salary | currency:'EGP':'symbol':'1.0-2':'en-EG' }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+    @if (activeTab === 'employment-history') {
+    <app-employment-history [employeeId]="employee()!.id"></app-employment-history>
+    }
+
+    @if (activeTab === 'salary-history') {
+    <app-salary-history [employeeId]="employee()!.id"></app-salary-history>
+    }
+
+    }
+
+</div>

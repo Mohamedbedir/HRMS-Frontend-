@@ -1,0 +1,53 @@
+@if (totalPages > 1) {
+
+<nav aria-label="Employees pagination">
+
+    <ul class="pagination justify-content-center mb-0">
+
+        <!-- Previous -->
+
+        <li class="page-item" [class.disabled]="!hasPreviousPage">
+
+            <button class="page-link" [disabled]="!hasPreviousPage" (click)="goToPage(currentPage - 1)">
+
+                <i class="bi bi-chevron-left"></i>
+
+            </button>
+
+        </li>
+
+
+        <!-- Pages -->
+
+        @for (page of pages; track page) {
+
+        <li class="page-item" [class.active]="page === currentPage">
+
+            <button class="page-link" (click)="goToPage(page)">
+
+                {{ page }}
+
+            </button>
+
+        </li>
+
+        }
+
+
+        <!-- Next -->
+
+        <li class="page-item" [class.disabled]="!hasNextPage">
+
+            <button class="page-link" [disabled]="!hasNextPage" (click)="goToPage(currentPage + 1)">
+
+                <i class="bi bi-chevron-right"></i>
+
+            </button>
+
+        </li>
+
+    </ul>
+
+</nav>
+
+}

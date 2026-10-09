@@ -45,6 +45,20 @@ export const routes: Routes = [
     },
 
     {
+      path: 'employees/:id/edit',
+      loadComponent: () =>
+        import('./features/employees/pages/employee-edit/employee-edit')
+          .then(m => m.EmployeeEdit)
+    },
+
+    {
+      path: 'employees/:id',
+      loadComponent: () =>
+        import('./features/employees/pages/employee-view/employee-view')
+          .then(m => m.EmployeeView)
+    },
+
+    {
       path: 'departments',
       loadComponent: () =>
         import('./features/departments/pages/departments/departments')

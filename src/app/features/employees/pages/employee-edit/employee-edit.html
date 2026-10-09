@@ -1,0 +1,203 @@
+<div class="container-fluid py-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+        <div>
+            <button type="button" class="btn btn-link text-decoration-none p-0 mb-2" (click)="goBack()">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Employee
+            </button>
+            <h2 class="fw-bold mb-1">Edit Employee</h2>
+            @if (employeeName) {
+            <p class="text-muted mb-0">{{ employeeName }}</p>
+            }
+        </div>
+    </div>
+
+    @if (isLoading()) {
+    <div class="text-center py-5" role="status">
+        <div class="spinner-border text-primary"></div>
+        <p class="text-muted mt-3">Loading employee data...</p>
+    </div>
+    } @else if (hasLoadError()) {
+    <div class="alert alert-danger" role="alert">
+        <p class="mb-3">Employee details or required form data could not be loaded.</p>
+        <button type="button" class="btn btn-outline-danger" (click)="retryLoad()">Try Again</button>
+    </div>
+    } @else {
+    <form [formGroup]="employeeForm" (ngSubmit)="submit()" class="card edit-form border-0 shadow-sm">
+        <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+            <div class="d-flex align-items-center gap-3">
+                <div class="edit-form-icon">
+                    <i class="bi bi-person-gear"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1">Employee Profile</h5>
+                    <p class="text-muted small mb-0">Update personal and employment information.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <section class="edit-form-section">
+                <h6 class="edit-form-section-title">
+                    <i class="bi bi-person me-2"></i>Personal Information
+                </h6>
+                <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input id="firstName" class="form-control" formControlName="firstName"
+                        [class.is-invalid]="controlError('firstName')"
+                        [class.is-valid]="isControlValid('firstName')">
+                    @if (controlError('firstName'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input id="lastName" class="form-control" formControlName="lastName"
+                        [class.is-invalid]="controlError('lastName')"
+                        [class.is-valid]="isControlValid('lastName')">
+                    @if (controlError('lastName'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" type="email" class="form-control" formControlName="email"
+                        [class.is-invalid]="controlError('email')"
+                        [class.is-valid]="isControlValid('email')">
+                    @if (controlError('email'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input id="phone" type="tel" class="form-control" formControlName="phone"
+                        [class.is-invalid]="controlError('phone')"
+                        [class.is-valid]="isControlValid('phone')">
+                    @if (controlError('phone'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-12">
+                    <label for="address" class="form-label">Address</label>
+                    <input id="address" class="form-control" formControlName="address"
+                        [class.is-invalid]="controlError('address')"
+                        [class.is-valid]="isControlValid('address')">
+                    @if (controlError('address'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <label for="birthDate" class="form-label">Birth Date</label>
+                    <input id="birthDate" type="date" class="form-control" formControlName="birthDate"
+                        [class.is-invalid]="controlError('birthDate')"
+                        [class.is-valid]="isControlValid('birthDate')">
+                    @if (controlError('birthDate'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <label for="hireDate" class="form-label">Hire Date</label>
+                    <input id="hireDate" type="date" class="form-control" formControlName="hireDate"
+                        [class.is-invalid]="controlError('hireDate')"
+                        [class.is-valid]="isControlValid('hireDate')">
+                    @if (controlError('hireDate'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <label for="terminationDate" class="form-label">Termination Date</label>
+                    <input id="terminationDate" type="date" class="form-control" formControlName="terminationDate"
+                        [class.is-valid]="isControlValid('terminationDate')">
+                </div>
+                </div>
+            </section>
+
+            <section class="edit-form-section">
+                <h6 class="edit-form-section-title">
+                    <i class="bi bi-briefcase me-2"></i>Employment Information
+                </h6>
+                <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="salary" class="form-label">Salary</label>
+                    <input id="salary" type="number" min="0" step="any" class="form-control"
+                        formControlName="salary" [class.is-invalid]="controlError('salary')"
+                        [class.is-valid]="isControlValid('salary')">
+                    @if (controlError('salary'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" class="form-select" formControlName="status"
+                        [class.is-invalid]="controlError('status')"
+                        [class.is-valid]="isControlValid('status')">
+                        <option value="Active">Active</option>
+                        <option value="Suspended">Suspended</option>
+                        <option value="Terminated">Terminated</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select id="gender" class="form-select" formControlName="gender"
+                        [class.is-invalid]="controlError('gender')"
+                        [class.is-valid]="isControlValid('gender')">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="departmentId" class="form-label">Department</label>
+                    <select id="departmentId" class="form-select" formControlName="departmentId"
+                        [class.is-invalid]="controlError('departmentId')"
+                        [class.is-valid]="isControlValid('departmentId')">
+                        <option [ngValue]="null">Select Department</option>
+                        @for (department of departments(); track department.id) {
+                        <option [ngValue]="department.id">{{ department.name }}</option>
+                        }
+                    </select>
+                    @if (controlError('departmentId'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <label for="positionId" class="form-label">Position</label>
+                    <select id="positionId" class="form-select" formControlName="positionId"
+                        [class.is-invalid]="controlError('positionId')"
+                        [class.is-valid]="isControlValid('positionId')">
+                        <option [ngValue]="null">Select Position</option>
+                        @for (position of positions(); track position.id) {
+                        <option [ngValue]="position.id">{{ position.title }}</option>
+                        }
+                    </select>
+                    @if (controlError('positionId'); as error) {
+                    <div class="invalid-feedback">{{ error }}</div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <label for="managerId" class="form-label">Manager</label>
+                    <select id="managerId" class="form-select" formControlName="managerId"
+                        [class.is-valid]="isControlValid('managerId')">
+                        <option [ngValue]="null">No Manager</option>
+                        @for (manager of managers(); track manager.id) {
+                        <option [ngValue]="manager.id">{{ manager.firstName }} {{ manager.lastName }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            </section>
+        </div>
+        <div class="card-footer bg-white border-top d-flex justify-content-end gap-2 p-4">
+            <button type="button" class="btn btn-light px-4" [disabled]="isSubmitting()" (click)="goBack()">Cancel</button>
+            <button type="submit" class="btn btn-primary px-4" [disabled]="isSubmitting()">
+                @if (isSubmitting()) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Saving...
+                } @else {
+                <i class="bi bi-check-lg me-2"></i>
+                Save Changes
+                }
+            </button>
+        </div>
+    </form>
+    }
+</div>

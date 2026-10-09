@@ -1,0 +1,24 @@
+<div class="search-box">
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            <i class="bi bi-search"></i>
+        </span>
+
+        <input type="text" class="form-control" placeholder="Search employees..." [(ngModel)]="searchValue"
+            (input)="onSearch()" />
+
+        @if (searchValue) {
+
+        <button type="button" class="btn btn-outline-secondary" (click)="clearSearch()">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+        }
+
+    </div>
+
+</div>

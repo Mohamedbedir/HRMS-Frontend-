@@ -1,0 +1,49 @@
+<section class="card border-0 shadow-sm" aria-label="Employee History">
+    <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">Employee History</h5>
+
+        @if (isLoading()) {
+        <div class="text-center py-4" role="status">
+            <div class="spinner-border spinner-border-sm text-primary"></div>
+            <span class="visually-hidden">Loading employee history...</span>
+        </div>
+        } @else if (hasError()) {
+        <div class="alert alert-danger mb-0" role="alert">
+            Failed to load employee history. Please try again later.
+        </div>
+        } @else if (records().length === 0) {
+        <p class="text-muted mb-0">No employee history records found.</p>
+        } @else {
+        <div class="row g-3">
+            @for (record of records(); track record.id) {
+            <div class="col-12">
+                <div class="border rounded p-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="text-muted small">Start Date</div>
+                            <strong>{{ record.startDate | date:'dd MMM yyyy' }}</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-muted small">End Date</div>
+                            <strong>{{ record.endDate | dateOrFallback }}</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-muted small">Department</div>
+                            <strong>{{ record.departmentName }}</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-muted small">Position</div>
+                            <strong>{{ record.positionTitle }}</strong>
+                        </div>
+                        <div class="col-12">
+                            <div class="text-muted small">Reason</div>
+                            <strong>{{ record.reason || '—' }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</section>

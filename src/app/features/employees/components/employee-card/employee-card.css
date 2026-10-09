@@ -1,0 +1,32 @@
+.employee-card {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.employee-card:hover {
+  transform: translateY(-3px);
+}
+
+.employee-card:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.employee-avatar {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary);
+
+  font-weight: 600;
+  font-size: 1rem;
+}

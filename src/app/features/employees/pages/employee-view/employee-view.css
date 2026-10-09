@@ -1,0 +1,58 @@
+.employee-avatar {
+  width: 80px;
+  height: 80px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary);
+
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 1rem;
+
+  padding: 0.9rem 0;
+
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.info-row:last-child {
+  border-bottom: 0;
+}
+
+.info-row span {
+  color: var(--bs-secondary-color);
+}
+
+.info-row strong {
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
+}
+
+@media (max-width: 576px) {
+
+  .info-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-row strong {
+    max-width: 100%;
+    text-align: left;
+  }
+
+}
