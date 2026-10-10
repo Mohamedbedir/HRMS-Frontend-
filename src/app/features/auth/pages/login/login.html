@@ -40,7 +40,7 @@
               <div class="form-floating">
                 <input type="email"
                         [class.is-invalid]="email?.invalid && email.touched"
-                        [class.is-valid]="email?.valid && email.touched"
+                        [class.is-valid]="email?.valid && (email.touched || email.dirty)"
                         placeholder="Enter your email"
                         class="form-control" formControlName="email">
 
@@ -66,7 +66,7 @@
               <div class="form-floating">
                 <input type="password"
                 [class.is-invalid]="password?.invalid && password.touched"
-                [class.is-valid]="password?.valid && password.touched"
+                [class.is-valid]="password?.valid && (password.touched || email.dirty)"
                 placeholder="Enter your password"
                 class="form-control" formControlName="password">
 
