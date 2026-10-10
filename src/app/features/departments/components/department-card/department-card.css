@@ -1,0 +1,19 @@
+.department-card {
+  background-color: var(--bs-tertiary-bg);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.department-card:hover {
+  transform: translateY(-3px);
+}
+
+.department-card:focus-within {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.department-card-actions {
+  position: relative;
+  z-index: 2;
+}

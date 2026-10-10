@@ -1,4 +1,5 @@
 .employee-card {
+  background-color: var(--bs-tertiary-bg);
   cursor: pointer;
   transition:
     transform 0.2s ease,

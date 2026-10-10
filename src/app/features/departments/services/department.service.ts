@@ -15,4 +15,12 @@ export class DepartmentService {
   GetAll(): Observable<ApiResponse<DepartmentResponse[]>> {
     return this.http.get<ApiResponse<DepartmentResponse[]>>(`${this.apiUrl}`);
   }
+
+  GetdepartmentByid(id:number): Observable<ApiResponse<DepartmentResponse>> {
+    return this.http.get<ApiResponse<DepartmentResponse>>(`${this.apiUrl}/${id}`);
+  }
+
+  Deletedepartment(id:number): Observable<ApiResponse<string>> {
+    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/${id}`);
+  }
 }

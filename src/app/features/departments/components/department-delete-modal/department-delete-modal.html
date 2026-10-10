@@ -1,0 +1,48 @@
+@if (department) {
+  <div class="department-delete-backdrop" (click)="closed.emit()">
+    <section
+      class="card department-delete-modal border-0 shadow-lg"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="department-delete-title"
+      aria-describedby="department-delete-message"
+      (click)="$event.stopPropagation()">
+      <div class="card-body p-4">
+        <div class="d-flex gap-3 align-items-start">
+          <div class="delete-icon text-danger" aria-hidden="true">
+            <i class="bi bi-trash3"></i>
+          </div>
+          <div>
+            <h2 id="department-delete-title" class="h5 fw-bold">Delete department?</h2>
+            <p id="department-delete-message" class="text-body-secondary mb-0">
+              Are you sure you want to delete <strong>{{ department.name }}</strong>? This action cannot be undone.
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            [disabled]="isDeleting"
+            (click)="closed.emit()">
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            [disabled]="isDeleting"
+            (click)="confirmDelete()">
+            @if (isDeleting) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Deleting...
+            } @else {
+              <i class="bi bi-trash3 me-2" aria-hidden="true"></i>
+              Delete
+            }
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+}

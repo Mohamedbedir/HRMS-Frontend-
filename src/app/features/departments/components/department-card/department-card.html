@@ -1,0 +1,53 @@
+<article class="card department-card h-100 border-0 shadow-sm">
+  <div class="card-body d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-start gap-3">
+      <a
+        class="department-card-link stretched-link text-decoration-none text-body flex-grow-1"
+        [routerLink]="['/admin/departments', department.id]"
+        [attr.aria-label]="'View details for ' + department.name">
+        <h5 class="card-title fw-semibold mb-2">{{ department.name }}</h5>
+        <span
+          class="badge rounded-pill"
+          [class.text-bg-success]="department.isActive"
+          [class.text-bg-secondary]="!department.isActive">
+          {{ department.isActive ? 'Active' : 'Inactive' }}
+        </span>
+        <p class="card-text text-muted mt-3 mb-0">
+          {{ department.description || 'No description available.' }}
+        </p>
+      </a>
+
+      <div class="department-card-actions dropdown">
+        <button
+          type="button"
+          class="btn btn-sm btn-light"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          [attr.aria-label]="'Actions for ' + department.name"
+          (click)="$event.stopPropagation()">
+          <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <button
+              type="button"
+              class="dropdown-item"
+              (click)="$event.stopPropagation(); edit.emit(department)">
+              <i class="bi bi-pencil me-2" aria-hidden="true"></i>
+              Edit
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="dropdown-item text-danger"
+              (click)="$event.stopPropagation(); delete.emit(department)">
+              <i class="bi bi-trash me-2" aria-hidden="true"></i>
+              Delete
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</article>

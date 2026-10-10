@@ -1,0 +1,65 @@
+<div class="container-fluid py-4">
+  <button type="button" class="btn btn-outline-secondary mb-4" (click)="goBack()">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>
+    Back to Departments
+  </button>
+
+  @if (isLoading()) {
+    <div class="card border-0 shadow-sm placeholder-glow" aria-label="Loading department details">
+      <div class="card-body p-4">
+        <div class="placeholder col-4 mb-4"></div>
+        <div class="placeholder col-8 mb-3"></div>
+        <div class="placeholder col-6"></div>
+      </div>
+    </div>
+  } @else if (hasError()) {
+    <div class="text-center py-5">
+      <i class="bi bi-exclamation-triangle text-danger fs-1" aria-hidden="true"></i>
+      <h2 class="h5 mt-3">Failed to load department details</h2>
+      <p class="text-body-secondary">The department could not be loaded. Please try again.</p>
+      <button type="button" class="btn btn-primary" (click)="retry()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>
+        Try Again
+      </button>
+    </div>
+  } @else if (department(); as item) {
+    <article class="card department-details-card border-0 shadow-sm">
+      <div class="card-body p-4 p-lg-5">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-4">
+          <div>
+            <p class="text-primary fw-semibold mb-2">
+              <i class="bi bi-diagram-3 me-2" aria-hidden="true"></i>
+              Department
+            </p>
+            <h1 class="h2 fw-bold mb-0">{{ item.name }}</h1>
+          </div>
+          <span
+            class="badge rounded-pill fs-6"
+            [class.text-bg-success]="item.isActive"
+            [class.text-bg-secondary]="!item.isActive">
+            {{ item.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+
+        <section class="department-details-section">
+          <h2 class="h6 fw-semibold">Description</h2>
+          <p class="text-body-secondary mb-0">
+            {{ item.description || 'No description available.' }}
+          </p>
+        </section>
+
+        <dl class="row g-3 mt-3 mb-0">
+          
+          <div class="col-sm-6">
+            <dt class="text-body-secondary small">Created</dt>
+            <dd class="fw-medium mb-0">{{ item.createdAt | date:'mediumDate' }}</dd>
+          </div>
+          <div class="col-sm-6">
+            <dt class="text-body-secondary small">Last updated</dt>
+            <dd class="fw-medium mb-0">{{ item.updatedAt | date:'mediumDate' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </article>
+  }
+</div>

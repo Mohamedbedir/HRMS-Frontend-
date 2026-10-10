@@ -1,0 +1,26 @@
+.department-delete-backdrop {
+  position: fixed;
+  z-index: 1060;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.department-delete-modal {
+  width: min(100%, 28rem);
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.delete-icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bs-danger-bg-subtle);
+  font-size: 1.25rem;
+}

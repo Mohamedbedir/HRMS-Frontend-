@@ -1,0 +1,10 @@
+.department-details-card {
+  background: var(--bs-tertiary-bg);
+}
+
+.department-details-section {
+  padding: 1.25rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  background: var(--bs-body-bg);
+}
