@@ -78,6 +78,12 @@ export const routes: Routes = [
         import('./features/positions/pages/positions/positions')
           .then(m => m.Positions)
     },
+     {
+      path: 'positions/:id',
+      loadComponent: () =>
+        import('./features/positions/pages/position-details/position-details')
+          .then(m => m.PositionDetails)
+    },
 
     {
       path: '',redirectTo: 'dashboard',pathMatch: 'full'

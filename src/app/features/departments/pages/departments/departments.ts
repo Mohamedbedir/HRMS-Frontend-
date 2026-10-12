@@ -1,13 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DepartmentCard } from '../../components/department-card/department-card';
+import { DepartmentCreateModal } from '../../components/department-create-modal/department-create-modal';
 import { DepartmentDeleteModal } from '../../components/department-delete-modal/department-delete-modal';
+import { DepartmentEditModal } from '../../components/department-edit-modal/department-edit-modal';
 import { DepartmentResponse } from '../../models/department-response';
 import { DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-departments',
   standalone: true,
-  imports: [DepartmentCard, DepartmentDeleteModal],
+  imports: [DepartmentCard, DepartmentCreateModal, DepartmentDeleteModal, DepartmentEditModal],
   styleUrl: './departments.css',
   templateUrl: './departments.html',
 })
@@ -18,6 +20,8 @@ export class Departments implements OnInit {
   isLoading = signal(true);
   hasError = signal(false);
   notice = signal<string | null>(null);
+  isCreateModalOpen = signal(false);
+  departmentPendingEdit = signal<DepartmentResponse | null>(null);
   departmentPendingDelete = signal<DepartmentResponse | null>(null);
 
   ngOnInit(): void {
@@ -48,11 +52,29 @@ export class Departments implements OnInit {
   }
 
   createDepartment(): void {
-    this.notice.set('Department creation is not available yet because the API endpoint is not implemented.');
+    this.isCreateModalOpen.set(true);
   }
 
-  editDepartment(): void {
-    this.notice.set('Department editing is not available yet because the API endpoint is not implemented.');
+  closeCreateModal(): void {
+    this.isCreateModalOpen.set(false);
+  }
+
+  onDepartmentCreated(): void {
+    this.closeCreateModal();
+    this.loadDepartments();
+  }
+
+  editDepartment(department: DepartmentResponse): void {
+    this.departmentPendingEdit.set(department);
+  }
+
+  closeEditModal(): void {
+    this.departmentPendingEdit.set(null);
+  }
+
+  onDepartmentUpdated(): void {
+    this.closeEditModal();
+    this.loadDepartments();
   }
 
   deleteDepartment(department: DepartmentResponse): void {

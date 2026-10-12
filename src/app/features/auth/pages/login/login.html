@@ -66,7 +66,7 @@
               <div class="form-floating">
                 <input type="password"
                 [class.is-invalid]="password?.invalid && password.touched"
-                [class.is-valid]="password?.valid && (password.touched || email.dirty)"
+                [class.is-valid]="password?.valid && (password.touched || password.dirty)"
                 placeholder="Enter your password"
                 class="form-control" formControlName="password">
 

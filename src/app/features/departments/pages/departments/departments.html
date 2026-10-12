@@ -59,7 +59,7 @@
           <div class="col-xl-4 col-lg-6">
             <app-department-card
               [department]="department"
-              (edit)="editDepartment()"
+              (edit)="editDepartment($event)"
               (delete)="deleteDepartment($event)">
             </app-department-card>
           </div>
@@ -72,6 +72,21 @@
         <p class="text-muted mb-0">There are no departments to display.</p>
       </div>
     }
+  }
+
+  @if (isCreateModalOpen()) {
+    <app-department-create-modal
+      (closed)="closeCreateModal()"
+      (departmentCreated)="onDepartmentCreated()">
+    </app-department-create-modal>
+  }
+
+  @if (departmentPendingEdit(); as department) {
+    <app-department-edit-modal
+      [department]="department"
+      (closed)="closeEditModal()"
+      (departmentUpdated)="onDepartmentUpdated()">
+    </app-department-edit-modal>
   }
 
   <app-department-delete-modal

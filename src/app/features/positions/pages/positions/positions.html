@@ -1,1 +1,89 @@
-<p>positions works!</p>
+<div class="container-fluid py-4">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Positions</h2>
+      <p class="text-muted mb-0">View and manage organization positions.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="isCreateModalOpen.set(true)">
+      <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>
+      Create Position
+    </button>
+  </div>
+
+  @if (!isLoading() && !hasError()) {
+    <div class="mb-3 text-muted">
+      {{ positions().length }} positions found
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="row g-4" aria-label="Loading positions" aria-busy="true">
+      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="col-xl-4 col-lg-6">
+          <div class="card h-100 border-0 shadow-sm placeholder-glow">
+            <div class="card-body">
+              <div class="placeholder col-7 mb-3"></div>
+              <div class="placeholder col-10 mb-2"></div>
+              <div class="placeholder col-8"></div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (hasError() && !isLoading()) {
+    <div class="text-center py-5" role="alert">
+      <i class="bi bi-exclamation-triangle text-danger fs-1" aria-hidden="true"></i>
+      <h5 class="mt-3">Failed to load positions</h5>
+      <p class="text-muted">Something went wrong while loading positions.</p>
+      <button type="button" class="btn btn-primary" (click)="LoadPosition()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>
+        Try Again
+      </button>
+    </div>
+  }
+
+  @if (!isLoading() && !hasError()) {
+    @if (positions().length > 0) {
+      <div class="row g-4">
+        @for (position of positions(); track position.id) {
+          <div class="col-xl-4 col-lg-6">
+            <app-position-card
+              [position]="position"
+              (edit)="editPosition($event)"
+              (delete)="deletePosition($event)">
+            </app-position-card>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="text-center py-5">
+        <i class="bi bi-briefcase text-muted fs-1" aria-hidden="true"></i>
+        <h5 class="mt-3">No positions found</h5>
+        <p class="text-muted mb-0">There are no positions to display.</p>
+      </div>
+    }
+  }
+
+  @if (isCreateModalOpen()) {
+    <app-position-create-modal
+      (closed)="isCreateModalOpen.set(false)"
+      (positionCreated)="onPositionCreated()">
+    </app-position-create-modal>
+  }
+
+  @if (positionPendingEdit(); as position) {
+    <app-position-edit-modal
+      [position]="position"
+      (closed)="closeEditModal()"
+      (positionUpdated)="onPositionUpdated()">
+    </app-position-edit-modal>
+  }
+
+  <app-position-delete-modal
+    [position]="positionPendingDelete()"
+    (closed)="closeDeleteModal()"
+    (deleted)="onPositionDeleted($event)">
+  </app-position-delete-modal>
+</div>

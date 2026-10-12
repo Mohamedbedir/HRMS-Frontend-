@@ -1,0 +1,129 @@
+<div
+  class="modal fade show d-block position-create-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="position-create-title"
+  (click)="close()">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" (click)="$event.stopPropagation()">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <div>
+          <h2 id="position-create-title" class="modal-title h5 fw-bold mb-1">Create Position</h2>
+          <p class="text-body-secondary mb-0">Add a new position and its salary range.</p>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          [disabled]="isSubmitting()"
+          (click)="close()">
+        </button>
+      </div>
+
+      <form [formGroup]="AddpositionForm" (ngSubmit)="submit()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="position-title" class="form-label">Position title</label>
+            <input
+              id="position-title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              placeholder="e.g. Software Engineer"
+              maxlength="50"
+              autocomplete="organization-title"
+              [class.is-invalid]="getControlError('title')"
+              [class.is-valid]="isControlValid('title')" />
+            @if (getControlError('title'); as error) {
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="position-description" class="form-label">Description</label>
+            <textarea
+              id="position-description"
+              class="form-control"
+              formControlName="description"
+              rows="3"
+              maxlength="500"
+              placeholder="Describe the position's responsibilities"
+              [class.is-invalid]="getControlError('description')"
+              [class.is-valid]="isControlValid('description')">
+            </textarea>
+            @if (getControlError('description'); as error) {
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label for="position-min-salary" class="form-label">Minimum salary</label>
+              <input
+                id="position-min-salary"
+                type="number"
+                class="form-control"
+                formControlName="minSalary"
+                min="10000"
+                step="1000"
+                inputmode="numeric"
+                [class.is-invalid]="getControlError('minSalary') || (AddpositionForm.hasError('salaryRange') && AddpositionForm.controls.minSalary.touched)"
+                [class.is-valid]="isControlValid('minSalary') && !AddpositionForm.hasError('salaryRange')" />
+              @if (getControlError('minSalary'); as error) {
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              }
+              @if (!getControlError('minSalary') && AddpositionForm.hasError('salaryRange') && AddpositionForm.controls.minSalary.touched) {
+                <div class="invalid-feedback d-block">Minimum salary cannot exceed maximum salary.</div>
+              }
+            </div>
+
+            <div class="col-sm-6">
+              <label for="position-max-salary" class="form-label">Maximum salary</label>
+              <input
+                id="position-max-salary"
+                type="number"
+                class="form-control"
+                formControlName="maxSalary"
+                max="50000"
+                step="1000"
+                inputmode="numeric"
+                [class.is-invalid]="getControlError('maxSalary') || (AddpositionForm.hasError('salaryRange') && AddpositionForm.controls.maxSalary.touched)"
+                [class.is-valid]="isControlValid('maxSalary') && !AddpositionForm.hasError('salaryRange')" />
+              @if (getControlError('maxSalary'); as error) {
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              }
+              @if (!getControlError('maxSalary') && AddpositionForm.hasError('salaryRange') && AddpositionForm.controls.maxSalary.touched) {
+                <div class="invalid-feedback d-block">Maximum salary cannot be lower than minimum salary.</div>
+              }
+            </div>
+          </div>
+
+          <div class="form-check">
+            <input
+              id="position-is-active"
+              type="checkbox"
+              class="form-check-input"
+              formControlName="isActive" />
+            <label for="position-is-active" class="form-check-label">Active position</label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting()" (click)="close()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+            @if (isSubmitting()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Creating...
+            } @else {
+              <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>
+              Create Position
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+.position-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.position-card:hover {
+  transform: translateY(-3px);
+}
+
+.position-card:focus-within {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.position-card-actions {
+  position: relative;
+  z-index: 2;
+}

@@ -43,7 +43,7 @@ export class DepartmentDeleteModal {
       },
       error: (error: unknown) => {
         this.isDeleting = false;
-        console.error('Failed to delete department.', error);
+        //console.error('Failed to delete department.', error);
         this.toastr.error(this.getErrorMessage(error), 'Delete failed');
       },
     });

@@ -1,0 +1,68 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true"
+  aria-labelledby="department-create-title" (click)="closed.emit()">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" (click)="$event.stopPropagation()">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <div>
+          <h2 id="department-create-title" class="modal-title h5 fw-bold mb-1">Create Department</h2>
+          <p class="text-body-secondary mb-0">Add a new department to your organization.</p>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" [disabled]="isSubmitting()"
+          (click)="closed.emit()"></button>
+      </div>
+
+      <form [formGroup]="AddDepartmentForm" (ngSubmit)="submit()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="department-name" class="form-label">Department name</label>
+            <input id="department-name" type="text" class="form-control" formControlName="name"
+              placeholder="e.g. Human Resources" maxlength="50" autocomplete="organization"
+              [class.is-invalid]="getControlError('name')" [class.is-valid]="isControlValid('name')" />
+            @if (getControlError('name'); as error) {
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="department-description" class="form-label">Description</label>
+            <textarea id="department-description" class="form-control" formControlName="description" rows="4"
+              maxlength="500" placeholder="Describe the department's responsibilities"
+              [class.is-invalid]="getControlError('description')"
+              [class.is-valid]="isControlValid('description')"></textarea>
+            @if (getControlError('description'); as error) {
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+
+          <div>
+            <label for="department-status" class="form-label">Status</label>
+            <select id="department-status" class="form-select" formControlName="isActive"
+              [class.is-invalid]="getControlError('isActive')" [class.is-valid]="isControlValid('isActive')">
+              <option value="" disabled>Select a status</option>
+              <option [ngValue]="true">Active</option>
+              <option [ngValue]="false">Inactive</option>
+            </select>
+            @if (getControlError('isActive'); as error) {
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting()" (click)="closed.emit()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+            @if (isSubmitting()) {
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            Creating...
+            } @else {
+            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>
+            Create Department
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

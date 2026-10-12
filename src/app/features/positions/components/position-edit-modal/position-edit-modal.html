@@ -1,0 +1,136 @@
+<div
+  class="modal fade show d-block bg-dark bg-opacity-50"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="position-edit-title"
+  (click)="close()">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" (click)="$event.stopPropagation()">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <div>
+          <h2 id="position-edit-title" class="modal-title h5 fw-bold mb-1">Edit Position</h2>
+          <p class="text-body-secondary mb-0">Update position details, salary range, and status.</p>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          [disabled]="isSubmitting"
+          (click)="close()">
+        </button>
+      </div>
+
+      <form [formGroup]="editPositionForm" (ngSubmit)="submit()">
+        <div class="modal-body">
+          <input type="hidden" formControlName="id" />
+
+          <div class="mb-3">
+            <label for="edit-position-title" class="form-label">Position title</label>
+            <input
+              id="edit-position-title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              maxlength="50"
+              autocomplete="organization-title"
+              [class.is-invalid]="getControlError('title')"
+              [class.is-valid]="isControlValid('title')" />
+            @if (getControlError('title'); as error) {
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-position-description" class="form-label">Description</label>
+            <textarea
+              id="edit-position-description"
+              class="form-control"
+              formControlName="description"
+              rows="4"
+              maxlength="500"
+              [class.is-invalid]="getControlError('description')"
+              [class.is-valid]="isControlValid('description')">
+            </textarea>
+            @if (getControlError('description'); as error) {
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label for="edit-position-min-salary" class="form-label">Minimum salary</label>
+              <input
+                id="edit-position-min-salary"
+                type="number"
+                class="form-control"
+                formControlName="minSalary"
+                min="10000"
+                step="1000"
+                inputmode="numeric"
+                [class.is-invalid]="getControlError('minSalary') || (editPositionForm.hasError('salaryRange') && editPositionForm.controls.minSalary.touched)"
+                [class.is-valid]="isControlValid('minSalary') && !editPositionForm.hasError('salaryRange')" />
+              @if (getControlError('minSalary'); as error) {
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              }
+              @if (!getControlError('minSalary') && editPositionForm.hasError('salaryRange') && editPositionForm.controls.minSalary.touched) {
+                <div class="invalid-feedback d-block">Minimum salary cannot exceed maximum salary.</div>
+              }
+            </div>
+
+            <div class="col-sm-6">
+              <label for="edit-position-max-salary" class="form-label">Maximum salary</label>
+              <input
+                id="edit-position-max-salary"
+                type="number"
+                class="form-control"
+                formControlName="maxSalary"
+                max="50000"
+                step="1000"
+                inputmode="numeric"
+                [class.is-invalid]="getControlError('maxSalary') || (editPositionForm.hasError('salaryRange') && editPositionForm.controls.maxSalary.touched)"
+                [class.is-valid]="isControlValid('maxSalary') && !editPositionForm.hasError('salaryRange')" />
+              @if (getControlError('maxSalary'); as error) {
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              }
+              @if (!getControlError('maxSalary') && editPositionForm.hasError('salaryRange') && editPositionForm.controls.maxSalary.touched) {
+                <div class="invalid-feedback d-block">Maximum salary cannot be lower than minimum salary.</div>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label for="edit-position-status" class="form-label">Status</label>
+            <select
+              id="edit-position-status"
+              class="form-select"
+              formControlName="isActive"
+              [class.is-invalid]="getControlError('isActive')"
+              [class.is-valid]="isControlValid('isActive')">
+              <option [ngValue]="true">Active</option>
+              <option [ngValue]="false">Inactive</option>
+            </select>
+            @if (getControlError('isActive'); as error) {
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting" (click)="close()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            @if (isSubmitting) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Saving...
+            } @else {
+              <i class="bi bi-check-lg me-2" aria-hidden="true"></i>
+              Save Changes
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
