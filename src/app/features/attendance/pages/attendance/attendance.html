@@ -1,0 +1,193 @@
+<main class="attendance-page container-fluid py-4">
+    <header class="attendance-page-header mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="page-icon" aria-hidden="true">
+                <i class="bi bi-calendar2-check"></i>
+            </div>
+            <div>
+                <p class="page-eyebrow mb-1">TIME &amp; ATTENDANCE</p>
+                <h1 class="h3 fw-bold mb-1">Attendance</h1>
+                <p class="text-body-secondary mb-0">Manage your daily check-in, check-out, and attendance history.</p>
+            </div>
+        </div>
+
+        <div class="record-count" aria-live="polite">
+            <i class="bi bi-journal-check" aria-hidden="true"></i>
+            <span><strong>{{ attendanceRecords().length }}</strong> records</span>
+        </div>
+    </header>
+
+    <section class="attendance-action-card mb-4" aria-labelledby="daily-attendance-heading">
+        <div class="action-card-content">
+            <div class="action-card-heading">
+                <div class="action-icon" aria-hidden="true">
+                    <i class="bi bi-stopwatch"></i>
+                </div>
+                <div>
+                    <p class="section-eyebrow mb-1">DAILY ATTENDANCE</p>
+                    <h2 id="daily-attendance-heading" class="h5 fw-bold mb-1">Record your workday</h2>
+                    <p class="text-body-secondary mb-0">Add an optional note, then record your attendance.</p>
+                </div>
+            </div>
+
+            <div class="notes-field">
+                <label for="notes" class="form-label">Notes <span class="text-body-secondary">(optional)</span></label>
+                <textarea
+                    id="notes"
+                    class="form-control"
+                    rows="2"
+                    maxlength="500"
+                    placeholder="Add a note for today's attendance..."
+                    [(ngModel)]="notes"></textarea>
+            </div>
+
+            <div class="attendance-actions">
+                <button
+                    class="btn btn-check-in"
+                    type="button"
+                    [disabled]="checkInSubmitting() || checkOutSubmitting()"
+                    (click)="checkIn()">
+                    @if (checkInSubmitting()) {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-label="Checking in"></span>
+                    } @else {
+                        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                    }
+                    <span>Check In</span>
+                </button>
+
+                <button
+                    class="btn btn-check-out"
+                    type="button"
+                    [disabled]="checkInSubmitting() || checkOutSubmitting()"
+                    (click)="checkOut()">
+                    @if (checkOutSubmitting()) {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-label="Checking out"></span>
+                    } @else {
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    }
+                    <span>Check Out</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="action-card-aside">
+            <div class="aside-icon" aria-hidden="true">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <h3 class="h6 fw-semibold mb-2">Keep your records up to date</h3>
+            <p class="text-body-secondary small mb-0">
+                Your attendance activity will appear in the records below after it is submitted.
+            </p>
+        </div>
+    </section>
+
+    <section class="records-card" aria-labelledby="attendance-records-heading">
+        <div class="records-card-header">
+            <div>
+                <p class="section-eyebrow mb-1">ACTIVITY</p>
+                <h2 id="attendance-records-heading" class="h5 fw-bold mb-1">Attendance records</h2>
+                <p class="text-body-secondary mb-0">Review check-in times, work status, and daily totals.</p>
+            </div>
+
+            <button class="btn btn-refresh" type="button" [disabled]="loading" (click)="loadAttendance()">
+                <i class="bi bi-arrow-clockwise" [class.spin]="loading" aria-hidden="true"></i>
+                <span>Reset filter</span>
+            </button>
+        </div>
+
+        <div class="filter-panel">
+            <div class="filter-field">
+                <label for="fromDate" class="form-label">From date</label>
+                <input id="fromDate" type="date" class="form-control" [(ngModel)]="fromDate">
+            </div>
+
+            <div class="filter-field">
+                <label for="toDate" class="form-label">To date</label>
+                <input id="toDate" type="date" class="form-control" [(ngModel)]="toDate">
+            </div>
+
+            <button class="btn btn-apply-filter" type="button" [disabled]="loading" (click)="filterByDate()">
+                @if (loading) {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-label="Filtering"></span>
+                } @else {
+                    <i class="bi bi-funnel" aria-hidden="true"></i>
+                }
+                <span>Apply filter</span>
+            </button>
+        </div>
+
+        @if (loading) {
+            <div class="records-state" role="status" aria-live="polite">
+                <span class="spinner-border text-primary" aria-hidden="true"></span>
+                <p class="text-body-secondary mb-0">Loading attendance records...</p>
+            </div>
+        } @else if (attendanceRecords().length === 0) {
+            <div class="records-state empty-state">
+                <div class="empty-state-icon" aria-hidden="true">
+                    <i class="bi bi-calendar2-x"></i>
+                </div>
+                <h3 class="h6 fw-bold mb-2">No attendance records found</h3>
+                <p class="text-body-secondary mb-0">Try another date range or check back after recording attendance.</p>
+            </div>
+        } @else {
+            <div class="table-responsive attendance-table-wrap">
+                <table class="table attendance-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Employee</th>
+                            <th scope="col">Check in</th>
+                            <th scope="col">Check out</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-end">Late</th>
+                            <th scope="col" class="text-end">Overtime</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (record of attendanceRecords(); track record.employeeId + '-' + record.date) {
+                            <tr>
+                                <td class="date-cell">{{ record.date | date:'dd MMM yyyy' }}</td>
+                                <td class="employee-cell">
+                                    <span class="employee-avatar" aria-hidden="true">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <span>{{ record.employeeName || '—' }}</span>
+                                </td>
+                                <td>
+                                    <span class="time-value">
+                                        <i class="bi bi-box-arrow-in-right text-success" aria-hidden="true"></i>
+                                        {{ formatAttendanceTime(record.checkIn, 'No check-in') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="time-value">
+                                        <i class="bi bi-box-arrow-right text-primary" aria-hidden="true"></i>
+                                        {{ formatAttendanceTime(record.checkOut, 'No check-out') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        class="status-badge"
+                                        [class.status-present]="record.status === 'Present'"
+                                        [class.status-late]="record.status === 'Late'"
+                                        [class.status-other]="record.status !== 'Present' && record.status !== 'Late'">
+                                        <span class="status-dot" aria-hidden="true"></span>
+                                        {{ record.status || 'Unknown' }}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <span class="minutes-value">{{ record.lateMinutes ?? 0 }}</span>
+                                    <span class="minutes-unit">min</span>
+                                </td>
+                                <td class="text-end">
+                                    <span class="minutes-value">{{ record.overtimeMinutes ?? 0 }}</span>
+                                    <span class="minutes-unit">min</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+</main>

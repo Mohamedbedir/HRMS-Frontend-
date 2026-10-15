@@ -6,9 +6,10 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { DateOrFallbackPipe } from '../../../../shared/pipes/date-or-fallback.pipe';
 import { EmploymentHistory } from '../../components/employment-history/employment-history';
 import { SalaryHistory } from '../../components/salary-history/salary-history';
+import { DocumentForEmployee } from '../../../employee-documents/components/document-for-employee/document-for-employee';
 
 @Component({
-  imports: [DatePipe, CurrencyPipe, DateOrFallbackPipe, EmploymentHistory, SalaryHistory],
+  imports: [DatePipe, CurrencyPipe, DateOrFallbackPipe, EmploymentHistory, SalaryHistory, DocumentForEmployee],
   selector: 'app-employee-view',
   styleUrl: './employee-view.css',
   templateUrl: './employee-view.html',
@@ -28,7 +29,7 @@ export class EmployeeView implements OnInit {
 
   hasError = false;
 
-  activeTab: 'overview' | 'employment-history' | 'salary-history' = 'overview';
+  activeTab: 'overview' | 'employment-history' | 'salary-history' | 'employee-document'= 'overview';
 
   ngOnInit(): void {
 
@@ -86,7 +87,7 @@ export class EmployeeView implements OnInit {
 
   }
 
-  selectTab(tab: 'overview' | 'employment-history' | 'salary-history'): void {
+  selectTab(tab: 'overview' | 'employment-history' | 'salary-history' | 'employee-document'): void {
     this.activeTab = tab;
   }
 

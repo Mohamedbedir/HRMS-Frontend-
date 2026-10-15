@@ -1,0 +1,154 @@
+<div class="modal-backdrop-shell" role="presentation" (click)="close()">
+    <div class="modal fade show d-block performance-review-modal" tabindex="-1" role="dialog" aria-modal="true"
+        aria-labelledby="performance-review-create-title" (click)="$event.stopPropagation()">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <div class="modal-heading">
+                        <span class="modal-heading-icon" aria-hidden="true">
+                            <i class="bi bi-clipboard2-check"></i>
+                        </span>
+                        <div>
+                            <h2 id="performance-review-create-title" class="modal-title h5 fw-bold mb-1">
+                                Create Performance Review
+                            </h2>
+                            <p class="text-body-secondary mb-0">
+                                Record an evaluation for one of your team members.
+                            </p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" aria-label="Close" [disabled]="submitting()"
+                        (click)="close()">
+                    </button>
+                </div>
+
+                <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+                    <div class="modal-body">
+                        @if (employeeLoadError()) {
+                        <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+                            <i class="bi bi-exclamation-circle mt-1" aria-hidden="true"></i>
+                            <span>{{ employeeLoadError() }}</span>
+                        </div>
+                        } @else if (!loadingEmployees() && employees().length === 0) {
+                        <div class="empty-employees" role="status">
+                            <i class="bi bi-people" aria-hidden="true"></i>
+                            <p class="fw-semibold mb-1">No team members available</p>
+                            <p class="text-body-secondary small mb-0">
+                                You can create a review after employees are assigned to you.
+                            </p>
+                        </div>
+                        }
+
+                        <div class="mb-3">
+                            <label for="review-employee" class="form-label">
+                                Employee <span class="required-mark" aria-hidden="true">*</span>
+                            </label>
+                            <select id="review-employee" class="form-select" formControlName="employeeId"
+                                [disabled]="loadingEmployees() || employees().length === 0"
+                                [class.is-invalid]="getControlError('employeeId')"
+                                [class.is-valid]="isControlValid('employeeId')">
+                                <option [ngValue]="0" disabled>
+                                    {{ loadingEmployees() ? 'Loading employees...' : 'Select an employee' }}
+                                </option>
+                                @for (employee of employees(); track employee.id) {
+                                <option [ngValue]="employee.id">
+                                    {{ employee.firstName }} {{ employee.lastName }}
+                                </option>
+                                }
+                            </select>
+                            @if (loadingEmployees()) {
+                            <div class="form-text">
+                                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                                Loading your team...
+                            </div>
+                            }
+                            @if (getControlError('employeeId'); as error) {
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            }
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-7">
+                                <label for="review-month" class="form-label">
+                                    Review month <span class="required-mark" aria-hidden="true">*</span>
+                                </label>
+                                <select id="review-month" class="form-select" formControlName="month"
+                                    [class.is-invalid]="getControlError('month')"
+                                    [class.is-valid]="isControlValid('month')">
+                                    @for (month of months; track month.value) {
+                                    <option [ngValue]="month.value">{{ month.label }}</option>
+                                    }
+                                </select>
+                                @if (getControlError('month'); as error) {
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                                }
+                            </div>
+
+                            <div class="col-sm-5">
+                                <label for="review-year" class="form-label">
+                                    Year <span class="required-mark" aria-hidden="true">*</span>
+                                </label>
+                                <input id="review-year" type="number" class="form-control" formControlName="year"
+                                    min="2000" max="2100" step="1" inputmode="numeric"
+                                    [class.is-invalid]="getControlError('year')"
+                                    [class.is-valid]="isControlValid('year')" />
+                                @if (getControlError('year'); as error) {
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="review-score" class="form-label">
+                                Performance score <span class="required-mark" aria-hidden="true">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input id="review-score" type="number" class="form-control" formControlName="score"
+                                    min="0" max="10" step="0.1" inputmode="decimal" aria-describedby="review-score-help"
+                                    [class.is-invalid]="getControlError('score')"
+                                    [class.is-valid]="isControlValid('score')" />
+                                <span class="input-group-text">/ 5</span>
+                            </div>
+                            @if (getControlError('score'); as error) {
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            }
+                        </div>
+
+                        <div>
+                            <label for="review-comments" class="form-label">
+                                Comments <span class="required-mark" aria-hidden="true">*</span>
+                            </label>
+                            <textarea id="review-comments" class="form-control" formControlName="comments" rows="4"
+                                maxlength="1000" placeholder="Share feedback, achievements, and areas for growth..."
+                                [class.is-invalid]="getControlError('comments')"
+                                [class.is-valid]="isControlValid('comments')">
+              </textarea>
+                            <div class="form-text text-end">
+                                {{ form.controls.comments.value.length }}/1000
+                            </div>
+                            @if (getControlError('comments'); as error) {
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            }
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" [disabled]="submitting()"
+                            (click)="close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary"
+                            [disabled]="submitting() || loadingEmployees() || employees().length === 0">
+                            @if (submitting()) {
+                            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                            Creating...
+                            } @else {
+                            <i class="bi bi-check2 me-2" aria-hidden="true"></i>
+                            Create Review
+                            }
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

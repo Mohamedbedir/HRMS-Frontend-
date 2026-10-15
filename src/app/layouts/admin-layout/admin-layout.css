@@ -6,19 +6,23 @@
   min-height: 100vh;
   background: var(--bs-body-bg);
   color: var(--bs-body-color);
-  --admin-sidebar-bg: #172235;
-  --admin-sidebar-hover: rgba(255, 255, 255, 0.07);
-  --admin-sidebar-border: rgba(255, 255, 255, 0.08);
-  --admin-sidebar-text: rgba(255, 255, 255, 0.72);
-  --admin-sidebar-muted: rgba(255, 255, 255, 0.48);
+  --admin-sidebar-bg: #fff;
+  --admin-sidebar-hover: var(--bs-primary-bg-subtle);
+  --admin-sidebar-border: var(--bs-border-color);
+  --admin-sidebar-text: #475569;
+  --admin-sidebar-muted: #778397;
+  --admin-sidebar-brand: #172235;
+  --admin-sidebar-hover-text: var(--bs-primary);
 }
 
 .admin-wrapper.dark-mode {
-  --admin-sidebar-bg: #0b1220;
-  --admin-sidebar-hover: rgba(255, 255, 255, 0.09);
-  --admin-sidebar-border: rgba(255, 255, 255, 0.1);
-  --admin-sidebar-text: rgba(255, 255, 255, 0.82);
-  --admin-sidebar-muted: rgba(255, 255, 255, 0.58);
+  --admin-sidebar-bg: #111827;
+  --admin-sidebar-hover: rgba(255, 255, 255, 0.08);
+  --admin-sidebar-border: rgba(255, 255, 255, 0.09);
+  --admin-sidebar-text: #cbd5e1;
+  --admin-sidebar-muted: #94a3b8;
+  --admin-sidebar-brand: #f8fafc;
+  --admin-sidebar-hover-text: #fff;
 }
 
 
@@ -35,7 +39,7 @@
   height: 100vh;
 
   background: var(--admin-sidebar-bg);
-  color: #fff;
+  color: var(--admin-sidebar-text);
 
   display: flex;
   flex-direction: column;
@@ -46,7 +50,8 @@
     width 0.3s ease,
     transform 0.3s ease;
 
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+  border-right: 1px solid var(--admin-sidebar-border);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.06);
 }
 
 
@@ -82,7 +87,7 @@
   align-items: center;
   gap: 12px;
 
-  color: #fff;
+  color: var(--admin-sidebar-brand);
   font-size: 1.25rem;
   font-weight: 700;
 
@@ -107,7 +112,7 @@
 
 
 .sidebar-close {
-  color: #fff;
+  color: var(--admin-sidebar-text);
 }
 
 
@@ -118,7 +123,7 @@
 .sidebar-body {
   flex: 1;
 
-  padding: 24px 14px;
+  padding: 20px 12px;
 
   overflow-y: auto;
 }
@@ -127,7 +132,7 @@
 .nav-title {
   display: block;
 
-  padding: 0 12px 12px;
+  padding: 0 14px 10px;
 
   font-size: 0.68rem;
   font-weight: 600;
@@ -170,7 +175,7 @@
 
 
 .nav-link:hover {
-  color: #fff;
+  color: var(--admin-sidebar-hover-text);
 
   background: var(--admin-sidebar-hover);
 
@@ -181,7 +186,7 @@
 .nav-link.active {
   color: #fff;
 
-  background: #0d6efd;
+  background: var(--bs-primary);
 
   box-shadow: 0 6px 18px rgba(13, 110, 253, 0.25);
 }
@@ -230,6 +235,7 @@
   background: transparent;
 
   color: var(--admin-sidebar-text);
+  cursor: pointer;
 
   transition:
     background 0.25s ease,
@@ -238,9 +244,9 @@
 
 
 .logout-button:hover {
-  color: #fff;
+  color: var(--bs-danger);
 
-  background: rgba(220, 53, 69, 0.15);
+  background: var(--bs-danger-bg-subtle);
 }
 
 

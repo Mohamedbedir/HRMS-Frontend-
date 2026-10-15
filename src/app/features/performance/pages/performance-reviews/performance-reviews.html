@@ -1,0 +1,121 @@
+<section class="performance-page">
+  <header class="performance-header">
+    <div class="performance-heading">
+      <div class="performance-heading-icon" aria-hidden="true">
+        <i class="bi bi-graph-up-arrow"></i>
+      </div>
+      <div>
+        <span class="performance-eyebrow">PEOPLE &amp; GROWTH</span>
+        <h1 class="performance-title">Performance Reviews</h1>
+        <p class="performance-subtitle">
+          Review employee performance and evaluation history.
+        </p>
+      </div>
+    </div>
+
+    <button
+      class="btn btn-primary performance-add-button"
+      type="button"
+      (click)="isCreateModalOpen.set(true)">
+      <i class="bi bi-plus-lg" aria-hidden="true"></i>
+      <span>Add Review</span>
+    </button>
+  </header>
+
+  <section class="review-panel" aria-labelledby="review-history-heading">
+    <div class="review-panel-header">
+      <div>
+        <h2 id="review-history-heading" class="review-panel-title">Review History</h2>
+        <p class="review-panel-subtitle mb-0">All employee evaluations in one place</p>
+      </div>
+      <span class="review-count">
+        <i class="bi bi-clipboard-check" aria-hidden="true"></i>
+        {{ reviews().length }} {{ reviews().length === 1 ? 'review' : 'reviews' }}
+      </span>
+    </div>
+
+    @if (loading()) {
+      <div class="review-state" role="status" aria-live="polite">
+        <div class="spinner-border text-primary" aria-hidden="true"></div>
+        <p class="review-state-title">Loading reviews</p>
+        <p class="review-state-copy mb-0">Your performance history will be ready shortly.</p>
+      </div>
+    } @else if (reviews().length === 0) {
+      <div class="review-state">
+        <div class="review-state-icon" aria-hidden="true">
+          <i class="bi bi-clipboard2-data"></i>
+        </div>
+        <h3 class="review-state-title">No performance reviews yet</h3>
+        <p class="review-state-copy mb-0">
+          Reviews will appear here after they are created.
+        </p>
+      </div>
+    } @else {
+      <div class="table-responsive review-table-wrapper">
+        <table class="table review-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Employee</th>
+              <th scope="col">Review period</th>
+              <th scope="col">Score</th>
+              <th scope="col">Reviewer</th>
+              <th scope="col">Review date</th>
+              <th scope="col">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (review of reviews(); track review.id) {
+              <tr
+                class="review-row"
+                role="link"
+                tabindex="0"
+                [attr.aria-label]="'View performance review for ' + review.employeeName"
+                (click)="openReview(review.id)"
+                (keydown.enter)="openReview(review.id)"
+                (keydown.space)="$event.preventDefault(); openReview(review.id)">
+                <td data-label="Employee">
+                  <div class="person-cell">
+                    <span class="person-avatar" aria-hidden="true">
+                      {{ review.employeeName?.charAt(0) || '?' }}
+                    </span>
+                    <span class="person-name">{{ review.employeeName }}</span>
+                  </div>
+                </td>
+                <td data-label="Review period">
+                  <span class="period-value">
+                    <i class="bi bi-calendar3" aria-hidden="true"></i>
+                    {{ review.month }}/{{ review.year }}
+                  </span>
+                </td>
+                <td data-label="Score">
+                  <span class="badge score-badge" [class]="getScoreClass(review.score)">
+                    {{ review.score }}
+                    <span class="score-out-of">/ 5</span>
+                  </span>
+                </td>
+                <td data-label="Reviewer">
+                  <span class="reviewer-name">{{ review.reviewerName }}</span>
+                </td>
+                <td data-label="Review date">
+                  <span class="date-value">{{ review.reviewDate | date:'mediumDate' }}</span>
+                </td>
+                <td data-label="Comments" class="comments-cell">
+                  <span [title]="review.comments || 'No comments'">
+                    {{ review.comments || 'No comments' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</section>
+
+@if (isCreateModalOpen()) {
+  <app-performance-review-create-modal
+    (closed)="isCreateModalOpen.set(false)"
+    (reviewCreated)="onReviewCreated()">
+  </app-performance-review-create-modal>
+}

@@ -1,0 +1,109 @@
+<section class="documents-section" aria-labelledby="documents-heading">
+  <div class="documents-heading">
+    <div class="d-flex align-items-center gap-3">
+      <div class="documents-heading-icon" aria-hidden="true">
+        <i class="bi bi-folder2-open"></i>
+      </div>
+      <div>
+        <h2 id="documents-heading" class="h4 fw-bold mb-1">Employee documents</h2>
+        <p class="text-muted mb-0">View documents uploaded for this employee.</p>
+      </div>
+    </div>
+
+    @if (!isLoading() && !hasError()) {
+      <span class="documents-count">
+        {{ documents().length }} {{ documents().length === 1 ? 'document' : 'documents' }}
+      </span>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="documents-state" role="status" aria-live="polite">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading employee documents…</span>
+    </div>
+  } @else if (hasError()) {
+    <div class="documents-state documents-state-error" role="alert">
+      <div class="documents-state-icon" aria-hidden="true">
+        <i class="bi bi-exclamation-triangle"></i>
+      </div>
+      <h3 class="h5 fw-semibold mb-2">Documents couldn't be loaded</h3>
+      <p class="text-muted mb-3">Please check your connection and try again.</p>
+      <button class="btn btn-outline-primary" type="button" (click)="loadDocuments()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>
+        Try again
+      </button>
+    </div>
+  } @else if (documents().length === 0) {
+    <div class="documents-state">
+      <div class="documents-state-icon" aria-hidden="true">
+        <i class="bi bi-file-earmark-text"></i>
+      </div>
+      <h3 class="h5 fw-semibold mb-2">No documents yet</h3>
+      <p class="text-muted mb-0">Documents for this employee will appear here when uploaded.</p>
+    </div>
+  } @else {
+    <div class="row g-3">
+      @for (document of documents(); track document.id) {
+        <div class="col-12 col-xl-6">
+          <article class="document-card h-100">
+            <div class="d-flex align-items-start gap-3">
+              <div class="document-file-icon" aria-hidden="true">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
+
+              <div class="flex-grow-1 min-width-0">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                  <h3 class="document-title mb-0">{{ document.documentType }}</h3>
+                  @if (document.expiryDate) {
+                    <span
+                      class="document-status"
+                      [class.document-status-expired]="isExpired(document.expiryDate)"
+                      [class.document-status-valid]="!isExpired(document.expiryDate)">
+                      {{ isExpired(document.expiryDate) ? 'Expired' : 'Valid' }}
+                    </span>
+                  }
+                </div>
+                <p class="document-filename mb-0" [title]="document.fileName">
+                  {{ document.fileName || 'Untitled file' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="document-metadata">
+              <div>
+                <span class="metadata-label">Uploaded</span>
+                <span class="metadata-value">
+                  {{ document.uploadedAt ? (document.uploadedAt | date:'dd MMM yyyy') : '—' }}
+                </span>
+              </div>
+              <div>
+                <span class="metadata-label">Expires</span>
+                <span class="metadata-value">
+                  {{ document.expiryDate ? (document.expiryDate | date:'dd MMM yyyy') : 'No expiry' }}
+                </span>
+              </div>
+            </div>
+
+            @if (document.file) {
+              <a
+                class="btn btn-outline-primary document-open-button"
+                [href]="document.file"
+                [attr.download]="document.fileName || null"
+                target="_blank"
+                rel="noopener noreferrer">
+                <i class="bi bi-box-arrow-up-right me-2" aria-hidden="true"></i>
+                Open document
+              </a>
+            } @else {
+              <div class="document-file-unavailable">
+                <i class="bi bi-link-45deg me-2" aria-hidden="true"></i>
+                File unavailable
+              </div>
+            }
+          </article>
+        </div>
+      }
+    </div>
+  }
+</section>

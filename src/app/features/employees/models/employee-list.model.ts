@@ -11,5 +11,6 @@ export interface EmployeeListItem {
   departmentName: string;
   positionTitle: string;
   managerName: string;
+  managerId: number | null;
 }
 

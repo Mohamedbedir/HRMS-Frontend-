@@ -1,0 +1,134 @@
+<main class="review-details-page">
+  <button type="button" class="back-button" (click)="goBack()">
+    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+    <span>Back to reviews</span>
+  </button>
+
+  @if (isLoading()) {
+    <section class="details-skeleton" aria-label="Loading review details" aria-busy="true">
+      <div class="skeleton-heading">
+        <span class="skeleton-block skeleton-icon"></span>
+        <span class="skeleton-block skeleton-title"></span>
+      </div>
+      <span class="skeleton-block skeleton-line"></span>
+      <span class="skeleton-block skeleton-line short"></span>
+      <div class="skeleton-grid">
+        <span class="skeleton-block"></span>
+        <span class="skeleton-block"></span>
+        <span class="skeleton-block"></span>
+      </div>
+    </section>
+  } @else if (hasError()) {
+    <section class="review-error" role="alert">
+      <span class="error-icon" aria-hidden="true">
+        <i class="bi bi-exclamation-triangle"></i>
+      </span>
+      <h1>Review details unavailable</h1>
+      <p>We couldn't load this performance review. Please try again.</p>
+      <button type="button" class="btn btn-primary" (click)="retry()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>
+        Try again
+      </button>
+    </section>
+  } @else if (review(); as item) {
+    <header class="details-heading">
+      <div class="details-heading-copy">
+        <span class="details-eyebrow">
+          <i class="bi bi-graph-up-arrow me-2" aria-hidden="true"></i>
+          PEOPLE &amp; GROWTH
+        </span>
+        <h1>Performance Review</h1>
+        <p>Evaluation details and feedback for {{ item.employeeName }}.</p>
+      </div>
+      <span class="review-period-pill">
+        <i class="bi bi-calendar3" aria-hidden="true"></i>
+        {{ getReviewMonth(item.month) }} {{ item.year }}
+      </span>
+    </header>
+
+    <article class="review-hero">
+      <div class="employee-summary">
+        <span class="employee-avatar" aria-hidden="true">
+          {{ item.employeeName?.charAt(0) || '?' }}
+        </span>
+        <div class="employee-copy">
+          <span class="summary-label">REVIEW FOR</span>
+          <h2>{{ item.employeeName }}</h2>
+        </div>
+      </div>
+
+      <div class="score-summary" [class]="getScoreClass(item.score)">
+        <span class="summary-label">OVERALL SCORE</span>
+        <div class="score-value">
+          {{ item.score | number:'1.0-2' }}
+          <span>/ 5</span>
+        </div>
+        <span class="score-label">{{ getScoreLabel(item.score) }}</span>
+        <div
+          class="score-progress"
+          role="progressbar"
+          [attr.aria-valuenow]="getScorePercentage(item.score)"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [attr.aria-label]="'Performance score: ' + item.score + ' out of 5'">
+          <span [style.width.%]="getScorePercentage(item.score)"></span>
+        </div>
+      </div>
+    </article>
+
+    <section class="details-card" aria-labelledby="review-information-heading">
+      <div class="details-card-heading">
+        <span class="section-icon" aria-hidden="true">
+          <i class="bi bi-card-list"></i>
+        </span>
+        <div>
+          <h2 id="review-information-heading">Review information</h2>
+          <p>Key details about this evaluation</p>
+        </div>
+      </div>
+
+      <dl class="review-metadata">
+        <div class="metadata-item">
+          <dt><i class="bi bi-calendar-range" aria-hidden="true"></i> Review period</dt>
+          <dd>{{ getReviewMonth(item.month) }} {{ item.year }}</dd>
+        </div>
+        <div class="metadata-item">
+          <dt><i class="bi bi-calendar-check" aria-hidden="true"></i> Review date</dt>
+          <dd>{{ item.reviewDate | date:'longDate' }}</dd>
+        </div>
+        <div class="metadata-item">
+          <dt><i class="bi bi-person-check" aria-hidden="true"></i> Reviewer</dt>
+          <dd>
+            <span class="reviewer-avatar" aria-hidden="true">
+              {{ item.reviewerName?.charAt(0) || '?' }}
+            </span>
+            {{ item.reviewerName }}
+          </dd>
+        </div>
+
+      </dl>
+    </section>
+
+    <section class="feedback-card" aria-labelledby="feedback-heading">
+      <div class="details-card-heading">
+        <span class="section-icon feedback-icon" aria-hidden="true">
+          <i class="bi bi-chat-left-text"></i>
+        </span>
+        <div>
+          <h2 id="feedback-heading">Feedback &amp; comments</h2>
+          <p>Notes shared as part of this performance review</p>
+        </div>
+      </div>
+      <div class="feedback-content">
+        @if (item.comments?.trim()) {
+          <p>{{ item.comments }}</p>
+        } @else {
+          <p class="no-feedback">
+            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+            No comments were added to this review.
+          </p>
+        }
+      </div>
+    </section>
+  }
+</main>
