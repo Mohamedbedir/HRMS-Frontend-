@@ -1,0 +1,58 @@
+.leave-action-backdrop {
+  position: fixed;
+  z-index: 1060;
+  inset: 0;
+  display: grid;
+  overflow-y: auto;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.leave-action-modal {
+  position: static;
+  display: block;
+  background: transparent;
+}
+
+.leave-action-modal .modal-dialog {
+  width: min(100% - 1.5rem, 27rem);
+  margin: 1rem auto;
+}
+
+.leave-action-modal .modal-content {
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.leave-action-modal .modal-body {
+  padding: 2rem 1.75rem 1.25rem;
+}
+
+.action-icon {
+  display: inline-grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.action-icon-success {
+  background: rgba(var(--bs-success-rgb), 0.12);
+  color: var(--bs-success);
+}
+
+.leave-action-modal .modal-footer {
+  gap: 0.6rem;
+  padding: 1rem 1.5rem 1.4rem;
+  border: 0;
+}
+
+.leave-action-modal .btn {
+  min-height: 2.55rem;
+  padding-inline: 1rem;
+  border-radius: 0.65rem;
+  font-weight: 600;
+}

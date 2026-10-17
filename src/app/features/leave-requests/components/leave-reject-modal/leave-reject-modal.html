@@ -1,0 +1,36 @@
+<div class="leave-action-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block leave-action-modal" role="dialog" aria-modal="true"
+    aria-labelledby="reject-leave-title" tabindex="-1" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <form (ngSubmit)="submit()" novalidate>
+          <div class="modal-body">
+            <div class="reject-heading">
+              <span class="action-icon action-icon-danger" aria-hidden="true"><i class="bi bi-x-lg"></i></span>
+              <div>
+                <h2 id="reject-leave-title" class="h5 fw-bold mb-1">Reject leave request</h2>
+                <p class="text-body-secondary mb-0">Add a reason for {{ employeeName }}.</p>
+              </div>
+            </div>
+            <label for="leave-rejection-reason" class="form-label mt-4">Rejection reason <span class="required-mark">*</span></label>
+            <textarea id="leave-rejection-reason" name="reason" class="form-control" rows="4" maxlength="500"
+              [(ngModel)]="reason" placeholder="Explain why this request cannot be approved..."></textarea>
+            <div class="form-text text-end">{{ reason.length }}/500</div>
+            @if (submitted && !reason.trim()) {
+              <div class="text-danger small mt-1">A rejection reason is required.</div>
+            } @else if (reason.length > 500) {
+              <div class="text-danger small mt-1">The reason must be 500 characters or fewer.</div>
+            }
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Go back</button>
+            <button type="submit" class="btn btn-danger" [disabled]="isLoading">
+              @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Rejecting... }
+              @else { <i class="bi bi-x-lg me-1" aria-hidden="true"></i>Reject request }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

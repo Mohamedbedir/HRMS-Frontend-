@@ -1,0 +1,102 @@
+<div class="leave-modal-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block leave-request-modal" role="dialog" aria-modal="true"
+    aria-labelledby="leave-request-title" tabindex="-1" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content border-0 shadow-lg">
+        <header class="modal-header">
+          <div class="modal-heading">
+            <span class="modal-heading-icon" aria-hidden="true">
+              <i class="bi bi-calendar2-plus"></i>
+            </span>
+            <div>
+              <h2 id="leave-request-title" class="modal-title h5 fw-bold mb-1">Create leave request</h2>
+              <p class="text-body-secondary mb-0">Choose your leave dates and tell us a little about your request.</p>
+            </div>
+          </div>
+          <button type="button" class="btn-close" aria-label="Close" [disabled]="submitting()" (click)="close()"></button>
+        </header>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="modal-body">
+            @if (errorMessage) {
+              <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+                <i class="bi bi-exclamation-circle mt-1" aria-hidden="true"></i>
+                <span>{{ errorMessage }}</span>
+                @if (leaveTypes().length === 0 && !loadingLeaveTypes()) {
+                  <button type="button" class="btn btn-link btn-sm ms-auto p-0" (click)="loadLeaveTypes()">Retry</button>
+                }
+              </div>
+            }
+
+            <div class="mb-3">
+              <label for="leave-type" class="form-label">Leave type <span class="required-mark">*</span></label>
+              <select id="leave-type" class="form-select" formControlName="leaveTypeId"
+                [class.is-invalid]="isInvalid('leaveTypeId')"
+                [disabled]="loadingLeaveTypes() || leaveTypes().length === 0">
+                <option [ngValue]="0" disabled>
+                  {{ loadingLeaveTypes() ? 'Loading leave types...' : 'Select a leave type' }}
+                </option>
+                @for (leaveType of leaveTypes(); track leaveType.id) {
+                  <option [ngValue]="leaveType.id">{{ leaveType.name }}</option>
+                }
+              </select>
+              @if (loadingLeaveTypes()) {
+                <div class="form-text"><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Loading leave types...</div>
+              }
+              @if (isInvalid('leaveTypeId')) {
+                <div class="invalid-feedback d-block">Select a leave type.</div>
+              }
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <label for="leave-start-date" class="form-label">Start date <span class="required-mark">*</span></label>
+                <input id="leave-start-date" type="date" class="form-control" formControlName="startDate"
+                  [min]="today" [class.is-invalid]="isInvalid('startDate') || (submitted && form.hasError('dateInPast'))" />
+                @if (isInvalid('startDate') || (submitted && form.hasError('dateInPast'))) {
+                  <div class="invalid-feedback">Select today or a future date.</div>
+                }
+              </div>
+              <div class="col-sm-6">
+                <label for="leave-end-date" class="form-label">End date <span class="required-mark">*</span></label>
+                <input id="leave-end-date" type="date" class="form-control" formControlName="endDate"
+                  [min]="form.controls.startDate.value || today" [class.is-invalid]="isInvalid('endDate') || (submitted && form.hasError('dateRange'))" />
+                @if (isInvalid('endDate') || (submitted && form.hasError('dateRange'))) {
+                  <div class="invalid-feedback">End date must be on or after the start date.</div>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label for="leave-reason" class="form-label">Reason <span class="required-mark">*</span></label>
+              <textarea id="leave-reason" class="form-control" formControlName="reason" rows="4" maxlength="500"
+                placeholder="Add a short note to support your request..."
+                [class.is-invalid]="isInvalid('reason')"></textarea>
+              <div class="form-text text-end">{{ form.controls.reason.value.length }}/500</div>
+              @if (isInvalid('reason')) {
+                <div class="invalid-feedback d-block">
+                  @if (form.controls.reason.hasError('maxlength')) {
+                    Your reason must be 500 characters or fewer.
+                  } @else {
+                    Please provide a reason for your leave request.
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="submitting()" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="submitting() || loadingLeaveTypes() || leaveTypes().length === 0">
+              @if (submitting()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Submitting...
+              } @else {
+                <i class="bi bi-send me-2" aria-hidden="true"></i>Submit request
+              }
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

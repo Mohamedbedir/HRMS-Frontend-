@@ -102,8 +102,16 @@ export const routes: Routes = [
         path: 'leave-requests',
         data: { title: 'Leave Requests' },
         loadComponent: () =>
-          import('./shared/pages/admin-feature-placeholder/admin-feature-placeholder').then(
-            (m) => m.AdminFeaturePlaceholder,
+          import('./features/leave-requests/pages/leave-requests/leave-requests').then(
+            (m) => m.LeaveRequests,
+          ),
+      },
+      {
+        path: 'leave-requests/:id',
+        data: { title: 'Leave Request Details' },
+        loadComponent: () =>
+          import('./features/leave-requests/pages/leave-request-details/leave-request-details').then(
+            (m) => m.LeaveRequestDetails,
           ),
       },
       {

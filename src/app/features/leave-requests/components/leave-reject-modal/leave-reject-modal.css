@@ -1,0 +1,89 @@
+.leave-action-backdrop {
+  position: fixed;
+  z-index: 1060;
+  inset: 0;
+  display: grid;
+  overflow-y: auto;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.leave-action-modal {
+  position: static;
+  display: block;
+  background: transparent;
+}
+
+.leave-action-modal .modal-dialog {
+  width: min(100% - 1.5rem, 30rem);
+  margin: 1rem auto;
+}
+
+.leave-action-modal .modal-content {
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.leave-action-modal .modal-body {
+  padding: 1.75rem;
+}
+
+.reject-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.action-icon {
+  display: inline-grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.3rem;
+}
+
+.action-icon-danger {
+  background: rgba(var(--bs-danger-rgb), 0.1);
+  color: var(--bs-danger);
+}
+
+.required-mark {
+  color: var(--bs-danger);
+}
+
+.leave-action-modal .form-label {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.leave-action-modal .form-control {
+  border-color: var(--bs-border-color);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.leave-action-modal .form-control:focus {
+  border-color: rgba(var(--bs-primary-rgb), 0.65);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+.leave-action-modal .form-text {
+  color: var(--bs-secondary-color);
+}
+
+.leave-action-modal .modal-footer {
+  gap: 0.6rem;
+  padding: 1rem 1.5rem 1.4rem;
+  border: 0;
+}
+
+.leave-action-modal .btn {
+  min-height: 2.55rem;
+  padding-inline: 1rem;
+  border-radius: 0.65rem;
+  font-weight: 600;
+}

@@ -1,0 +1,24 @@
+<div class="leave-action-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block leave-action-modal" role="alertdialog" aria-modal="true"
+    aria-labelledby="approve-leave-title" aria-describedby="approve-leave-description" tabindex="-1"
+    (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-body text-center">
+          <span class="action-icon action-icon-success" aria-hidden="true"><i class="bi bi-check-lg"></i></span>
+          <h2 id="approve-leave-title" class="h5 fw-bold mt-3 mb-2">Approve leave request?</h2>
+          <p id="approve-leave-description" class="text-body-secondary mb-0">
+            This will approve the leave request from <strong class="text-body">{{ employeeName }}</strong>.
+          </p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Go back</button>
+          <button type="button" class="btn btn-success" [disabled]="isLoading" (click)="confirmed.emit()">
+            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Approving... }
+            @else { <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Approve request }
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

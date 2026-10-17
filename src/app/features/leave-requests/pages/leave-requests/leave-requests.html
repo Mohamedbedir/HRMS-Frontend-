@@ -1,0 +1,207 @@
+<main class="container-fluid py-4 leave-requests-page">
+    <header class="page-heading d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <div class="page-eyebrow"><i class="bi bi-calendar2-week me-2" aria-hidden="true"></i>People operations
+            </div>
+            <h1 class="fw-bold mb-1">Leave requests</h1>
+            <p class="text-body-secondary mb-0">Review employee time-off requests and keep track of their status.</p>
+        </div>
+        <button type="button" class="btn btn-primary create-request-button" (click)="createModalOpen.set(true)">
+            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>New request
+        </button>
+    </header>
+
+    @if (successMessage) {
+    <div class="alert alert-success alert-dismissible fade show" role="status">
+        <i class="bi bi-check-circle me-2" aria-hidden="true"></i>{{ successMessage }}
+        <button type="button" class="btn-close" aria-label="Dismiss success message"
+            (click)="successMessage = ''"></button>
+    </div>
+    }
+
+    @if (errorMessage) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>{{ errorMessage }}
+        <button type="button" class="btn-close" aria-label="Dismiss error message" (click)="errorMessage = ''"></button>
+    </div>
+    }
+
+    <section class="request-overview row g-3 mb-4" aria-label="Leave request summary">
+        <div class="col-6 col-xl-3">
+            <article class="overview-card">
+                <span class="overview-icon overview-icon-total"><i class="bi bi-inbox" aria-hidden="true"></i></span>
+                <div><span class="overview-label">All requests</span><strong>{{ requests().length }}</strong></div>
+            </article>
+        </div>
+        <div class="col-6 col-xl-3">
+            <article class="overview-card">
+                <span class="overview-icon overview-icon-pending"><i class="bi bi-hourglass-split"
+                        aria-hidden="true"></i></span>
+                <div><span class="overview-label">Pending</span><strong>{{ countByStatus('pending') }}</strong></div>
+            </article>
+        </div>
+        <div class="col-6 col-xl-3">
+            <article class="overview-card">
+                <span class="overview-icon overview-icon-approved"><i class="bi bi-check2-circle"
+                        aria-hidden="true"></i></span>
+                <div><span class="overview-label">Approved</span><strong>{{ countByStatus('approved') }}</strong></div>
+            </article>
+        </div>
+        <div class="col-6 col-xl-3">
+            <article class="overview-card">
+                <span class="overview-icon overview-icon-rejected"><i class="bi bi-x-circle"
+                        aria-hidden="true"></i></span>
+                <div><span class="overview-label">Rejected</span><strong>{{ countByStatus('rejected') }}</strong></div>
+            </article>
+        </div>
+    </section>
+
+    <section class="card requests-card border-0 shadow-sm">
+        <header class="card-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h2 class="h5 fw-bold mb-1">All leave requests</h2>
+                <p class="text-body-secondary small mb-0">Search, filter, and manage submitted requests.</p>
+            </div>
+            <button type="button" class="btn btn-outline-secondary refresh-button" (click)="loadRequests()"
+                [disabled]="loading()">
+                @if (loading()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Refreshing
+                } @else {
+                <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Refresh
+                }
+            </button>
+        </header>
+
+        <div class="request-toolbar">
+            <label class="search-control" for="leave-request-search">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input id="leave-request-search" type="search" class="form-control"
+                    placeholder="Search employee, leave type, or reason" [(ngModel)]="searchTerm" />
+            </label>
+            <label class="filter-control" for="leave-request-status">
+                <span>Status</span>
+                <select id="leave-request-status" class="form-select" [(ngModel)]="statusFilter">
+                    <option value="all">All statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </label>
+        </div>
+
+        @if (loading()) {
+        <div class="loading-state" role="status">
+            <span class="spinner-border text-primary" aria-hidden="true"></span>
+            <p class="text-body-secondary mt-3 mb-0">Loading leave requests...</p>
+        </div>
+        } @else {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Employee</th>
+                        <th scope="col">Leave type</th>
+                        <th scope="col">Period</th>
+                        <th scope="col">Submitted</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Approved by</th>
+                        <th scope="col" class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (request of filteredRequests(); track request.id) {
+                    <tr class="request-row" tabindex="0"
+                        [routerLink]="['/admin/leave-requests', request.id]"
+                        [attr.aria-label]="'View leave request details for ' + request.employeeName"
+                        (keydown)="onRowKeydown($event, request)">
+                        <td>
+                            <div class="employee-cell">
+                                <span class="employee-avatar" aria-hidden="true">{{ request.employeeName.charAt(0) ||
+                                    '?' }}</span>
+                                <span class="fw-semibold">
+                                    {{ request.employeeName }}
+                                </span>
+                            </div>
+                        </td>
+                        <td><span class="leave-type-label">{{ request.leaveType }}</span></td>
+                        <td>
+                            <div class="fw-medium">{{ request.startDate | date:'dd MMM yyyy' }}</div>
+                            <div class="small text-body-secondary">to {{ request.endDate | date:'dd MMM yyyy' }}</div>
+                        </td>
+                        <td class="text-body-secondary">{{ request.createdAt | date:'dd MMM yyyy' }}</td>
+                        <td><span class="status-badge" [ngClass]="getStatusClass(request.status)">{{ request.status
+                                }}</span></td>
+                        <td class="text-body-secondary">{{ request.approvedByName || '—' }}</td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-2">
+                                @if (request.status.toLowerCase() === 'pending') {
+                                <button type="button" class="btn btn-sm btn-success action-button"
+                                    title="Approve request" aria-label="Approve request" [disabled]="actionLoading()"
+                                    (click)="$event.stopPropagation(); openAction('approve', request)">
+                                    <i class="bi bi-check-lg" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger action-button"
+                                    title="Reject request" aria-label="Reject request" [disabled]="actionLoading()"
+                                    (click)="$event.stopPropagation(); openAction('reject', request)">
+                                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary action-button"
+                                    title="Cancel request" aria-label="Cancel request" [disabled]="actionLoading()"
+                                    (click)="$event.stopPropagation(); openAction('cancel', request)">
+                                    <i class="bi bi-slash-circle" aria-hidden="true"></i>
+                                </button>
+                                } @else {
+                                <span class="text-body-secondary small">No actions</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="7" class="empty-table-cell">
+                            <span class="empty-icon"><i class="bi bi-calendar2-x" aria-hidden="true"></i></span>
+                            <h3 class="h6 fw-semibold mt-3 mb-1">{{ requests().length ? 'No matching requests' : 'No
+                                leave requests yet' }}</h3>
+                            <p class="text-body-secondary mb-0">
+                                {{ requests().length ? 'Try a different search term or status filter.' : 'Submitted
+                                leave requests will appear here.' }}
+                            </p>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+
+        <footer class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span class="text-body-secondary small">
+                Showing {{ loading() ? 0 : filteredRequests().length }} of {{ requests().length }} requests
+            </span>
+            <span class="text-body-secondary small">Data refreshes after each completed action</span>
+        </footer>
+    </section>
+</main>
+
+@if (createModalOpen()) {
+<app-leave-request-modal (closed)="createModalOpen.set(false)"
+    (requestCreated)="createModalOpen.set(false); loadRequests()" />
+}
+
+@if (selectedRequest(); as request) {
+@switch (activeAction()) {
+@case ('approve') {
+<app-leave-approve-modal [employeeName]="request.employeeName" [isLoading]="actionLoading()"
+    (confirmed)="approveRequest()" (closed)="closeAction()" />
+}
+@case ('cancel') {
+<app-leave-cancel-modal [employeeName]="request.employeeName" [isLoading]="actionLoading()"
+    (confirmed)="cancelRequest()" (closed)="closeAction()" />
+}
+@case ('reject') {
+<app-leave-reject-modal [employeeName]="request.employeeName" [isLoading]="actionLoading()"
+    (confirmed)="rejectRequest($event)" (closed)="closeAction()" />
+}
+}
+}

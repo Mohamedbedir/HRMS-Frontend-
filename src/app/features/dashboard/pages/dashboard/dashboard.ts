@@ -47,7 +47,7 @@ export class Dashboard implements OnInit {
       title: 'Add Employee',
       description: 'Create a new employee',
       icon: 'bi-person-plus-fill',
-      route: '/admin/employees/create'
+      route: '/admin/employees'
     },
     {
       title: 'Departments',
@@ -65,7 +65,7 @@ export class Dashboard implements OnInit {
       title: 'Leave Requests',
       description: 'Review pending requests',
       icon: 'bi-calendar2-event-fill',
-      route: '/admin/leave'
+      route: '/admin/leave-requests'
     }
   ];
 
