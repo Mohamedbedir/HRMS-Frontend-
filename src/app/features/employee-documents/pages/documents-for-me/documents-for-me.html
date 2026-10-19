@@ -1,0 +1,124 @@
+<main class="documents-page container-fluid py-4">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">YOUR WORKSPACE</span>
+      <h1 class="page-title">My documents</h1>
+      <p class="page-description">View and manage the documents associated with your employee profile.</p>
+    </div>
+    <button type="button" class="btn btn-primary upload-button" (click)="openUpload()">
+      <i class="bi bi-cloud-arrow-up me-2" aria-hidden="true"></i>
+      Upload document
+    </button>
+  </header>
+
+  @if (notice(); as message) {
+    <div class="alert alert-success alert-dismissible" role="status">
+      {{ message }}
+      <button type="button" class="btn-close" aria-label="Close" (click)="clearNotice()"></button>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="page-state" role="status" aria-live="polite">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading your documents…</span>
+    </div>
+  } @else if (hasError()) {
+    <div class="page-state" role="alert">
+      <div class="state-icon state-icon-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h2 class="h5">Unable to load documents</h2>
+      <p class="text-secondary">{{ errorMessage() }}</p>
+      @if (employeeId > 0) {
+        <button type="button" class="btn btn-outline-primary" (click)="loadDocuments()">
+          <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+        </button>
+      }
+    </div>
+  } @else if (documents().length === 0) {
+    <div class="page-state">
+      <div class="state-icon"><i class="bi bi-folder2-open" aria-hidden="true"></i></div>
+      <h2 class="h5">No documents yet</h2>
+      <p class="text-secondary">Upload a document and it will be available here.</p>
+      <button type="button" class="btn btn-primary" (click)="openUpload()">
+        <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Upload your first document
+      </button>
+    </div>
+  } @else {
+    <section aria-label="My documents">
+      <div class="documents-summary">
+        <span>{{ documents().length }} {{ documents().length === 1 ? 'document' : 'documents' }}</span>
+        <span class="summary-dot" aria-hidden="true"></span>
+        <span>Only visible to you and authorized HR staff</span>
+      </div>
+      <div class="row g-3">
+        @for (document of documents(); track document.id) {
+          <div class="col-12 col-xl-6">
+            <article class="document-card">
+              <div class="document-main">
+                <div class="document-icon" aria-hidden="true"><i class="bi bi-file-earmark-text"></i></div>
+                <div class="document-heading">
+                  <button type="button" class="document-title" (click)="openDetails(document.id)">
+                    {{ document.documentType || 'Employee document' }}
+                  </button>
+                  @if (document.expiryDate) {
+                    <span class="document-status"
+                      [class.document-status-expired]="isExpired(document.expiryDate)"
+                      [class.document-status-valid]="!isExpired(document.expiryDate)">
+                      {{ isExpired(document.expiryDate) ? 'Expired' : 'Valid' }}
+                    </span>
+                  }
+                  <span class="document-filename" [title]="document.fileName">
+                    {{ document.fileName || 'Untitled file' }}
+                  </span>
+                </div>
+                <button type="button" class="icon-action" aria-label="Open document details"
+                  title="Open details" (click)="openDetails(document.id)">
+                  <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <div class="document-meta">
+                <div>
+                  <span class="meta-label">Uploaded</span>
+                  <span class="meta-value">{{ document.uploadedAt ? (document.uploadedAt | date:'dd MMM yyyy') : '—' }}</span>
+                </div>
+                <div>
+                  <span class="meta-label">Expires</span>
+                  <span class="meta-value">{{ document.expiryDate ? (document.expiryDate | date:'dd MMM yyyy') : 'No expiry' }}</span>
+                </div>
+              </div>
+
+              <footer class="document-actions">
+                @if (document.file) {
+                  <a class="btn btn-sm btn-outline-primary" [href]="document.file"
+                    [attr.download]="document.fileName || null" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-box-arrow-up-right me-1" aria-hidden="true"></i>Open file
+                  </a>
+                }
+                <span class="action-spacer"></span>
+                <button type="button" class="btn btn-sm btn-outline-secondary"
+                  (click)="editDocument(document)">
+                  <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger"
+                  (click)="deleteDocument(document)">
+                  <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete
+                </button>
+              </footer>
+            </article>
+          </div>
+        }
+      </div>
+    </section>
+  }
+</main>
+
+@if (isUploadOpen()) {
+  <app-upload-document-modal [employeeId]="employeeId" (closed)="closeUpload()" (uploaded)="onUploaded()"></app-upload-document-modal>
+}
+@if (documentToEdit(); as document) {
+  <app-edit-document-modal [document]="document" (closed)="closeEdit()" (updated)="onUpdated()"></app-edit-document-modal>
+}
+@if (documentToDelete(); as document) {
+  <app-delete-document-modal [document]="document" (closed)="closeDelete()" (deleted)="onDeleted($event)"></app-delete-document-modal>
+}

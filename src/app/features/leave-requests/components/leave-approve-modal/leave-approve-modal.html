@@ -12,9 +12,10 @@
           </p>
         </div>
         <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Go back</button>
+          <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Goback</button>
           <button type="button" class="btn btn-success" [disabled]="isLoading" (click)="confirmed.emit()">
-            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Approving... }
+            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Approving...
+            }
             @else { <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Approve request }
           </button>
         </div>

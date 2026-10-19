@@ -1,0 +1,107 @@
+<main class="candidate-details-page container-fluid py-4">
+  <a class="back-link" routerLink="/admin/candidates">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to candidates
+  </a>
+
+  @if (isLoading()) {
+    <div class="details-state" role="status" aria-live="polite">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading candidate…</span>
+    </div>
+  } @else if (hasError()) {
+    <div class="details-state" role="alert">
+      <div class="state-icon state-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h1>Candidate unavailable</h1>
+      <p>This candidate could not be found or loaded.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadCandidate()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (candidate(); as item) {
+    <article class="details-card">
+      <header class="candidate-hero">
+        <div class="candidate-avatar" aria-hidden="true">
+          {{ item.firstName.charAt(0) }}{{ item.lastName.charAt(0) }}
+        </div>
+        <div class="candidate-heading">
+          <span class="eyebrow">CANDIDATE PROFILE</span>
+          <h1>{{ item.firstName }} {{ item.lastName }}</h1>
+          <p>Added {{ item.createdAt ? (item.createdAt | date:'dd MMMM yyyy') : '—' }}</p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-outline-secondary" (click)="isEditOpen.set(true)">
+            <i class="bi bi-pencil me-2" aria-hidden="true"></i>Edit
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="isDeleteOpen.set(true)">
+            <i class="bi bi-trash me-2" aria-hidden="true"></i>Delete
+          </button>
+        </div>
+      </header>
+
+      <section class="details-section" aria-labelledby="contact-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-person-lines-fill" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="contact-heading">Contact information</h2>
+            <p>Candidate's primary contact details.</p>
+          </div>
+        </div>
+        <div class="contact-grid">
+          <div class="detail-item">
+            <span class="detail-label">Email address</span>
+            <a class="detail-value" [href]="'mailto:' + item.email">{{ item.email }}</a>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Phone number</span>
+            <a class="detail-value" [href]="'tel:' + item.phone">{{ item.phone || 'Not provided' }}</a>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Date added</span>
+            <span class="detail-value">{{ item.createdAt ? (item.createdAt | date:'dd MMMM yyyy') : '—' }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="details-section cv-section" aria-labelledby="cv-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-file-earmark-person" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="cv-heading">Resume / CV</h2>
+            <p>Candidate's attached resume.</p>
+          </div>
+        </div>
+        @if (item.cv) {
+          <div class="cv-card">
+            <div class="cv-file-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></div>
+            <div class="cv-description">
+              <strong>Candidate CV</strong>
+              <span>Open or download the attached resume.</span>
+            </div>
+            <div class="cv-actions">
+              <a class="btn btn-outline-primary" [href]="item.cv" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-box-arrow-up-right me-2" aria-hidden="true"></i>View CV
+              </a>
+              <a class="btn btn-primary" [href]="item.cv" download>
+                <i class="bi bi-download me-2" aria-hidden="true"></i>Download
+              </a>
+            </div>
+          </div>
+        } @else {
+          <div class="cv-empty">
+            <i class="bi bi-file-earmark-x" aria-hidden="true"></i>
+            <span>No CV has been uploaded for this candidate.</span>
+          </div>
+        }
+      </section>
+    </article>
+
+    @if (isEditOpen()) {
+      <app-edit-candidate-modal [candidate]="item" (closed)="isEditOpen.set(false)"
+        (candidateUpdated)="onCandidateUpdated()"></app-edit-candidate-modal>
+    }
+    @if (isDeleteOpen()) {
+      <app-delete-candidate-modal [candidate]="item" (closed)="isDeleteOpen.set(false)"
+        (deleted)="onCandidateDeleted()"></app-delete-candidate-modal>
+    }
+  }
+</main>

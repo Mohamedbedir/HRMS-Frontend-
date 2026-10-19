@@ -1,0 +1,175 @@
+<main class="payroll-details-page">
+  <button type="button" class="back-button" (click)="goBack()">
+    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+    <span>Back to payroll</span>
+  </button>
+
+  @if (loading()) {
+    <section class="details-loading" aria-label="Loading payroll details" aria-busy="true">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading payroll details…</span>
+    </section>
+  } @else if (errorMessage()) {
+    <section class="details-error" role="alert">
+      <span class="error-icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></span>
+      <h1>Payroll details unavailable</h1>
+      <p>{{ errorMessage() }}</p>
+      <button type="button" class="btn btn-primary" (click)="retry()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </section>
+  } @else if (payroll(); as item) {
+    <header class="details-page-header">
+      <div>
+        <span class="details-eyebrow"><i class="bi bi-wallet2 me-2" aria-hidden="true"></i>PAYROLL MANAGEMENT</span>
+        <h1>Payroll details</h1>
+        <p>Salary breakdown and payment items for this payroll period.</p>
+      </div>
+      <span class="period-pill"><i class="bi bi-calendar3" aria-hidden="true"></i>{{ period }}</span>
+    </header>
+
+    <article class="payroll-hero">
+      <div class="employee-summary">
+        <span class="employee-avatar" aria-hidden="true">{{ item.employeeName?.charAt(0) || '?' }}</span>
+        <div>
+          <span class="summary-label">EMPLOYEE</span>
+          <h2>{{ item.employeeName || 'Employee' }}</h2>
+          <span class="payroll-reference">Payroll #{{ item.id }} <span aria-hidden="true">·</span> Employee #{{ item.employeeId }}</span>
+        </div>
+      </div>
+      <div class="hero-status">
+        <span class="summary-label">PAYROLL STATUS</span>
+        <span class="status-badge" [ngClass]="statusClass(item.status)">{{ item.status }}</span>
+      </div>
+      <div class="hero-net-pay">
+        <span class="summary-label">NET PAY</span>
+        <strong>{{ item.netSalary | currency:'EGP':'symbol':'1.2-2' }}</strong>
+      </div>
+    </article>
+
+    <section class="summary-grid" aria-label="Salary summary">
+      <article class="summary-card">
+        <span class="summary-card-icon icon-basic"><i class="bi bi-person-workspace" aria-hidden="true"></i></span>
+        <span class="summary-label">Basic salary</span>
+        <strong>{{ item.basicSalary | currency:'EGP':'symbol':'1.2-2' }}</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-card-icon icon-gross"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
+        <span class="summary-label">Gross salary</span>
+        <strong>{{ item.grossSalary | currency:'EGP':'symbol':'1.2-2' }}</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-card-icon icon-deductions"><i class="bi bi-dash-circle" aria-hidden="true"></i></span>
+        <span class="summary-label">Total deductions</span>
+        <strong>{{ item.totalDeductions | currency:'EGP':'symbol':'1.2-2' }}</strong>
+      </article>
+      <article class="summary-card summary-card-net">
+        <span class="summary-card-icon icon-net"><i class="bi bi-cash-stack" aria-hidden="true"></i></span>
+        <span class="summary-label">Net salary</span>
+        <strong>{{ item.netSalary | currency:'EGP':'symbol':'1.2-2' }}</strong>
+      </article>
+    </section>
+
+    <section class="details-card items-card" aria-labelledby="payroll-items-title">
+      <div class="card-heading">
+        <div class="heading-icon"><i class="bi bi-list-check" aria-hidden="true"></i></div>
+        <div>
+          <h2 id="payroll-items-title">Payroll items</h2>
+          <p>Individual earnings and deductions included in this payroll.</p>
+        </div>
+        <span class="item-count">{{ item.items?.length ?? 0 }} items</span>
+      </div>
+      @if (item.items?.length) {
+        <div class="table-responsive">
+          <table class="table items-table align-middle mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+                <th scope="col" class="text-end">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (payrollItem of item.items ?? []; track $index) {
+                <tr>
+                  <td><strong>{{ payrollItem.name || 'Payroll item' }}</strong></td>
+                  <td><span class="item-type">{{ getItemTypeLabel(payrollItem.type) }}</span></td>
+                  <td class="item-description">{{ payrollItem.description || '—' }}</td>
+                  <td class="text-end amount-cell"
+                    [class.amount-deduction]="payrollItem.type.toLowerCase().includes('deduction') || payrollItem.type.toLowerCase() === 'tax' || payrollItem.type.toLowerCase() === 'insurance' || payrollItem.type.toLowerCase() === 'unpaidleave'">
+                    {{ payrollItem.amount | currency:'EGP':'symbol':'1.2-2' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="empty-items">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <strong>No payroll items</strong>
+          <span>There are no itemized earnings or deductions for this payroll.</span>
+        </div>
+      }
+    </section>
+
+    <section class="details-card timeline-card" aria-labelledby="timeline-title">
+      <div class="card-heading">
+        <div class="heading-icon timeline-heading-icon"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
+        <div>
+          <h2 id="timeline-title">Payroll timeline</h2>
+          <p>Track when this payroll was generated, approved, and paid.</p>
+        </div>
+      </div>
+      <div class="timeline-grid">
+        <div class="timeline-item">
+          <span class="timeline-dot dot-generated"></span>
+          <span class="timeline-label">Generated</span>
+          <time>{{ item.generatedAt ? (item.generatedAt | date:'medium') : 'Not generated' }}</time>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-dot dot-approved"></span>
+          <span class="timeline-label">Approved</span>
+          <time>{{ item.approvedAt ? (item.approvedAt | date:'medium') : 'Not approved' }}</time>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-dot dot-paid"></span>
+          <span class="timeline-label">Paid</span>
+          <time>{{ item.paidAt ? (item.paidAt | date:'medium') : 'Not paid' }}</time>
+        </div>
+      </div>
+    </section>
+
+    <footer class="details-actions">
+      @if (canCancel(item)) {
+        <button type="button" class="btn btn-outline-danger" (click)="openAction('cancel')">
+          <i class="bi bi-x-lg me-1" aria-hidden="true"></i>Cancel payroll
+        </button>
+      }
+      @if (canApprove(item)) {
+        <button type="button" class="btn btn-success" (click)="openAction('approve')">
+          <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Approve payroll
+        </button>
+      }
+      @if (canPay(item)) {
+        <button type="button" class="btn btn-primary" (click)="openAction('pay')">
+          <i class="bi bi-cash me-1" aria-hidden="true"></i>Mark as paid
+        </button>
+      }
+    </footer>
+  }
+</main>
+
+@if (activeAction() === 'approve' && payroll(); as item) {
+  <app-payroll-approve-modal [employeeName]="item.employeeName || 'Employee'" [month]="monthName" [year]="item.year"
+    [isLoading]="actionLoading()" (confirmed)="confirmAction()" (closed)="closeAction()" />
+}
+@if (activeAction() === 'pay' && payroll(); as item) {
+  <app-payroll-pay-modal [employeeName]="item.employeeName || 'Employee'" [amount]="item.netSalary" [month]="monthName"
+    [year]="item.year" [isLoading]="actionLoading()" (confirmed)="confirmAction()" (closed)="closeAction()" />
+}
+@if (activeAction() === 'cancel' && payroll(); as item) {
+  <app-payroll-cancel-modal [employeeName]="item.employeeName || 'Employee'" [month]="monthName" [year]="item.year"
+    [isLoading]="actionLoading()" (confirmed)="confirmAction()"  (closed)="closeAction()" />
+}

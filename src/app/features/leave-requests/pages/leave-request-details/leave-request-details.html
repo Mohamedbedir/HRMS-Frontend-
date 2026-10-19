@@ -5,146 +5,150 @@
   </a>
 
   @if (isLoading()) {
-    <section class="details-card details-loading" aria-label="Loading leave request" aria-busy="true">
-      <span class="spinner-border text-primary" aria-hidden="true"></span>
-      <p class="text-body-secondary mb-0">Loading request details...</p>
-    </section>
+  <section class="details-card details-loading" aria-label="Loading leave request" aria-busy="true">
+    <span class="spinner-border text-primary" aria-hidden="true"></span>
+    <p class="text-body-secondary mb-0">Loading request details...</p>
+  </section>
   } @else if (hasError()) {
-    <section class="details-error" role="alert">
-      <span class="error-icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></span>
-      <h1>Request details unavailable</h1>
-      <p>We couldn't load this leave request. It may have been removed, or there may be a connection problem.</p>
-      <div class="d-flex flex-wrap justify-content-center gap-2">
-        @if (requestId !== null) {
-          <button type="button" class="btn btn-primary" (click)="retry()">
-            <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
-          </button>
-        }
-        <button type="button" class="btn btn-outline-secondary" (click)="goBack()">Back to requests</button>
-      </div>
-    </section>
+  <section class="details-error" role="alert">
+    <span class="error-icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></span>
+    <h1>Request details unavailable</h1>
+    <p>We couldn't load this leave request. It may have been removed, or there may be a connection problem.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      @if (requestId !== null) {
+      <button type="button" class="btn btn-primary" (click)="retry()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+      }
+      <button type="button" class="btn btn-outline-secondary" (click)="goBack()">Back to requests</button>
+    </div>
+  </section>
   } @else if (request(); as item) {
-    <header class="details-heading">
-      <div>
-        <span class="details-eyebrow"><i class="bi bi-calendar2-week me-2" aria-hidden="true"></i>PEOPLE OPERATIONS</span>
-        <h1>Leave request details</h1>
-        <p>Review the request information and its approval status.</p>
+  <header class="details-heading">
+    <div>
+      <span class="details-eyebrow"><i class="bi bi-calendar2-week me-2" aria-hidden="true"></i>PEOPLE OPERATIONS</span>
+      <h1>Leave request details</h1>
+      <p>Review the request information and its approval status.</p>
+    </div>
+    <!-- <span class="request-reference">Request #{{ item.id }}</span> -->
+  </header>
+
+  <article class="request-hero">
+    <div class="employee-summary">
+      <span class="employee-avatar" aria-hidden="true">{{ item.employeeName?.charAt(0) || '?' }}</span>
+      <div class="employee-copy">
+        <span class="summary-label">REQUESTED BY</span>
+        <h2>{{ item.employeeName }}</h2>
+        <span class="text-body-secondary">{{ item.leaveType }}</span>
       </div>
-      <span class="request-reference">Request #{{ item.id }}</span>
+    </div>
+    <div class="request-status">
+      <span class="summary-label">CURRENT STATUS</span>
+      <span class="status-badge" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
+    </div>
+  </article>
+
+  <section class="details-card" aria-labelledby="leave-info-heading">
+    <header class="section-heading">
+      <span class="section-icon" aria-hidden="true"><i class="bi bi-card-list"></i></span>
+      <div>
+        <h2 id="leave-info-heading">Request information</h2>
+        <p>Important dates and request details</p>
+      </div>
     </header>
 
-    <article class="request-hero">
-      <div class="employee-summary">
-        <span class="employee-avatar" aria-hidden="true">{{ item.employeeName?.charAt(0) || '?' }}</span>
-        <div class="employee-copy">
-          <span class="summary-label">REQUESTED BY</span>
-          <h2>{{ item.employeeName }}</h2>
-          <span class="text-body-secondary">{{ item.leaveType }}</span>
-        </div>
+    <dl class="request-metadata">
+      <div class="metadata-item">
+        <dt><i class="bi bi-calendar-event" aria-hidden="true"></i> Leave type</dt>
+        <dd>{{ item.leaveType }}</dd>
       </div>
-      <div class="request-status">
-        <span class="summary-label">CURRENT STATUS</span>
-        <span class="status-badge" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
+      <div class="metadata-item">
+        <dt><i class="bi bi-calendar-range" aria-hidden="true"></i> Leave period</dt>
+        <dd>{{ item.startDate | date:'longDate' }} <span class="date-separator">to</span> {{ item.endDate |
+          date:'longDate' }}</dd>
       </div>
-    </article>
-
-    <section class="details-card" aria-labelledby="leave-info-heading">
-      <header class="section-heading">
-        <span class="section-icon" aria-hidden="true"><i class="bi bi-card-list"></i></span>
-        <div>
-          <h2 id="leave-info-heading">Request information</h2>
-          <p>Important dates and request details</p>
-        </div>
-      </header>
-
-      <dl class="request-metadata">
-        <div class="metadata-item">
-          <dt><i class="bi bi-calendar-event" aria-hidden="true"></i> Leave type</dt>
-          <dd>{{ item.leaveType }}</dd>
-        </div>
-        <div class="metadata-item">
-          <dt><i class="bi bi-calendar-range" aria-hidden="true"></i> Leave period</dt>
-          <dd>{{ item.startDate | date:'longDate' }} <span class="date-separator">to</span> {{ item.endDate | date:'longDate' }}</dd>
-        </div>
-        <div class="metadata-item">
-          <dt><i class="bi bi-clock-history" aria-hidden="true"></i> Submitted on</dt>
-          <dd>{{ item.createdAt | date:'longDate' }}</dd>
-        </div>
-        <div class="metadata-item">
-          <dt><i class="bi bi-person-check" aria-hidden="true"></i> Approved by</dt>
-          <dd>{{ item.approvedByName || 'Not assigned' }}</dd>
-        </div>
-        @if (item.approvedAt) {
-          <div class="metadata-item">
-            <dt><i class="bi bi-calendar-check" aria-hidden="true"></i> Decision date</dt>
-            <dd>{{ item.approvedAt | date:'longDate' }}</dd>
-          </div>
-        }
-      </dl>
-    </section>
-
-    <section class="details-card" aria-labelledby="reason-heading">
-      <header class="section-heading">
-        <span class="section-icon reason-icon" aria-hidden="true"><i class="bi bi-chat-left-text"></i></span>
-        <div>
-          <h2 id="reason-heading">Employee's reason</h2>
-          <p>Additional context provided with the request</p>
-        </div>
-      </header>
-      <div class="text-content">
-        @if (item.reason?.trim()) {
-          <p>{{ item.reason }}</p>
-        } @else {
-          <p class="text-body-secondary mb-0">No reason was provided.</p>
-        }
+      <div class="metadata-item">
+        <dt><i class="bi bi-clock-history" aria-hidden="true"></i> Submitted on</dt>
+        <dd>{{ item.createdAt | date:'longDate' }}</dd>
       </div>
-    </section>
+      <div class="metadata-item">
+        <dt><i class="bi bi-person-check" aria-hidden="true"></i> Approved by</dt>
+        <dd>{{ item.approvedByName || 'Not assigned' }}</dd>
+      </div>
+      @if (item.approvedAt) {
+      <div class="metadata-item">
+        <dt><i class="bi bi-calendar-check" aria-hidden="true"></i> Decision date</dt>
+        <dd>{{ item.approvedAt | date:'longDate' }}</dd>
+      </div>
+      }
+    </dl>
+  </section>
 
-    @if (item.status.toLowerCase() === 'rejected' && item.rejectionReason) {
-      <section class="details-card rejection-card" aria-labelledby="rejection-reason-heading">
-        <header class="section-heading">
-          <span class="section-icon rejection-icon" aria-hidden="true"><i class="bi bi-x-circle"></i></span>
-          <div>
-            <h2 id="rejection-reason-heading">Rejection reason</h2>
-            <p>Reason provided when this request was rejected</p>
-          </div>
-        </header>
-        <div class="text-content"><p>{{ item.rejectionReason }}</p></div>
-      </section>
-    }
+  <section class="details-card" aria-labelledby="reason-heading">
+    <header class="section-heading">
+      <span class="section-icon reason-icon" aria-hidden="true"><i class="bi bi-chat-left-text"></i></span>
+      <div>
+        <h2 id="reason-heading">Employee's reason</h2>
+        <p>Additional context provided with the request</p>
+      </div>
+    </header>
+    <div class="text-content">
+      @if (item.reason?.trim()) {
+      <p>{{ item.reason }}</p>
+      } @else {
+      <p class="text-body-secondary mb-0">No reason was provided.</p>
+      }
+    </div>
+  </section>
 
-    @if (item.status.toLowerCase() === 'pending') {
-      <footer class="details-actions">
-        <span class="text-body-secondary">This request is waiting for a decision.</span>
-        <div class="d-flex flex-wrap gap-2">
-          <button type="button" class="btn btn-outline-secondary" [disabled]="actionLoading()" (click)="openAction('cancel')">
-            <i class="bi bi-slash-circle me-2" aria-hidden="true"></i>Cancel request
-          </button>
-          <button type="button" class="btn btn-outline-danger" [disabled]="actionLoading()" (click)="openAction('reject')">
-            <i class="bi bi-x-lg me-2" aria-hidden="true"></i>Reject
-          </button>
-          <button type="button" class="btn btn-success" [disabled]="actionLoading()" (click)="openAction('approve')">
-            <i class="bi bi-check-lg me-2" aria-hidden="true"></i>Approve
-          </button>
-        </div>
-      </footer>
-    }
+  @if (item.status.toLowerCase() === 'rejected' && item.rejectionReason) {
+  <section class="details-card rejection-card" aria-labelledby="rejection-reason-heading">
+    <header class="section-heading">
+      <span class="section-icon rejection-icon" aria-hidden="true"><i class="bi bi-x-circle"></i></span>
+      <div>
+        <h2 id="rejection-reason-heading">Rejection reason</h2>
+        <p>Reason provided when this request was rejected</p>
+      </div>
+    </header>
+    <div class="text-content">
+      <p>{{ item.rejectionReason }}</p>
+    </div>
+  </section>
+  }
+
+  @if (item.status.toLowerCase() === 'pending') {
+  <footer class="details-actions">
+    <span class="text-body-secondary">This request is waiting for a decision.</span>
+    <div class="d-flex flex-wrap gap-2">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="actionLoading()"
+        (click)="openAction('cancel')">
+        <i class="bi bi-slash-circle me-2" aria-hidden="true"></i>Cancel request
+      </button>
+      <button type="button" class="btn btn-outline-danger" [disabled]="actionLoading()" (click)="openAction('reject')">
+        <i class="bi bi-x-lg me-2" aria-hidden="true"></i>Reject
+      </button>
+      <button type="button" class="btn btn-success" [disabled]="actionLoading()" (click)="openAction('approve')">
+        <i class="bi bi-check-lg me-2" aria-hidden="true"></i>Approve
+      </button>
+    </div>
+  </footer>
+  }
   }
 </main>
 
 @if (request(); as item) {
-  @switch (activeAction()) {
-    @case ('approve') {
-      <app-leave-approve-modal [employeeName]="item.employeeName" [isLoading]="actionLoading()"
-        (confirmed)="approveRequest()" (closed)="closeAction()" />
-    }
-    @case ('cancel') {
-      <app-leave-cancel-modal [employeeName]="item.employeeName" [isLoading]="actionLoading()"
-        (confirmed)="cancelRequest()" (closed)="closeAction()" />
-    }
-    @case ('reject') {
-      <app-leave-reject-modal [employeeName]="item.employeeName" [isLoading]="actionLoading()"
-        (confirmed)="rejectRequest($event)" (closed)="closeAction()" />
-    }
-  }
+@switch (activeAction()) {
+@case ('approve') {
+<app-leave-approve-modal [employeeName]="item.employeeName" [isLoading]="actionLoading()" (confirmed)="approveRequest()"
+  (closed)="closeAction()" />
+}
+@case ('cancel') {
+<app-leave-cancel-modal [employeeName]="item.employeeName" [isLoading]="actionLoading()" (confirmed)="cancelRequest()"
+  (closed)="closeAction()" />
+}
+@case ('reject') {
+<app-leave-reject-modal [employeeName]="item.employeeName" [isLoading]="actionLoading()"
+  (confirmed)="rejectRequest($event)" (closed)="closeAction()" />
+}
+}
 }

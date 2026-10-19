@@ -61,14 +61,14 @@ export class TokenService {
     return Number(payload.nameid);
   }
 
-  getEmployeeId(): number | null {
+  getEmployeeId(): number {
 
     const payload = this.decodeToken();
 
-    if (!payload?.EmployeeId)
-      return null;
+    // if (!payload?.EmployeeId)
+    //   return null;
 
-    return Number(payload.EmployeeId);
+    return Number(payload?.EmployeeId);
   }
 
     getEmail(): string | null {

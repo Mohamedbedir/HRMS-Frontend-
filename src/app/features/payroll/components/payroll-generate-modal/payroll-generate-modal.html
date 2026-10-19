@@ -1,0 +1,78 @@
+<div class="payroll-modal-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block payroll-modal" role="dialog" aria-modal="true"
+    aria-labelledby="generate-payroll-title" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <form class="modal-content" [formGroup]="form" (ngSubmit)="submit()">
+        <header class="modal-header">
+          <div>
+            <span class="modal-kicker">PAYROLL MANAGEMENT</span>
+            <h2 class="modal-title" id="generate-payroll-title">Generate payroll</h2>
+          </div>
+          <button type="button" class="btn-close" aria-label="Close" [disabled]="isLoading" (click)="close()"></button>
+        </header>
+        <div class="modal-body">
+          <p class="text-body-secondary modal-intro">Create a payroll record for an employee and pay period.</p>
+          <label class="form-label" for="payroll-employee">Employee</label>
+          <select id="payroll-employee" class="form-select" formControlName="employeeId"
+            [class.is-invalid]="isInvalid('employeeId')">
+            <option [ngValue]="0" disabled>Select an employee</option>
+            @for (employee of employees; track employee.id) {
+              <option [ngValue]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</option>
+            }
+          </select>
+          @if (isInvalid('employeeId')) { <div class="invalid-feedback">Select an employee.</div> }
+          @if (!employees.length) {
+            <div class="form-text text-warning-emphasis">No employees are available for payroll generation.</div>
+          }
+
+          <div class="row g-3 mt-1">
+            <div class="col-7">
+              <label class="form-label" for="payroll-month">Month</label>
+              <select id="payroll-month" class="form-select" formControlName="month"
+                [class.is-invalid]="isInvalid('month')">
+                @for (month of months; track month.value) {
+                  <option [ngValue]="month.value">{{ month.label }}</option>
+                }
+              </select>
+              @if (isInvalid('month')) { <div class="invalid-feedback">Select a valid month.</div> }
+            </div>
+            <div class="col-5">
+              <label class="form-label" for="payroll-year">Year</label>
+              <input id="payroll-year" class="form-control" type="number" min="2000" max="2100"
+                formControlName="year" [class.is-invalid]="isInvalid('year')" />
+              @if (isInvalid('year')) { <div class="invalid-feedback">Enter a valid year.</div> }
+            </div>
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-6">
+              <label class="form-label" for="payroll-bonus">Bonus</label>
+              <div class="input-group">
+                <span class="input-group-text">EGP</span>
+                <input id="payroll-bonus" class="form-control" type="number" min="0" step="0.01"
+                  formControlName="bonus" [class.is-invalid]="isInvalid('bonus')" />
+              </div>
+              @if (isInvalid('bonus')) { <div class="invalid-feedback d-block">Bonus must be zero or more.</div> }
+            </div>
+            <div class="col-6">
+              <label class="form-label" for="payroll-deduction">Deduction</label>
+              <div class="input-group">
+                <span class="input-group-text">EGP</span>
+                <input id="payroll-deduction" class="form-control" type="number" min="0" step="0.01"
+                  formControlName="deduction" [class.is-invalid]="isInvalid('deduction')" />
+              </div>
+              @if (isInvalid('deduction')) { <div class="invalid-feedback d-block">Deduction must be zero or more.</div> }
+            </div>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-light" [disabled]="isLoading" (click)="close()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isLoading || !employees.length">
+            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Generating… }
+            @else { <i class="bi bi-lightning-charge me-1" aria-hidden="true"></i>Generate payroll }
+          </button>
+        </footer>
+      </form>
+    </div>
+  </section>
+</div>

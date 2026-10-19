@@ -1,0 +1,544 @@
+.payroll-details-page {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 1.5rem clamp(1rem, 3vw, 2rem) 2rem;
+  color: var(--bs-body-color);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1.5rem;
+  padding: 0.4rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--bs-secondary-color);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.back-button:hover {
+  color: var(--bs-primary);
+}
+
+.details-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.details-eyebrow {
+  color: var(--bs-primary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.details-page-header h1 {
+  margin: 0.35rem 0;
+  font-size: clamp(1.55rem, 3vw, 2rem);
+  font-weight: 780;
+  letter-spacing: -0.035em;
+}
+
+.details-page-header p {
+  margin: 0;
+  color: var(--bs-secondary-color);
+  font-size: 0.88rem;
+}
+
+.period-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.7rem;
+  background: var(--bs-body-bg);
+  font-size: 0.82rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.payroll-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+}
+
+.employee-summary {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.employee-avatar {
+  display: grid;
+  width: 3.1rem;
+  height: 3.1rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 1rem;
+  background: rgba(var(--bs-primary-rgb), 0.1);
+  color: var(--bs-primary);
+  font-size: 1.1rem;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.employee-summary h2 {
+  overflow: hidden;
+  margin: 0.2rem 0;
+  font-size: 1.05rem;
+  font-weight: 720;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary-label {
+  display: block;
+  color: var(--bs-secondary-color);
+  font-size: 0.67rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.payroll-reference {
+  color: var(--bs-secondary-color);
+  font-size: 0.75rem;
+}
+
+.hero-status,
+.hero-net-pay {
+  display: flex;
+  min-height: 3.1rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  padding-left: 1.4rem;
+  border-left: 1px solid var(--bs-border-color);
+}
+
+.status-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.35rem 0.65rem;
+  border-radius: 2rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-success {
+  background: rgba(var(--bs-success-rgb), 0.13);
+  color: var(--bs-success-text-emphasis);
+}
+
+.status-danger {
+  background: rgba(var(--bs-danger-rgb), 0.1);
+  color: var(--bs-danger-text-emphasis);
+}
+
+.status-info {
+  background: rgba(var(--bs-info-rgb), 0.14);
+  color: var(--bs-info-text-emphasis);
+}
+
+.status-warning {
+  background: rgba(var(--bs-warning-rgb), 0.17);
+  color: var(--bs-warning-text-emphasis);
+}
+
+.hero-net-pay strong {
+  font-size: 1.15rem;
+  font-weight: 780;
+  white-space: nowrap;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 1rem 0;
+}
+
+.summary-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.9rem;
+  background: var(--bs-body-bg);
+}
+
+.summary-card-icon {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  grid-row: span 2;
+  place-items: center;
+  border-radius: 0.7rem;
+}
+
+.icon-basic {
+  background: rgba(var(--bs-primary-rgb), 0.1);
+  color: var(--bs-primary);
+}
+
+.icon-gross {
+  background: rgba(var(--bs-info-rgb), 0.14);
+  color: var(--bs-info-text-emphasis);
+}
+
+.icon-deductions {
+  background: rgba(var(--bs-danger-rgb), 0.1);
+  color: var(--bs-danger);
+}
+
+.icon-net {
+  background: rgba(var(--bs-success-rgb), 0.13);
+  color: var(--bs-success);
+}
+
+.summary-card strong {
+  overflow: hidden;
+  font-size: 0.92rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.details-card {
+  overflow: hidden;
+  margin-top: 1rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.1rem 1.3rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.heading-icon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 0.75rem;
+  background: rgba(var(--bs-primary-rgb), 0.1);
+  color: var(--bs-primary);
+}
+
+.timeline-heading-icon {
+  background: rgba(var(--bs-info-rgb), 0.13);
+  color: var(--bs-info-text-emphasis);
+}
+
+.card-heading h2 {
+  margin: 0 0 0.2rem;
+  font-size: 0.98rem;
+  font-weight: 720;
+}
+
+.card-heading p {
+  margin: 0;
+  color: var(--bs-secondary-color);
+  font-size: 0.78rem;
+}
+
+.item-count {
+  margin-left: auto;
+  padding: 0.35rem 0.65rem;
+  border-radius: 2rem;
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color);
+  font-size: 0.72rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.items-table {
+  --bs-table-bg: var(--bs-body-bg);
+  --bs-table-color: var(--bs-body-color);
+  --bs-table-border-color: var(--bs-border-color);
+  min-width: 650px;
+}
+
+.items-table th {
+  padding: 0.75rem 1.1rem;
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color);
+  font-size: 0.67rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.items-table td {
+  padding: 0.85rem 1.1rem;
+  font-size: 0.83rem;
+}
+
+.item-type {
+  display: inline-flex;
+  padding: 0.3rem 0.55rem;
+  border-radius: 2rem;
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color);
+  font-size: 0.7rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.item-description {
+  max-width: 22rem;
+  color: var(--bs-secondary-color) !important;
+  white-space: normal;
+}
+
+.amount-cell {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.amount-deduction {
+  color: var(--bs-danger) !important;
+}
+
+.empty-items {
+  display: flex;
+  min-height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  color: var(--bs-secondary-color);
+  text-align: center;
+}
+
+.empty-items > i {
+  margin-bottom: 0.35rem;
+  font-size: 1.5rem;
+}
+
+.empty-items strong {
+  color: var(--bs-body-color);
+}
+
+.empty-items span {
+  font-size: 0.8rem;
+}
+
+.timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0.5rem 1.3rem;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 0.65rem 1fr;
+  align-items: center;
+  gap: 0.25rem 0.65rem;
+  padding: 0.85rem 0.8rem;
+}
+
+.timeline-item + .timeline-item {
+  border-left: 1px solid var(--bs-border-color);
+}
+
+.timeline-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  grid-row: span 2;
+  border-radius: 50%;
+}
+
+.dot-generated {
+  background: var(--bs-info);
+}
+
+.dot-approved {
+  background: var(--bs-success);
+}
+
+.dot-paid {
+  background: var(--bs-primary);
+}
+
+.timeline-label {
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.timeline-item time {
+  color: var(--bs-secondary-color);
+  font-size: 0.73rem;
+}
+
+.details-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.details-actions .btn {
+  min-height: 2.55rem;
+  border-radius: 0.65rem;
+  font-weight: 650;
+}
+
+.details-loading,
+.details-error {
+  display: flex;
+  min-height: 18rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--bs-secondary-color);
+  text-align: center;
+}
+
+.details-error {
+  padding: 2rem;
+}
+
+.details-error h1 {
+  margin: 0.25rem 0 0;
+  color: var(--bs-body-color);
+  font-size: 1.25rem;
+}
+
+.details-error p {
+  margin: 0;
+}
+
+.error-icon {
+  display: grid;
+  width: 3.2rem;
+  height: 3.2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(var(--bs-danger-rgb), 0.1);
+  color: var(--bs-danger);
+  font-size: 1.35rem;
+}
+
+@media (max-width: 900px) {
+  .payroll-hero {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .hero-net-pay {
+    grid-column: 1 / -1;
+    padding: 0.85rem 0 0;
+    border-top: 1px solid var(--bs-border-color);
+    border-left: 0;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .payroll-details-page {
+    padding: 1rem 0.75rem 1.5rem;
+  }
+
+  .details-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .payroll-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .hero-status,
+  .hero-net-pay {
+    grid-column: auto;
+    padding: 0.85rem 0 0;
+    border-top: 1px solid var(--bs-border-color);
+    border-left: 0;
+  }
+
+  .summary-grid {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.2rem 0.55rem;
+    padding: 0.75rem;
+  }
+
+  .summary-card-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .summary-card .summary-label {
+    font-size: 0.59rem;
+  }
+
+  .summary-card strong {
+    font-size: 0.75rem;
+  }
+
+  .card-heading {
+    padding: 0.9rem;
+  }
+
+  .card-heading p {
+    max-width: 15rem;
+  }
+
+  .timeline-grid {
+    grid-template-columns: 1fr;
+    padding: 0.35rem 0.8rem;
+  }
+
+  .timeline-item + .timeline-item {
+    border-top: 1px solid var(--bs-border-color);
+    border-left: 0;
+  }
+
+  .timeline-item {
+    padding-inline: 0.4rem;
+  }
+
+  .details-actions {
+    flex-wrap: wrap;
+  }
+
+  .details-actions .btn {
+    flex: 1 1 auto;
+  }
+}

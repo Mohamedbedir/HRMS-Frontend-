@@ -26,8 +26,7 @@ export class EmployeeApiService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl =
-    `${environment.apiUrl}/Employees`;
+  private readonly apiUrl = `${environment.apiUrl}/Employees`;
 
   GetAll(): Observable<ApiResponse<EmployeeListItem[]>> {
     return this.http.get<ApiResponse<EmployeeListItem[]>>(`${this.apiUrl}`);
@@ -83,10 +82,7 @@ export class EmployeeApiService {
     );
   }
 
-  private toFormData(
-    employee: CreateEmployeeRequest,
-    id?: number
-  ): FormData {
+  private toFormData(employee: CreateEmployeeRequest,id?: number): FormData {
     const formData = new FormData();
 
     if (id !== undefined) {

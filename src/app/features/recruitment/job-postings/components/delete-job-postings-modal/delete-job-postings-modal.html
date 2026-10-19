@@ -1,0 +1,19 @@
+<div class="modal-backdrop" (click)="closed.emit()">
+  <section class="posting-modal delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-posting-title"
+    (click)="$event.stopPropagation()">
+    <div class="delete-icon" aria-hidden="true"><i class="bi bi-briefcase"></i></div>
+    <h2 id="delete-posting-title">Delete this job posting?</h2>
+    <p><strong>{{ jobPosting.title }}</strong> will be permanently removed.</p>
+
+    <footer class="modal-actions">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isDeleting" (click)="closed.emit()">Cancel</button>
+      <button type="button" class="btn btn-danger" [disabled]="isDeleting" (click)="confirmDelete()">
+        @if (isDeleting) {
+          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Deleting…
+        } @else {
+          <i class="bi bi-trash me-2" aria-hidden="true"></i>Delete posting
+        }
+      </button>
+    </footer>
+  </section>
+</div>

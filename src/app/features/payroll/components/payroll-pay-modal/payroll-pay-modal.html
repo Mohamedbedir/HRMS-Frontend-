@@ -1,0 +1,24 @@
+<div class="payroll-confirm-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block payroll-confirm-modal" role="alertdialog" aria-modal="true"
+    aria-labelledby="pay-payroll-title" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <span class="confirm-icon confirm-primary" aria-hidden="true"><i class="bi bi-cash-coin"></i></span>
+          <h2 id="pay-payroll-title">Mark payroll as paid?</h2>
+          <p class="text-body-secondary mb-0">
+            Confirm payment of <strong class="text-body">{{ amount | currency:'EGP':'symbol':'1.2-2' }}</strong>
+            to <strong class="text-body">{{ employeeName }}</strong> for {{ month }} {{ year }}.
+          </p>
+        </div>
+        <footer class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-light" [disabled]="isLoading" (click)="close()">Go back</button>
+          <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="confirmed.emit()">
+            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Processing… }
+            @else { <i class="bi bi-cash me-1" aria-hidden="true"></i>Confirm payment }
+          </button>
+        </footer>
+      </div>
+    </div>
+  </section>
+</div>

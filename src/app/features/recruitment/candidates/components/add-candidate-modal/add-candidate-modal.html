@@ -1,0 +1,57 @@
+<div class="modal-backdrop" (click)="closed.emit()">
+  <section class="candidate-modal" role="dialog" aria-modal="true" aria-labelledby="add-candidate-title"
+    (click)="$event.stopPropagation()">
+    <header class="modal-heading">
+      <div>
+        <span class="eyebrow">TALENT ACQUISITION</span>
+        <h2 id="add-candidate-title">Add candidate</h2>
+        <p>Enter the candidate's contact details and attach their CV.</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close" [disabled]="isSubmitting" (click)="closed.emit()">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row g-3">
+        <div class="col-sm-6">
+          <label class="form-label" for="candidate-first-name">First name <span class="text-danger">*</span></label>
+          <input id="candidate-first-name" class="form-control" formControlName="firstName" autocomplete="given-name" />
+          @if (getControlError('firstName'); as error) { <small class="field-error">{{ error }}</small> }
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label" for="candidate-last-name">Last name <span class="text-danger">*</span></label>
+          <input id="candidate-last-name" class="form-control" formControlName="lastName" autocomplete="family-name" />
+          @if (getControlError('lastName'); as error) { <small class="field-error">{{ error }}</small> }
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="candidate-email">Email <span class="text-danger">*</span></label>
+          <input id="candidate-email" class="form-control" type="email" formControlName="email" autocomplete="email" />
+          @if (getControlError('email'); as error) { <small class="field-error">{{ error }}</small> }
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="candidate-phone">Phone <span class="text-danger">*</span></label>
+          <input id="candidate-phone" class="form-control" type="tel" formControlName="phone" autocomplete="tel" />
+          @if (getControlError('phone'); as error) { <small class="field-error">{{ error }}</small> }
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="candidate-cv">CV / resume <span class="text-danger">*</span></label>
+          <input id="candidate-cv" class="form-control" type="file" accept=".pdf,.doc,.docx"
+            (change)="onCvSelected($event)" />
+          <small class="form-hint">{{ selectedCv?.name || 'PDF or Word document' }}</small>
+        </div>
+      </div>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting" (click)="closed.emit()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Adding…
+          } @else {
+            <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Add candidate
+          }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

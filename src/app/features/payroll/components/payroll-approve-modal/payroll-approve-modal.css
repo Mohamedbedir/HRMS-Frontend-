@@ -1,0 +1,81 @@
+.payroll-confirm-backdrop {
+  position: fixed;
+  z-index: 1070;
+  inset: 0;
+  display: grid;
+  overflow-y: auto;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.payroll-confirm-modal {
+  position: static;
+  display: block;
+  background: transparent;
+}
+
+.payroll-confirm-modal .modal-dialog {
+  width: min(100% - 1.5rem, 28rem);
+  margin: 1rem auto;
+}
+
+.payroll-confirm-modal .modal-content {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.2);
+}
+
+.payroll-confirm-modal .modal-body {
+  padding: 2rem 1.75rem 1.25rem;
+}
+
+.payroll-confirm-modal h2 {
+  margin: 1rem 0 0.55rem;
+  font-size: 1.2rem;
+  font-weight: 750;
+}
+
+.payroll-confirm-modal p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.confirm-icon {
+  display: inline-grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.confirm-success {
+  background: rgba(var(--bs-success-rgb), 0.12);
+  color: var(--bs-success);
+}
+
+.confirm-danger {
+  background: rgba(var(--bs-danger-rgb), 0.1);
+  color: var(--bs-danger);
+}
+
+.confirm-primary {
+  background: rgba(var(--bs-primary-rgb), 0.1);
+  color: var(--bs-primary);
+}
+
+.payroll-confirm-modal .modal-footer {
+  gap: 0.6rem;
+  padding: 1rem 1.5rem 1.4rem;
+  border: 0;
+}
+
+.payroll-confirm-modal .btn {
+  min-height: 2.55rem;
+  padding-inline: 1rem;
+  border-radius: 0.65rem;
+  font-weight: 650;
+}

@@ -1,0 +1,27 @@
+<div class="modal-backdrop" (click)="closed.emit()">
+  <section class="document-modal delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title"
+    (click)="$event.stopPropagation()">
+    <div class="delete-icon" aria-hidden="true"><i class="bi bi-trash3"></i></div>
+    <h2 id="delete-title">Delete this document?</h2>
+    <p>
+      <strong>{{ document.documentType }}</strong>
+      @if (document.fileName) { <span> ({{ document.fileName }})</span> }
+      will be permanently removed.
+    </p>
+
+    @if (errorMessage) {
+      <div class="alert alert-danger py-2" role="alert">{{ errorMessage }}</div>
+    }
+
+    <footer class="modal-actions">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isDeleting" (click)="closed.emit()">Cancel</button>
+      <button type="button" class="btn btn-danger" [disabled]="isDeleting" (click)="confirmDelete()">
+        @if (isDeleting) {
+          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Deleting…
+        } @else {
+          <i class="bi bi-trash me-2" aria-hidden="true"></i>Delete document
+        }
+      </button>
+    </footer>
+  </section>
+</div>

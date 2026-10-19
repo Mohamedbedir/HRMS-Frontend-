@@ -1,0 +1,100 @@
+.payroll-modal-backdrop {
+  position: fixed;
+  z-index: 1060;
+  inset: 0;
+  display: grid;
+  overflow-y: auto;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.payroll-modal {
+  position: static;
+  display: block;
+  background: transparent;
+}
+
+.payroll-modal .modal-dialog {
+  width: min(100% - 1.5rem, 34rem);
+  margin: 1rem auto;
+}
+
+.payroll-modal .modal-content {
+  overflow: hidden;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.2);
+}
+
+.payroll-modal .modal-header {
+  align-items: flex-start;
+  padding: 1.35rem 1.5rem;
+  border-bottom-color: var(--bs-border-color);
+}
+
+.modal-kicker {
+  color: var(--bs-primary);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.payroll-modal .modal-title {
+  margin-top: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 750;
+}
+
+.payroll-modal .modal-body {
+  padding: 1.35rem 1.5rem;
+}
+
+.modal-intro {
+  margin-bottom: 1.2rem;
+  font-size: 0.86rem;
+}
+
+.payroll-modal .form-label {
+  margin-bottom: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.payroll-modal .form-control,
+.payroll-modal .form-select,
+.payroll-modal .input-group-text {
+  min-height: 2.65rem;
+  border-color: var(--bs-border-color);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.payroll-modal .input-group-text {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color);
+  font-size: 0.75rem;
+}
+
+.payroll-modal .modal-footer {
+  gap: 0.55rem;
+  padding: 1rem 1.5rem 1.3rem;
+  border-top-color: var(--bs-border-color);
+}
+
+.payroll-modal .modal-footer .btn {
+  min-height: 2.55rem;
+  padding-inline: 1rem;
+  border-radius: 0.65rem;
+  font-weight: 650;
+}
+
+@media (max-width: 575.98px) {
+  .payroll-modal .modal-body,
+  .payroll-modal .modal-header,
+  .payroll-modal .modal-footer {
+    padding-inline: 1rem;
+  }
+}

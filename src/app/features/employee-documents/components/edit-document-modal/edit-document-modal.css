@@ -1,0 +1,80 @@
+.modal-backdrop {
+  position: fixed;
+  z-index: 1055;
+  inset: 0;
+  display: grid;
+  overflow-y: auto;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 55%);
+}
+
+.document-modal {
+  width: min(100%, 34rem);
+  padding: 1.5rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 20%);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-eyebrow {
+  color: var(--bs-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.modal-header h2 {
+  margin: 0.3rem 0;
+  color: var(--bs-emphasis-color);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.modal-header p {
+  margin: 0;
+  color: var(--bs-secondary-color);
+}
+
+.modal-close {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.65rem;
+  color: var(--bs-secondary-color);
+  background: var(--bs-body-bg);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.selected-file {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--bs-secondary-color);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 575.98px) {
+  .document-modal {
+    padding: 1.1rem;
+  }
+}

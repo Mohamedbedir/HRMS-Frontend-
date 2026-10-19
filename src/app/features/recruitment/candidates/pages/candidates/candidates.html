@@ -1,0 +1,116 @@
+<main class="candidates-page container-fluid py-4">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">TALENT ACQUISITION</span>
+      <h1>Candidates</h1>
+      <p>Review and manage candidates in your recruitment pipeline.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openAddModal()">
+      <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Add candidate
+    </button>
+  </header>
+
+  <section class="search-panel" aria-label="Search candidates">
+    <label class="search-box">
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input #searchInput type="search" class="form-control" placeholder="Search by name, email or phone"
+        [value]="searchTerm()" (input)="onSearch(searchInput.value)" />
+    </label>
+    @if (!isLoading() && !hasError()) {
+      <span class="results-count">{{ filteredCandidates().length }} {{ filteredCandidates().length === 1 ? 'candidate' : 'candidates' }}</span>
+    }
+  </section>
+
+  @if (isLoading()) {
+    <div class="row g-3" role="status" aria-label="Loading candidates">
+      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="col-12 col-lg-6 col-xxl-4">
+          <div class="candidate-card loading-card">
+            <span class="placeholder col-5 mb-3"></span>
+            <span class="placeholder col-8 mb-2"></span>
+            <span class="placeholder col-6"></span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (hasError()) {
+    <div class="page-state" role="alert">
+      <div class="state-icon state-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h2>Couldn't load candidates</h2>
+      <p>Please check your connection and try again.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadCandidates()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (filteredCandidates().length === 0) {
+    <div class="page-state">
+      <div class="state-icon"><i class="bi bi-people" aria-hidden="true"></i></div>
+      <h2>{{ searchTerm() ? 'No matching candidates' : 'No candidates yet' }}</h2>
+      <p>{{ searchTerm() ? 'Try another name, email or phone number.' : 'Add a candidate to start building your recruitment pipeline.' }}</p>
+      @if (!searchTerm()) {
+        <button type="button" class="btn btn-primary" (click)="openAddModal()">
+          <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Add candidate
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="row g-3">
+      @for (candidate of filteredCandidates(); track candidate.id) {
+        <div class="col-12 col-lg-6 col-xxl-4">
+          <article class="candidate-card">
+            <header class="candidate-header">
+              <div class="candidate-avatar" aria-hidden="true">
+                {{ candidate.firstName.charAt(0) }}{{ candidate.lastName.charAt(0) }}
+              </div>
+              <div class="candidate-identity">
+                <a class="candidate-name" [routerLink]="[candidate.id]">
+                  {{ candidate.firstName }} {{ candidate.lastName }}
+                </a>
+                <span class="candidate-date">Added {{ candidate.createdAt ? (candidate.createdAt | date:'dd MMM yyyy') : '—' }}</span>
+              </div>
+              <a class="details-link" [routerLink]="[candidate.id]" [attr.aria-label]="'View ' + candidate.firstName + ' ' + candidate.lastName">
+                <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+              </a>
+            </header>
+
+            <div class="candidate-info">
+              <a class="info-row" [href]="'mailto:' + candidate.email">
+                <i class="bi bi-envelope" aria-hidden="true"></i><span>{{ candidate.email }}</span>
+              </a>
+              <a class="info-row" [href]="'tel:' + candidate.phone">
+                <i class="bi bi-telephone" aria-hidden="true"></i><span>{{ candidate.phone || 'No phone provided' }}</span>
+              </a>
+            </div>
+
+            <footer class="candidate-actions">
+              @if (candidate.cv) {
+                <a class="btn btn-sm btn-outline-primary" [href]="candidate.cv" target="_blank" rel="noopener noreferrer">
+                  <i class="bi bi-file-earmark-text me-1" aria-hidden="true"></i>View CV
+                </a>
+              } @else {
+                <span class="cv-missing"><i class="bi bi-file-earmark-x me-1" aria-hidden="true"></i>No CV</span>
+              }
+              <span class="action-spacer"></span>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openEditModal(candidate)">
+                <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="openDeleteModal(candidate)">
+                <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete
+              </button>
+            </footer>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</main>
+
+@if (isAddModalOpen()) {
+  <app-add-candidate-modal (closed)="closeAddModal()" (candidateCreated)="onCandidateCreated()"></app-add-candidate-modal>
+}
+@if (candidateToEdit(); as candidate) {
+  <app-edit-candidate-modal [candidate]="candidate" (closed)="closeEditModal()" (candidateUpdated)="onCandidateUpdated()"></app-edit-candidate-modal>
+}
+@if (candidateToDelete(); as candidate) {
+  <app-delete-candidate-modal [candidate]="candidate" (closed)="closeDeleteModal()" (deleted)="onCandidateDeleted($event)"></app-delete-candidate-modal>
+}

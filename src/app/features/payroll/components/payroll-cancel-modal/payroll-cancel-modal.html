@@ -1,0 +1,24 @@
+<div class="payroll-confirm-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block payroll-confirm-modal" role="alertdialog" aria-modal="true"
+    aria-labelledby="cancel-payroll-title" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <span class="confirm-icon confirm-danger" aria-hidden="true"><i class="bi bi-x-lg"></i></span>
+          <h2 id="cancel-payroll-title">Cancel payroll?</h2>
+          <p class="text-body-secondary mb-0">
+            Cancel the <strong>{{ month }} {{ year }}</strong> payroll for
+            <strong class="text-body">{{ employeeName }}</strong>. This action cannot be undone.
+          </p>
+        </div>
+        <footer class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-light" [disabled]="isLoading" (click)="close()">Keep payroll</button>
+          <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="confirmed.emit()">
+            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Cancelling… }
+            @else { <i class="bi bi-x-lg me-1" aria-hidden="true"></i>Cancel payroll }
+          </button>
+        </footer>
+      </div>
+    </div>
+  </section>
+</div>

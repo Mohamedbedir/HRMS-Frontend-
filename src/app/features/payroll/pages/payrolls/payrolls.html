@@ -1,0 +1,171 @@
+<main class="payroll-page container-fluid py-4">
+  <header class="page-header mb-4">
+    <div>
+      <span class="eyebrow">FINANCE &amp; PEOPLE</span>
+      <h1>Payroll</h1>
+      <p class="text-body-secondary mb-0">Review payroll records and manage monthly payments.</p>
+    </div>
+    <button type="button" class="btn btn-primary generate-button" (click)="generateModalOpen.set(true)">
+      <i class="bi bi-plus-lg" aria-hidden="true"></i>
+      Generate payroll
+    </button>
+  </header>
+
+  <section class="payroll-overview row g-3 mb-4" aria-label="Payroll overview">
+    <div class="col-6 col-xl-3">
+      <article class="overview-card">
+        <span class="overview-icon icon-total"><i class="bi bi-wallet2" aria-hidden="true"></i></span>
+        <div><span class="overview-label">All payrolls</span><strong>{{ payrolls().length }}</strong></div>
+      </article>
+    </div>
+    <div class="col-6 col-xl-3">
+      <article class="overview-card">
+        <span class="overview-icon icon-pending"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+        <div><span class="overview-label">Awaiting approval</span><strong>{{ countByStatus('generated') + countByStatus('calculated') }}</strong></div>
+      </article>
+    </div>
+    <div class="col-6 col-xl-3">
+      <article class="overview-card">
+        <span class="overview-icon icon-approved"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+        <div><span class="overview-label">Approved</span><strong>{{ countByStatus('approved') }}</strong></div>
+      </article>
+    </div>
+    <div class="col-6 col-xl-3">
+      <article class="overview-card">
+        <span class="overview-icon icon-paid"><i class="bi bi-cash-coin" aria-hidden="true"></i></span>
+        <div><span class="overview-label">Paid</span><strong>{{ countByStatus('paid') }}</strong></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="payroll-card">
+    <div class="card-heading">
+      <div>
+        <h2>Payroll records</h2>
+        <p class="text-body-secondary mb-0">Select a record to view its full details.</p>
+      </div>
+      <span class="record-count">{{ filteredPayrolls().length }} records</span>
+    </div>
+
+    <div class="payroll-toolbar">
+      <label class="search-box">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <span class="visually-hidden">Search payrolls</span>
+        <input class="form-control" type="search" [(ngModel)]="searchTerm"
+          placeholder="Search employee, period" />
+      </label>
+      <label class="filter-box">
+        <span>Status</span>
+        <select class="form-select" [(ngModel)]="statusFilter">
+          <option value="all">All statuses</option>
+          <option value="draft">Draft</option>
+          <option value="generated">Generated</option>
+          <option value="calculated">Calculated</option>
+          <option value="approved">Approved</option>
+          <option value="paid">Paid</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </label>
+    </div>
+
+    @if (loading()) {
+      <div class="state-message" role="status">
+        <span class="spinner-border text-primary" aria-hidden="true"></span>
+        <span>Loading payroll records…</span>
+      </div>
+    } @else if (errorMessage) {
+      <div class="state-message error-state" role="alert">
+        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+        <span>{{ errorMessage }}</span>
+        <button type="button" class="btn btn-sm btn-outline-primary ms-2" (click)="loadPayrolls()">Try again</button>
+      </div>
+    } @else if (filteredPayrolls().length === 0) {
+      <div class="state-message empty-state">
+        <span class="empty-icon"><i class="bi bi-receipt" aria-hidden="true"></i></span>
+        <strong>{{ payrolls().length ? 'No matching payrolls' : 'No payrolls yet' }}</strong>
+        <span class="text-body-secondary">
+          {{ payrolls().length ? 'Try changing your search or status filter.' : 'Generate a payroll to get started.' }}
+        </span>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table payroll-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Employee</th>
+              <th scope="col">Pay period</th>
+              <th scope="col">Gross pay</th>
+              <th scope="col">Deductions</th>
+              <th scope="col">Net pay</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (payroll of filteredPayrolls(); track payroll.id) {
+              <tr class="payroll-row" tabindex="0" role="button" (click)="openPayrollDetails(payroll)"
+                (keydown)="onRowKeydown($event, payroll)" [attr.aria-label]="'View payroll details for ' + payroll.employeeName">
+                <td>
+                  <div class="employee-cell">
+                    <span class="employee-avatar">{{ payroll.employeeName?.charAt(0) || '?' }}</span>
+                    <!-- <span><strong>{{ payroll.employeeName || 'Employee' }}</strong><small>Payroll #{{ payroll.id }}</small></span> -->
+                  </div>
+                </td>
+                <td><span class="period-label">{{ monthName(payroll.month) }} {{ payroll.year }}</span></td>
+                <td>{{ payroll.grossSalary | currency:'EGP':'symbol':'1.2-2' }}</td>
+                <td>{{ payroll.totalDeductions | currency:'EGP':'symbol':'1.2-2' }}</td>
+                <td><strong>{{ payroll.netSalary | currency:'EGP':'symbol':'1.2-2' }}</strong></td>
+                <td><span class="status-badge" [ngClass]="statusClass(payroll.status)">{{ payroll.status }}</span></td>
+                <td>
+                  <div class="row-actions" (click)="$event.stopPropagation()">
+                    @if (canApprove(payroll)) {
+                      <button type="button" class="btn btn-sm btn-outline-success" title="Approve payroll"
+                        aria-label="Approve payroll" (click)="openAction('approve', payroll)">
+                        <i class="bi bi-check-lg" aria-hidden="true"></i>
+                      </button>
+                    }
+                    @if (canPay(payroll)) {
+                      <button type="button" class="btn btn-sm btn-outline-primary" title="Mark payroll paid"
+                        aria-label="Mark payroll paid" (click)="openAction('pay', payroll)">
+                        <i class="bi bi-cash" aria-hidden="true"></i>
+                      </button>
+                    }
+                    @if (canCancel(payroll)) {
+                      <button type="button" class="btn btn-sm btn-outline-danger" title="Cancel payroll"
+                        aria-label="Cancel payroll" (click)="openAction('cancel', payroll)">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
+                      </button>
+                    }
+                    <button type="button" class="btn btn-sm btn-light details-button" title="View details"
+                      aria-label="View payroll details" (click)="openPayrollDetails(payroll)">
+                      <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>
+
+@if (generateModalOpen()) {
+  <app-payroll-generate-modal [employees]="employees()" [isLoading]="actionLoading()"
+    (generated)="generatePayroll($event)" (closed)="generateModalOpen.set(false)" />
+}
+
+@if (activeAction() === 'approve' && selectedPayroll(); as payroll) {
+  <app-payroll-approve-modal [employeeName]="payroll.employeeName || 'Employee'" [month]="monthName(payroll.month)"
+    [year]="payroll.year" [isLoading]="actionLoading()" (confirmed)="approvePayroll()" (closed)="closeAction()" />
+}
+@if (activeAction() === 'pay' && selectedPayroll(); as payroll) {
+  <app-payroll-pay-modal [employeeName]="payroll.employeeName || 'Employee'" [amount]="payroll.netSalary"
+    [month]="monthName(payroll.month)" [year]="payroll.year" [isLoading]="actionLoading()"
+    (confirmed)="payPayroll()" (closed)="closeAction()" />
+}
+@if (activeAction() === 'cancel' && selectedPayroll(); as payroll) {
+  <app-payroll-cancel-modal [employeeName]="payroll.employeeName || 'Employee'" [month]="monthName(payroll.month)"
+    [year]="payroll.year" [isLoading]="actionLoading()" (confirmed)="cancelPayroll()" (closed)="closeAction()" />
+}

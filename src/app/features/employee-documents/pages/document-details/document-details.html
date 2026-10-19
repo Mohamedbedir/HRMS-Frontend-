@@ -1,0 +1,98 @@
+<main class="details-page container-fluid py-4">
+  <button type="button" class="btn btn-link back-button px-0 mb-3" (click)="goBack()">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to my documents
+  </button>
+
+  @if (isLoading()) {
+    <div class="details-state" role="status" aria-live="polite">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading document…</span>
+    </div>
+  } @else if (hasError()) {
+    <div class="details-state" role="alert">
+      <i class="bi bi-exclamation-triangle text-danger fs-2 mb-3" aria-hidden="true"></i>
+      <h1 class="h5">Document unavailable</h1>
+      <p class="text-secondary">This document could not be found or loaded.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadDocument()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (document(); as item) {
+    <article class="details-card">
+      <header class="details-heading">
+        <div class="file-icon" aria-hidden="true"><i class="bi bi-file-earmark-text"></i></div>
+        <div class="flex-grow-1">
+          <span class="eyebrow">DOCUMENT DETAILS</span>
+          <h1>{{ item.documentType || 'Employee document' }}</h1>
+          <p>{{ item.fileName || 'Untitled file' }}</p>
+        </div>
+        @if (downloadUrl(); as url) {
+          <a class="btn btn-primary" [href]="url" [attr.download]="item.fileName || null">
+            <i class="bi bi-download me-2" aria-hidden="true"></i>Download file
+          </a>
+        }
+      </header>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Document type</span>
+          <span class="detail-value">{{ item.documentType || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Uploaded on</span>
+          <span class="detail-value">{{ item.uploadedAt ? (item.uploadedAt | date:'dd MMMM yyyy') : '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Expiry date</span>
+          <span class="detail-value">{{ item.expiryDate ? (item.expiryDate | date:'dd MMMM yyyy') : 'No expiry date' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Employee</span>
+          <span class="detail-value">{{ item.employeeName || 'You' }}</span>
+        </div>
+      </div>
+
+      <section class="file-section" aria-labelledby="file-preview-title">
+        <div class="file-section-heading">
+          <div>
+            <h2 id="file-preview-title">Document file</h2>
+            <p>{{ item.fileName || 'Preview or download the uploaded file' }}</p>
+          </div>
+          @if (downloadUrl(); as url) {
+            <a class="btn btn-outline-primary" [href]="url" [attr.download]="item.fileName || null">
+              <i class="bi bi-download me-2" aria-hidden="true"></i>Download
+            </a>
+          }
+        </div>
+
+        @if (previewType() === 'image' && imagePreviewUrl(); as imageUrl) {
+          <div class="file-preview image-preview">
+            <img [src]="imageUrl" [alt]="item.fileName || item.documentType" />
+          </div>
+        } @else if (previewType() === 'pdf' && pdfPreviewUrl(); as pdfUrl) {
+          <div class="file-preview pdf-preview">
+            <iframe [src]="pdfUrl" [title]="item.fileName || 'PDF document preview'"
+              loading="lazy" sandbox="allow-same-origin"></iframe>
+          </div>
+        } @else if (previewType() === 'unsupported') {
+          <div class="file-preview preview-message">
+            <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i>
+            <h3 class="h5">Preview isn't available for this file type</h3>
+            <p>Use the download button to view this document on your device.</p>
+            @if (downloadUrl(); as url) {
+              <a class="btn btn-primary" [href]="url" [attr.download]="item.fileName || null">
+                <i class="bi bi-download me-2" aria-hidden="true"></i>Download {{ item.fileName || 'file' }}
+              </a>
+            }
+          </div>
+        } @else {
+          <div class="file-preview preview-message">
+            <i class="bi bi-file-earmark-x" aria-hidden="true"></i>
+            <h3 class="h5">File unavailable</h3>
+            <p>The uploaded file could not be displayed or downloaded.</p>
+          </div>
+        }
+      </section>
+    </article>
+  }
+</main>

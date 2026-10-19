@@ -1,0 +1,119 @@
+<main class="posting-details-page container-fluid py-4">
+  <a class="back-link" routerLink="/admin/job-postings">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to job postings
+  </a>
+
+  @if (isLoading()) {
+    <div class="details-state" role="status" aria-live="polite">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading job posting…</span>
+    </div>
+  } @else if (hasError()) {
+    <div class="details-state" role="alert">
+      <div class="state-icon state-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h1>Job posting unavailable</h1>
+      <p>This job posting could not be found or loaded.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadJobPosting()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (jobPosting(); as posting) {
+    <article class="details-card">
+      <header class="posting-hero">
+        <div class="posting-icon"><i class="bi bi-briefcase" aria-hidden="true"></i></div>
+        <div class="posting-heading">
+          <div class="heading-badges">
+            <span class="eyebrow">JOB POSTING</span>
+            <span class="status-badge" [class]="statusClass(posting.status)">{{ statusLabel(posting.status) }}</span>
+          </div>
+          <h1>{{ posting.title }}</h1>
+          <p>{{ posting.departmentName }} <span aria-hidden="true">·</span> {{ posting.positionName }}</p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-outline-secondary" (click)="isEditOpen.set(true)">
+            <i class="bi bi-pencil me-2" aria-hidden="true"></i>Edit
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="isDeleteOpen.set(true)">
+            <i class="bi bi-trash me-2" aria-hidden="true"></i>Delete
+          </button>
+        </div>
+      </header>
+
+      <section class="details-section" aria-labelledby="role-details-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-card-text" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="role-details-heading">Role details</h2>
+            <p>Position information and hiring timeline.</p>
+          </div>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Department</span>
+            <span class="detail-value">{{ posting.departmentName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Position</span>
+            <span class="detail-value">{{ posting.positionName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Salary range</span>
+            <span class="detail-value">{{ posting.minSalary | currency:'USD':'symbol':'1.0-0' }} – {{ posting.maxSalary | currency:'USD':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Posted on</span>
+            <span class="detail-value">{{ posting.postedAt ? (posting.postedAt | date:'dd MMMM yyyy') : '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Closing date</span>
+            <span class="detail-value">{{ posting.closingDate ? (posting.closingDate | date:'dd MMMM yyyy') : '—' }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="details-section" aria-labelledby="description-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-file-text" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="description-heading">Job description</h2>
+            <p>Responsibilities, requirements and role information.</p>
+          </div>
+        </div>
+        <div class="description-content">{{ posting.description }}</div>
+      </section>
+
+      <section class="details-section share-section" aria-labelledby="share-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-share" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="share-heading">Share this job</h2>
+            <p>Share the posting with your network or copy its link.</p>
+          </div>
+        </div>
+        <div class="share-actions">
+          <button type="button" class="btn btn-outline-primary" (click)="shareOnLinkedIn()">
+            <i class="bi bi-linkedin me-2" aria-hidden="true"></i>LinkedIn
+          </button>
+          <button type="button" class="btn btn-outline-primary" (click)="shareOnFacebook()">
+            <i class="bi bi-facebook me-2" aria-hidden="true"></i>Facebook
+          </button>
+          <button type="button" class="btn btn-outline-secondary" (click)="copyLink()">
+            <i class="bi bi-clipboard me-2" aria-hidden="true"></i>Copy link
+          </button>
+          <button type="button" class="btn btn-primary" (click)="sharePosting()">
+            <i class="bi bi-send me-2" aria-hidden="true"></i>Share
+          </button>
+        </div>
+      </section>
+    </article>
+
+    @if (isEditOpen()) {
+      <app-edit-job-postings-modal [jobPosting]="posting" (closed)="isEditOpen.set(false)"
+        (jobPostingUpdated)="onJobPostingUpdated()"></app-edit-job-postings-modal>
+    }
+    @if (isDeleteOpen()) {
+      <app-delete-job-postings-modal [jobPosting]="posting" (closed)="isDeleteOpen.set(false)"
+        (deleted)="onJobPostingDeleted()"></app-delete-job-postings-modal>
+    }
+  }
+</main>

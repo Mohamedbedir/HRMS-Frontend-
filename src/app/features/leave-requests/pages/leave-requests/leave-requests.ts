@@ -9,6 +9,7 @@ import { LeaveRejectModal } from '../../components/leave-reject-modal/leave-reje
 import { LeaveRequestModal } from '../../components/leave-request-modal/leave-request-modal';
 import { LeaveRequest } from '../../models/leave-request.model';
 import { LeaveRequestService } from '../../services/leave-request.service';
+import { TokenService } from '../../../../core/services/token.service';
 
 type LeaveAction = 'approve' | 'cancel' | 'reject';
 
@@ -30,6 +31,8 @@ type LeaveAction = 'approve' | 'cancel' | 'reject';
 export class LeaveRequests implements OnInit {
   private readonly leaveRequestService = inject(LeaveRequestService);
   private readonly toastr = inject(ToastrService);
+    private readonly tokenService = inject(TokenService);
+  
 
   readonly requests = signal<LeaveRequest[]>([]);
   readonly loading = signal(false);
@@ -51,7 +54,8 @@ export class LeaveRequests implements OnInit {
     this.loading.set(true);
     this.errorMessage = '';
 
-    this.leaveRequestService.getAll().subscribe({
+    // this.leaveRequestService.getByEmployee(this.tokenService.getEmployeeId()).subscribe({
+      this.leaveRequestService.getAll().subscribe({
       next: (response) => {
         this.loading.set(false);
 
@@ -75,11 +79,8 @@ export class LeaveRequests implements OnInit {
   filteredRequests(): LeaveRequest[] {
     const search = this.searchTerm.trim().toLowerCase();
     return this.requests().filter((request) => {
-      const matchesStatus =
-        this.statusFilter === 'all' || request.status.toLowerCase() === this.statusFilter;
-      const matchesSearch =
-        !search ||
-        [request.employeeName, request.leaveType, request.reason, request.status]
+      const matchesStatus =this.statusFilter === 'all' || request.status.toLowerCase() === this.statusFilter;
+      const matchesSearch =!search || [request.employeeName, request.leaveType, request.reason, request.status]
           .some((value) => value?.toLowerCase().includes(search));
       return matchesStatus && matchesSearch;
     });
@@ -93,8 +94,7 @@ export class LeaveRequests implements OnInit {
     const target = event.target;
 
     if (
-      target instanceof HTMLElement &&
-      target.closest('button, a, input, select, textarea')
+      target instanceof HTMLElement && target.closest('button, a, input, select, textarea')
     ) {
       return;
     }

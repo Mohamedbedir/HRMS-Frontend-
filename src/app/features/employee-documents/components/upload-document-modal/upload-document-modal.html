@@ -1,0 +1,46 @@
+<div class="modal-backdrop" (click)="closed.emit()">
+  <section class="document-modal" role="dialog" aria-modal="true" aria-labelledby="upload-title"
+    (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <div>
+        <span class="modal-eyebrow">MY DOCUMENTS</span>
+        <h2 id="upload-title">Upload document</h2>
+        <p>Add a document to your employee profile.</p>
+      </div>
+      <button type="button" class="modal-close" aria-label="Close" (click)="closed.emit()">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <form (ngSubmit)="submit()">
+      @if (errorMessage) {
+        <div class="alert alert-danger py-2" role="alert">{{ errorMessage }}</div>
+      }
+      <label class="form-label" for="upload-document-type">Document type <span class="text-danger">*</span></label>
+      <input id="upload-document-type" class="form-control mb-3" name="documentType"
+        [(ngModel)]="documentType" required maxlength="100" placeholder="e.g. National ID" />
+
+      <label class="form-label" for="upload-document-file">File <span class="text-danger">*</span></label>
+      <input id="upload-document-file" class="form-control" type="file" name="file"
+        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required (change)="onFileSelected($event)" />
+      @if (selectedFile) {
+        <span class="selected-file"><i class="bi bi-paperclip me-1" aria-hidden="true"></i>{{ selectedFile.name }}</span>
+      }
+
+      <label class="form-label mt-3" for="upload-expiry-date">Expiry date <span class="text-secondary">(optional)</span></label>
+      <input id="upload-expiry-date" class="form-control" type="date" name="expiryDate"
+        [(ngModel)]="expiryDate" />
+
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="isSaving" (click)="closed.emit()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSaving || !documentType.trim() || !selectedFile">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Uploading…
+          } @else {
+            <i class="bi bi-cloud-arrow-up me-2" aria-hidden="true"></i>Upload
+          }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,24 @@
+<div class="payroll-confirm-backdrop" role="presentation" (click)="close()">
+  <section class="modal fade show d-block payroll-confirm-modal" role="alertdialog" aria-modal="true"
+    aria-labelledby="approve-payroll-title" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <span class="confirm-icon confirm-success" aria-hidden="true"><i class="bi bi-check-lg"></i></span>
+          <h2 id="approve-payroll-title">Approve payroll?</h2>
+          <p class="text-body-secondary mb-0">
+            Approve the <strong>{{ month }} {{ year }}</strong> payroll for
+            <strong class="text-body">{{ employeeName }}</strong>?
+          </p>
+        </div>
+        <footer class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-light" [disabled]="isLoading" (click)="close()">Go back</button>
+          <button type="button" class="btn btn-success" [disabled]="isLoading" (click)="confirmed.emit()">
+            @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Approving… }
+            @else { <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Approve payroll }
+          </button>
+        </footer>
+      </div>
+    </div>
+  </section>
+</div>

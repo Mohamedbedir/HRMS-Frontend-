@@ -1,0 +1,125 @@
+<main class="job-postings-page container-fluid py-4">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">TALENT ACQUISITION</span>
+      <h1>Job postings</h1>
+      <p>Create and manage open roles across your organization.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openAddModal()">
+      <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Create job posting
+    </button>
+  </header>
+
+  <section class="filters-panel" aria-label="Filter job postings">
+    <label class="search-box">
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input #searchInput type="search" class="form-control" placeholder="Search title, department or position"
+        [value]="searchTerm()" (input)="onSearch(searchInput.value)" />
+    </label>
+    <label class="status-filter">
+      <span class="visually-hidden">Filter by status</span>
+      <select #statusSelect class="form-select" [value]="statusFilter()" (change)="onStatusChange(statusSelect.value)">
+        <option value="All">All statuses</option>
+        <option value="Draft">Draft</option>
+        <option value="Published">Published</option>
+        <option value="OnHold">On hold</option>
+        <option value="Closed">Closed</option>
+        <option value="Filled">Filled</option>
+        <option value="Canceled">Canceled</option>
+      </select>
+    </label>
+    @if (!isLoading() && !hasError()) {
+      <span class="results-count">{{ filteredJobPostings().length }} {{ filteredJobPostings().length === 1 ? 'posting' : 'postings' }}</span>
+    }
+  </section>
+
+  @if (isLoading()) {
+    <div class="row g-3" role="status" aria-label="Loading job postings">
+      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="col-12 col-xl-6">
+          <div class="posting-card loading-card">
+            <span class="placeholder col-5 mb-3"></span>
+            <span class="placeholder col-8 mb-2"></span>
+            <span class="placeholder col-6"></span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (hasError()) {
+    <div class="page-state" role="alert">
+      <div class="state-icon state-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h2>Couldn't load job postings</h2>
+      <p>Please check your connection and try again.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadJobPostings()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (filteredJobPostings().length === 0) {
+    <div class="page-state">
+      <div class="state-icon"><i class="bi bi-briefcase" aria-hidden="true"></i></div>
+      <h2>{{ searchTerm() || statusFilter() !== 'All' ? 'No matching job postings' : 'No job postings yet' }}</h2>
+      <p>{{ searchTerm() || statusFilter() !== 'All' ? 'Try changing the search or status filter.' : 'Create a posting to start recruiting for an open role.' }}</p>
+      @if (!searchTerm() && statusFilter() === 'All') {
+        <button type="button" class="btn btn-primary" (click)="openAddModal()">
+          <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Create job posting
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="row g-3">
+      @for (posting of filteredJobPostings(); track posting.id) {
+        <div class="col-12 col-xl-6">
+          <article class="posting-card">
+            <header class="posting-header">
+              <div class="posting-icon"><i class="bi bi-briefcase" aria-hidden="true"></i></div>
+              <div class="posting-heading">
+                <a class="posting-title" [routerLink]="[posting.id]">{{ posting.title }}</a>
+                <span class="posting-company">{{ posting.departmentName }} <span aria-hidden="true">·</span> {{ posting.positionName }}</span>
+              </div>
+              <span class="status-badge" [class]="statusClass(posting.status)">{{ statusLabel(posting.status) }}</span>
+            </header>
+
+            <p class="posting-description">{{ posting.description }}</p>
+
+            <div class="posting-meta">
+              <div>
+                <span class="meta-label">Salary range</span>
+                <span class="meta-value">{{ posting.minSalary | currency:'USD':'symbol':'1.0-0' }} – {{ posting.maxSalary | currency:'USD':'symbol':'1.0-0' }}</span>
+              </div>
+              <div>
+                <span class="meta-label">Closing date</span>
+                <span class="meta-value">{{ posting.closingDate ? (posting.closingDate | date:'dd MMM yyyy') : 'No closing date' }}</span>
+              </div>
+            </div>
+
+            <footer class="posting-actions">
+              <a class="btn btn-sm btn-outline-primary" [routerLink]="[posting.id]">
+                <i class="bi bi-eye me-1" aria-hidden="true"></i>Details
+              </a>
+              <span class="action-spacer"></span>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="editJobPosting(posting)">
+                <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteJobPosting(posting)">
+                <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete
+              </button>
+            </footer>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</main>
+
+@if (isAddModalOpen()) {
+  <app-add-job-postings-modal (closed)="isAddModalOpen.set(false)"
+    (jobPostingCreated)="onJobPostingCreated()"></app-add-job-postings-modal>
+}
+@if (jobPostingToEdit(); as posting) {
+  <app-edit-job-postings-modal [jobPosting]="posting" (closed)="jobPostingToEdit.set(null)"
+    (jobPostingUpdated)="onJobPostingUpdated()"></app-edit-job-postings-modal>
+}
+@if (jobPostingToDelete(); as posting) {
+  <app-delete-job-postings-modal [jobPosting]="posting" (closed)="jobPostingToDelete.set(null)"
+    (deleted)="onJobPostingDeleted($event)"></app-delete-job-postings-modal>
+}

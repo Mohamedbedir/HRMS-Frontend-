@@ -12,20 +12,23 @@
                 <p class="text-body-secondary mb-0">Add a reason for {{ employeeName }}.</p>
               </div>
             </div>
-            <label for="leave-rejection-reason" class="form-label mt-4">Rejection reason <span class="required-mark">*</span></label>
+            <label for="leave-rejection-reason" class="form-label mt-4">Rejection reason <span
+                class="required-mark">*</span></label>
             <textarea id="leave-rejection-reason" name="reason" class="form-control" rows="4" maxlength="500"
               [(ngModel)]="reason" placeholder="Explain why this request cannot be approved..."></textarea>
             <div class="form-text text-end">{{ reason.length }}/500</div>
             @if (submitted && !reason.trim()) {
-              <div class="text-danger small mt-1">A rejection reason is required.</div>
+            <div class="text-danger small mt-1">A rejection reason is required.</div>
             } @else if (reason.length > 500) {
-              <div class="text-danger small mt-1">The reason must be 500 characters or fewer.</div>
+            <div class="text-danger small mt-1">The reason must be 500 characters or fewer.</div>
             }
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Go back</button>
+            <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Go
+              back</button>
             <button type="submit" class="btn btn-danger" [disabled]="isLoading">
-              @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Rejecting... }
+              @if (isLoading) { <span class="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"></span>Rejecting... }
               @else { <i class="bi bi-x-lg me-1" aria-hidden="true"></i>Reject request }
             </button>
           </div>

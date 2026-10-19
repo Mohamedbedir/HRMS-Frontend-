@@ -111,8 +111,7 @@
                 </thead>
                 <tbody>
                     @for (request of filteredRequests(); track request.id) {
-                    <tr class="request-row" tabindex="0"
-                        [routerLink]="['/admin/leave-requests', request.id]"
+                    <tr class="request-row" tabindex="0" [routerLink]="['/admin/leave-requests', request.id]"
                         [attr.aria-label]="'View leave request details for ' + request.employeeName"
                         (keydown)="onRowKeydown($event, request)">
                         <td>
