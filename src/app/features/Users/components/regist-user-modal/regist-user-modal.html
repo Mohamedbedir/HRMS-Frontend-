@@ -1,0 +1,111 @@
+<div class="user-modal-backdrop" role="presentation" (click)="close()">
+  <section class="user-modal" role="dialog" aria-modal="true" aria-labelledby="register-user-title"
+    (click)="$event.stopPropagation()">
+    <header class="d-flex align-items-start justify-content-between gap-3 text-start mb-4">
+      <div>
+        <h2 id="register-user-title" class="h5 fw-bold mb-1">Add user</h2>
+        <p class="text-body-secondary mb-0">Create an account for an employee.</p>
+      </div>
+      <button type="button" class="btn-close" aria-label="Close" [disabled]="isSubmitting" (click)="close()"></button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="mb-3 text-start">
+        <label for="register-employee" class="form-label">Employee</label>
+        @if (employeeError) {
+          <div class="alert alert-danger py-2" role="alert">
+            <span>{{ employeeError }}</span>
+            <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="loadEmployees()">Try again</button>
+          </div>
+        } @else {
+          <select
+            id="register-employee"
+            class="form-select"
+            formControlName="employeeId"
+            [class.is-invalid]="isInvalid('employeeId')"
+            [disabled]="isLoadingEmployees || isSubmitting || employees.length === 0"
+            (change)="onEmployeeChange(form.controls.employeeId.value)"
+          >
+            <option [ngValue]="0" disabled>
+              <!-- {{ isLoadingEmployees ? 'Loading employees...' : employees.length ? 'Select an employee' : 'No employees available' }} -->
+            Select an employee
+            </option>
+            @for (employee of employees(); track employee.id) {
+              <option [ngValue]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</option>
+            }
+          </select>
+          @if (isInvalid('employeeId')) {
+            <div class="invalid-feedback">Select an employee.</div>
+          }
+        }
+      </div>
+
+      <div class="mb-3 text-start">
+        <label for="register-email" class="form-label">Email</label>
+        <input
+          id="register-email"
+          type="email"
+          class="form-control"
+          autocomplete="email"
+          formControlName="email"
+          [class.is-invalid]="isInvalid('email')"
+          [disabled]="isSubmitting"
+        />
+        @if (isInvalid('email')) {
+          <div class="invalid-feedback">Enter a valid email address.</div>
+        }
+      </div>
+
+      <div class="mb-3 text-start">
+        <label for="register-password" class="form-label">Password</label>
+        <input
+          id="register-password"
+          type="password"
+          class="form-control"
+          autocomplete="new-password"
+          formControlName="password"
+          [class.is-invalid]="isInvalid('password')"
+          [disabled]="isSubmitting"
+        />
+        @if (isInvalid('password')) {
+          <div class="invalid-feedback">Enter a password.</div>
+        }
+      </div>
+
+      <div class="mb-3 text-start">
+        <label for="register-role" class="form-label">Role</label>
+        <select
+          id="register-role"
+          class="form-select"
+          formControlName="role"
+          [class.is-invalid]="isInvalid('role')"
+          [disabled]="isSubmitting"
+        >
+          <option value="" disabled>Select a role</option>
+          @for (role of roles; track role) {
+            <option [value]="role">{{ role }}</option>
+          }
+        </select>
+        @if (isInvalid('role')) {
+          <div class="invalid-feedback">Select a role.</div>
+        }
+      </div>
+
+      @if (!employeeError && (!employees() || employees()!.length === 0) && !isLoadingEmployees) {
+        <p class="text-body-secondary small mb-0">Add an employee before creating a user account.</p>
+      }
+
+      <footer class="user-modal-actions">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="!employees() || isSubmitting" (click)="close()">Cancel</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSubmitting || isLoadingEmployees || !employees() || employees()!.length === 0"
+        >
+          @if (isSubmitting) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Adding... }
+          @else { <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Add user }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

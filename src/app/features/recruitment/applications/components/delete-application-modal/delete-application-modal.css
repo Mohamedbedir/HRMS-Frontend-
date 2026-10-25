@@ -1,0 +1,46 @@
+@import '../create-application-modal/create-application-modal.css';
+
+.application-modal.delete-modal {
+  width: min(100%, 30rem);
+  text-align: center;
+}
+
+.delete-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 1rem;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--bs-danger);
+  background: var(--bs-danger-bg-subtle);
+  font-size: 1.4rem;
+}
+
+.delete-modal h2 {
+  color: var(--bs-emphasis-color);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.delete-modal p {
+  color: var(--bs-secondary-color);
+}
+
+.delete-modal strong {
+  color: var(--bs-emphasis-color);
+}
+
+.delete-modal .modal-actions {
+  justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+  .delete-modal .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .delete-modal .modal-actions .btn {
+    width: 100%;
+  }
+}

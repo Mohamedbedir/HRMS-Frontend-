@@ -1,0 +1,66 @@
+<div class="user-modal-backdrop" role="presentation" (click)="close()">
+  <section
+    class="user-modal roles-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="edit-user-roles-title"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="roles-modal-header">
+      <div class="roles-modal-icon" aria-hidden="true">
+        <i class="bi bi-shield-check"></i>
+      </div>
+      <button type="button" class="btn-close" aria-label="Close" [disabled]="isLoading" (click)="close()"></button>
+      <div class="roles-modal-heading">
+        <h2 id="edit-user-roles-title" class="h5 fw-bold mb-1">Manage user roles</h2>
+        <p class="text-body-secondary mb-0">
+          Choose the access roles for <span class="fw-semibold text-body">{{ user.fullName || user.userName }}</span>.
+        </p>
+      </div>
+    </header>
+
+    <div class="roles-selection-summary">
+      <span class="small text-body-secondary">Available roles</span>
+      <span class="badge rounded-pill text-bg-primary">{{ selectedRoles.length }} selected</span>
+    </div>
+
+    <div class="role-options" aria-label="Available user roles">
+      @for (role of roles; track role) {
+        <label class="role-option" [class.role-option-selected]="isSelected(role)">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [checked]="isSelected(role)"
+            [disabled]="isLoading"
+            [attr.aria-label]="'Assign ' + role + ' role'"
+            (change)="toggleRole(role, $event)"
+          />
+          <span class="role-option-content">
+            <span class="role-option-name">{{ role }}</span>
+            <span class="role-option-description">
+              @switch (role) {
+                @case ('Admin') { Full access to system management. }
+                @case ('HR') { Access to HR operations and employee records. }
+                @case ('Manager') { Access to team and manager features. }
+                @case ('Employee') { Standard employee self-service access. }
+                @case ('Recruiter') { Access to recruitment and candidates. }
+              }
+            </span>
+          </span>
+          <i class="bi bi-check-circle-fill role-option-check" aria-hidden="true"></i>
+        </label>
+      }
+    </div>
+
+    <footer class="user-modal-actions">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="submit()">
+        @if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Saving...
+        } @else {
+          <i class="bi bi-check2 me-2" aria-hidden="true"></i>Save roles
+        }
+      </button>
+    </footer>
+  </section>
+</div>

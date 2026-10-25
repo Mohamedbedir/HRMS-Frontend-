@@ -1,0 +1,99 @@
+<main class="application-details-page container-fluid py-4">
+  <a class="back-link" routerLink="/admin/applications">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to applications
+  </a>
+
+  @if (isLoading()) {
+    <div class="details-state" role="status" aria-live="polite">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <span>Loading application…</span>
+    </div>
+  } @else if (hasError()) {
+    <div class="details-state" role="alert">
+      <div class="state-icon state-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h1>Application unavailable</h1>
+      <p>This application could not be found or loaded.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadApplication()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (application(); as item) {
+    <article class="details-card">
+      <header class="application-hero">
+        <div class="application-icon"><i class="bi bi-person-workspace" aria-hidden="true"></i></div>
+        <div class="application-heading">
+          <div class="heading-badges">
+            <span class="eyebrow">APPLICATION #{{ item.id }}</span>
+            <span class="status-badge" [class]="statusClass(item.status)">{{ item.status }}</span>
+          </div>
+          <h1>{{ item.candidateName }}</h1>
+          <p>{{ item.jobPostTitle }}</p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-outline-secondary" (click)="isEditOpen.set(true)">
+            <i class="bi bi-pencil me-2" aria-hidden="true"></i>Edit notes
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="isDeleteOpen.set(true)">
+            <i class="bi bi-trash me-2" aria-hidden="true"></i>Delete
+          </button>
+        </div>
+      </header>
+
+      <section class="details-section" aria-labelledby="application-info-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-card-checklist" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="application-info-heading">Application information</h2>
+            <p>Candidate, role and submission details.</p>
+          </div>
+        </div>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Candidate</span>
+            <span class="detail-value">{{ item.candidateName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Job posting</span>
+            <span class="detail-value">{{ item.jobPostTitle }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Applied on</span>
+            <span class="detail-value">{{ item.appliedAt ? (item.appliedAt | date:'dd MMMM yyyy') : '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Current status</span>
+            <span class="detail-value"><span class="status-badge" [class]="statusClass(item.status)">{{ item.status }}</span></span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Candidate ID</span>
+            <span class="detail-value">{{ item.candidateId }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Job posting ID</span>
+            <span class="detail-value">{{ item.jobPostingId }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="details-section" aria-labelledby="application-notes-heading">
+        <div class="section-heading">
+          <div class="section-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></div>
+          <div>
+            <h2 id="application-notes-heading">Notes</h2>
+            <p>Internal notes recorded for this application.</p>
+          </div>
+        </div>
+        <div class="notes-content">{{ item.notes || 'No notes have been added.' }}</div>
+      </section>
+    </article>
+
+    @if (isEditOpen()) {
+      <app-edit-application-modal [application]="item" (closed)="isEditOpen.set(false)"
+        (applicationUpdated)="onApplicationUpdated()"></app-edit-application-modal>
+    }
+    @if (isDeleteOpen()) {
+      <app-delete-application-modal [application]="item" (closed)="isDeleteOpen.set(false)"
+        (deleted)="onApplicationDeleted()"></app-delete-application-modal>
+    }
+  }
+</main>

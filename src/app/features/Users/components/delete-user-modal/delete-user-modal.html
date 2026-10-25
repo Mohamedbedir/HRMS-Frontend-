@@ -1,0 +1,17 @@
+<div class="user-modal-backdrop" role="presentation" (click)="close()">
+  <section class="user-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-user-title"
+    (click)="$event.stopPropagation()">
+    <span class="user-modal-icon text-danger" aria-hidden="true"><i class="bi bi-person-x"></i></span>
+    <h2 id="delete-user-title" class="h5 fw-bold">Delete this user?</h2>
+    <p class="text-body-secondary">
+      The account for <strong class="text-body">{{ user.fullName || user.userName }}</strong> will be permanently deleted.
+    </p>
+    <footer class="user-modal-actions">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="confirmed.emit()">
+        @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Deleting... }
+        @else { <i class="bi bi-trash me-2" aria-hidden="true"></i>Delete user }
+      </button>
+    </footer>
+  </section>
+</div>

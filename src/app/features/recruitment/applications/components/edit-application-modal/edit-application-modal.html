@@ -1,0 +1,35 @@
+<div class="modal-backdrop" (click)="closed.emit()">
+  <section class="application-modal" role="dialog" aria-modal="true" aria-labelledby="edit-application-title"
+    (click)="$event.stopPropagation()">
+    <header class="modal-heading">
+      <div>
+        <span class="eyebrow">APPLICATION #{{ application.id }}</span>
+        <h2 id="edit-application-title">Edit application notes</h2>
+        <p>{{ application.candidateName }} · {{ application.jobPostTitle }}</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close" [disabled]="isSubmitting" (click)="closed.emit()">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="form-label" for="edit-application-notes">Notes</label>
+      <textarea id="edit-application-notes" class="form-control" rows="5" maxlength="2000"
+        formControlName="notes" placeholder="Add notes about this application"></textarea>
+      @if (form.controls.notes.touched && form.controls.notes.hasError('maxlength')) {
+        <small class="field-error">Notes must be 2000 characters or fewer.</small>
+      }
+
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting" (click)="closed.emit()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || form.invalid">
+          @if (isSubmitting) {
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Saving…
+          } @else {
+            <i class="bi bi-check-lg me-2" aria-hidden="true"></i>Save changes
+          }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

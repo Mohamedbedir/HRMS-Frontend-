@@ -1,0 +1,17 @@
+<div class="user-modal-backdrop" role="presentation" (click)="close()">
+  <section class="user-modal" role="alertdialog" aria-modal="true" aria-labelledby="unlock-user-title"
+    (click)="$event.stopPropagation()">
+    <span class="user-modal-icon text-success" aria-hidden="true"><i class="bi bi-unlock"></i></span>
+    <h2 id="unlock-user-title" class="h5 fw-bold">Unlock this user?</h2>
+    <p class="text-body-secondary">
+      Restore system access for <strong class="text-body">{{ user.fullName || user.userName }}</strong>?
+    </p>
+    <footer class="user-modal-actions">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-success" [disabled]="isLoading" (click)="confirmed.emit()">
+        @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Unlocking... }
+        @else { <i class="bi bi-unlock me-2" aria-hidden="true"></i>Unlock user }
+      </button>
+    </footer>
+  </section>
+</div>

@@ -31,6 +31,7 @@ export class EditJobPostingsModal implements OnInit {
   readonly positions: PositionResponse[] = [];
   departmentSearch = '';
   positionSearch = '';
+  openDropdown: 'department' | 'position' | null = null;
   isLoadingOptions = true;
   optionsError = false;
   isSubmitting = false;
@@ -87,18 +88,44 @@ export class EditJobPostingsModal implements OnInit {
 
   get filteredDepartments(): DepartmentResponse[] {
     const query = this.departmentSearch.trim().toLowerCase();
-    const selectedId = this.form.controls.departmentId.value;
     return this.departments.filter(item =>
-      item.id === selectedId || item.name.toLowerCase().includes(query),
+      item.name.toLowerCase().includes(query),
     );
   }
 
   get filteredPositions(): PositionResponse[] {
     const query = this.positionSearch.trim().toLowerCase();
-    const selectedId = this.form.controls.positionId.value;
     return this.positions.filter(item =>
-      item.id === selectedId || item.title.toLowerCase().includes(query),
+      item.title.toLowerCase().includes(query),
     );
+  }
+
+  get selectedDepartmentName(): string {
+    return this.departments.find(item => item.id === this.form.controls.departmentId.value)?.name ?? 'Select department';
+  }
+
+  get selectedPositionName(): string {
+    return this.positions.find(item => item.id === this.form.controls.positionId.value)?.title ?? 'Select position';
+  }
+
+  toggleDropdown(dropdown: 'department' | 'position'): void {
+    this.openDropdown = this.openDropdown === dropdown ? null : dropdown;
+  }
+
+  selectDepartment(id: number): void {
+    this.form.controls.departmentId.setValue(id);
+    this.departmentSearch = '';
+    this.openDropdown = null;
+  }
+
+  selectPosition(id: number): void {
+    this.form.controls.positionId.setValue(id);
+    this.positionSearch = '';
+    this.openDropdown = null;
+  }
+
+  closeDropdown(): void {
+    this.openDropdown = null;
   }
 
   onDepartmentSearch(event: Event): void {

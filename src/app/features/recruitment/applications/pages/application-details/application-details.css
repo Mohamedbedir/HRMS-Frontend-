@@ -1,0 +1,253 @@
+.application-details-page {
+  color: var(--bs-body-color);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: var(--bs-secondary-color);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--bs-primary);
+}
+
+.details-card {
+  overflow: hidden;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1rem;
+  background: var(--bs-body-bg);
+  box-shadow: 0 0.25rem 1rem rgb(33 37 41 / 4%);
+}
+
+.application-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  background: var(--bs-tertiary-bg);
+}
+
+.application-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 1rem;
+  color: var(--bs-primary);
+  background: var(--bs-primary-bg-subtle);
+  font-size: 1.45rem;
+}
+
+.application-heading {
+  min-width: 0;
+  flex: 1;
+}
+
+.heading-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.eyebrow {
+  color: var(--bs-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.application-heading h1 {
+  margin: 0.45rem 0 0.2rem;
+  color: var(--bs-emphasis-color);
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.application-heading p {
+  margin: 0;
+  color: var(--bs-secondary-color);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+
+.status-applied,
+.status-default {
+  color: var(--bs-primary-text-emphasis);
+  background: var(--bs-primary-bg-subtle);
+}
+
+.status-screening {
+  color: var(--bs-warning-text-emphasis);
+  background: var(--bs-warning-bg-subtle);
+}
+
+.status-interview {
+  color: var(--bs-info-text-emphasis);
+  background: var(--bs-info-bg-subtle);
+}
+
+.status-accepted {
+  color: var(--bs-success-text-emphasis);
+  background: var(--bs-success-bg-subtle);
+}
+
+.status-closed {
+  color: var(--bs-danger-text-emphasis);
+  background: var(--bs-danger-bg-subtle);
+}
+
+.hero-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+}
+
+.details-section {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.details-section:last-child {
+  border-bottom: 0;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-icon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 0.75rem;
+  color: var(--bs-primary);
+  background: var(--bs-primary-bg-subtle);
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: var(--bs-emphasis-color);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.section-heading p {
+  margin: 0.2rem 0 0;
+  color: var(--bs-secondary-color);
+  font-size: 0.85rem;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.detail-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detail-label {
+  color: var(--bs-secondary-color);
+  font-size: 0.78rem;
+}
+
+.detail-value {
+  color: var(--bs-emphasis-color);
+  font-size: 0.92rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.notes-content {
+  color: var(--bs-body-color);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.details-state {
+  display: flex;
+  min-height: 24rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.details-state h1 {
+  margin: 0.5rem 0 0;
+  color: var(--bs-emphasis-color);
+  font-size: 1.4rem;
+}
+
+.details-state p {
+  color: var(--bs-secondary-color);
+}
+
+.state-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--bs-primary);
+  background: var(--bs-primary-bg-subtle);
+  font-size: 1.4rem;
+}
+
+.state-error {
+  color: var(--bs-danger);
+  background: var(--bs-danger-bg-subtle);
+}
+
+@media (max-width: 767.98px) {
+  .application-hero {
+    flex-wrap: wrap;
+  }
+
+  .hero-actions {
+    width: 100%;
+  }
+
+  .details-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .details-section,
+  .application-hero {
+    padding: 1.1rem;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions .btn {
+    flex: 1;
+  }
+}

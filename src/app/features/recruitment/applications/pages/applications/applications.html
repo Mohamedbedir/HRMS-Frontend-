@@ -1,0 +1,127 @@
+<main class="applications-page container-fluid py-4">
+  <header class="page-heading">
+    <div>
+      <span class="eyebrow">TALENT ACQUISITION</span>
+      <h1>Applications</h1>
+      <p>Review and manage candidate applications across open roles.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="isCreateModalOpen.set(true)">
+      <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Create application
+    </button>
+  </header>
+
+  <section class="filters-panel" aria-label="Filter applications">
+    <label class="search-box">
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input #searchInput type="search" class="form-control" placeholder="Search candidate, job or notes"
+        [value]="searchTerm()" (input)="onSearch(searchInput.value)" />
+    </label>
+    <label class="status-filter">
+      <span class="visually-hidden">Filter by status</span>
+      <select #statusSelect class="form-select" [value]="statusFilter()" (change)="onStatusChange(statusSelect.value)">
+        <option value="All">All statuses</option>
+        <option value="Applied">Applied</option>
+        <option value="Screening">Screening</option>
+        <option value="Interview">Interview</option>
+        <option value="Accepted">Accepted</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Withdrawn">Withdrawn</option>
+      </select>
+    </label>
+    @if (!isLoading() && !hasError()) {
+      <span class="results-count">{{ filteredApplications().length }} {{ filteredApplications().length === 1 ? 'application' : 'applications' }}</span>
+    }
+  </section>
+
+  @if (isLoading()) {
+    <div class="row g-3" role="status" aria-label="Loading applications">
+      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="col-12 col-xl-6">
+          <div class="application-card loading-card">
+            <span class="placeholder col-5 mb-3"></span>
+            <span class="placeholder col-8 mb-2"></span>
+            <span class="placeholder col-6"></span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (hasError()) {
+    <div class="page-state" role="alert">
+      <div class="state-icon state-error"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      <h2>Couldn't load applications</h2>
+      <p>Please check your connection and try again.</p>
+      <button type="button" class="btn btn-outline-primary" (click)="loadApplications()">
+        <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i>Try again
+      </button>
+    </div>
+  } @else if (filteredApplications().length === 0) {
+    <div class="page-state">
+      <div class="state-icon"><i class="bi bi-inbox" aria-hidden="true"></i></div>
+      <h2>{{ searchTerm() || statusFilter() !== 'All' ? 'No matching applications' : 'No applications yet' }}</h2>
+      <p>{{ searchTerm() || statusFilter() !== 'All' ? 'Try changing the search or status filter.' : 'Create an application to start tracking a candidate for a role.' }}</p>
+      @if (!searchTerm() && statusFilter() === 'All') {
+        <button type="button" class="btn btn-primary" (click)="isCreateModalOpen.set(true)">
+          <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Create application
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="row g-3">
+      @for (application of filteredApplications(); track application.id) {
+        <div class="col-12 col-xl-6">
+          <article class="application-card">
+            <header class="application-header">
+              <div class="application-icon"><i class="bi bi-person-workspace" aria-hidden="true"></i></div>
+              <div class="application-heading">
+                <a class="candidate-name" [routerLink]="[application.id]">{{ application.candidateName }}</a>
+                <span class="job-title">{{ application.jobPostTitle }}</span>
+              </div>
+              <span class="status-badge" [class]="statusClass(application.status)">{{ application.status }}</span>
+            </header>
+
+            <div class="application-meta">
+              <div>
+                <span class="meta-label">Applied on</span>
+                <span class="meta-value">{{ application.appliedAt ? (application.appliedAt | date:'dd MMM yyyy') : '—' }}</span>
+              </div>
+              <div>
+                <span class="meta-label">Application ID</span>
+                <span class="meta-value">#{{ application.id }}</span>
+              </div>
+            </div>
+
+            @if (application.notes) {
+              <p class="application-notes">{{ application.notes }}</p>
+            }
+
+            <footer class="application-actions">
+              <a class="btn btn-sm btn-outline-primary" [routerLink]="[application.id]">
+                <i class="bi bi-eye me-1" aria-hidden="true"></i>Details
+              </a>
+              <span class="action-spacer"></span>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="applicationToEdit.set(application)">
+                <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="applicationToDelete.set(application)">
+                <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete
+              </button>
+            </footer>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</main>
+
+@if (isCreateModalOpen()) {
+  <app-create-application-modal (closed)="isCreateModalOpen.set(false)"
+    (applicationCreated)="onApplicationCreated()"></app-create-application-modal>
+}
+@if (applicationToEdit(); as application) {
+  <app-edit-application-modal [application]="application" (closed)="applicationToEdit.set(null)"
+    (applicationUpdated)="onApplicationUpdated()"></app-edit-application-modal>
+}
+@if (applicationToDelete(); as application) {
+  <app-delete-application-modal [application]="application" (closed)="applicationToDelete.set(null)"
+    (deleted)="onApplicationDeleted($event)"></app-delete-application-modal>
+}

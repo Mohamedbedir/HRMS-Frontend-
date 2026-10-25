@@ -1,6 +1,6 @@
 <div class="modal-backdrop" (click)="closed.emit()">
   <section class="job-modal" role="dialog" aria-modal="true" aria-labelledby="add-job-title"
-    (click)="$event.stopPropagation()">
+    (click)="closeDropdown(); $event.stopPropagation()">
     <header class="modal-heading">
       <div>
         <span class="eyebrow">TALENT ACQUISITION</span>
@@ -31,40 +31,62 @@
           @if (getControlError('title'); as error) { <small class="field-error">{{ error }}</small> }
         </div>
         <div class="col-md-6">
-          <label class="form-label" for="job-department-search">Department <span class="text-danger">*</span></label>
-          <div class="select-search">
-            <i class="bi bi-search" aria-hidden="true"></i>
-            <input id="job-department-search" class="form-control" type="search" [value]="departmentSearch"
-              (input)="onDepartmentSearch($event)" placeholder="Search departments" />
-          </div>
-          <select class="form-select mt-2" formControlName="departmentId" aria-label="Select department">
-            <option [ngValue]="0" disabled>Select department</option>
-            @for (department of filteredDepartments; track department.id) {
-              <option [ngValue]="department.id">{{ department.name }}</option>
+          <label class="form-label" for="job-department-select">Department <span class="text-danger">*</span></label>
+          <div class="searchable-select" (click)="$event.stopPropagation()" (keydown.escape)="closeDropdown()">
+            <button id="job-department-select" type="button" class="form-select searchable-select-trigger"
+              [attr.aria-expanded]="openDropdown === 'department'" aria-haspopup="listbox"
+              [disabled]="isLoadingOptions || optionsError" (click)="toggleDropdown('department')">
+              {{ selectedDepartmentName }}
+            </button>
+            @if (openDropdown === 'department') {
+              <div class="searchable-select-menu">
+                <div class="select-search">
+                  <i class="bi bi-search" aria-hidden="true"></i>
+                  <input id="job-department-search" class="form-control" type="search" [value]="departmentSearch"
+                    (input)="onDepartmentSearch($event)" placeholder="Search departments" aria-label="Search departments" />
+                </div>
+                <div class="searchable-select-options" role="listbox" aria-label="Departments">
+                  @for (department of filteredDepartments; track department.id) {
+                    <button type="button" class="searchable-select-option" role="option"
+                      [attr.aria-selected]="form.controls.departmentId.value === department.id"
+                      (click)="selectDepartment(department.id)">{{ department.name }}</button>
+                  } @empty {
+                    <p class="searchable-select-empty">No departments match your search.</p>
+                  }
+                </div>
+              </div>
             }
-          </select>
+          </div>
           @if (getControlError('departmentId'); as error) { <small class="field-error">{{ error }}</small> }
-          @if (filteredDepartments.length === 0 && departmentSearch) {
-            <small class="form-hint">No departments match your search.</small>
-          }
         </div>
         <div class="col-md-6">
-          <label class="form-label" for="job-position-search">Position <span class="text-danger">*</span></label>
-          <div class="select-search">
-            <i class="bi bi-search" aria-hidden="true"></i>
-            <input id="job-position-search" class="form-control" type="search" [value]="positionSearch"
-              (input)="onPositionSearch($event)" placeholder="Search positions" />
-          </div>
-          <select class="form-select mt-2" formControlName="positionId" aria-label="Select position">
-            <option [ngValue]="0" disabled>Select position</option>
-            @for (position of filteredPositions; track position.id) {
-              <option [ngValue]="position.id">{{ position.title }}</option>
+          <label class="form-label" for="job-position-select">Position <span class="text-danger">*</span></label>
+          <div class="searchable-select" (click)="$event.stopPropagation()" (keydown.escape)="closeDropdown()">
+            <button id="job-position-select" type="button" class="form-select searchable-select-trigger"
+              [attr.aria-expanded]="openDropdown === 'position'" aria-haspopup="listbox"
+              [disabled]="isLoadingOptions || optionsError" (click)="toggleDropdown('position')">
+              {{ selectedPositionName }}
+            </button>
+            @if (openDropdown === 'position') {
+              <div class="searchable-select-menu">
+                <div class="select-search">
+                  <i class="bi bi-search" aria-hidden="true"></i>
+                  <input id="job-position-search" class="form-control" type="search" [value]="positionSearch"
+                    (input)="onPositionSearch($event)" placeholder="Search positions" aria-label="Search positions" />
+                </div>
+                <div class="searchable-select-options" role="listbox" aria-label="Positions">
+                  @for (position of filteredPositions; track position.id) {
+                    <button type="button" class="searchable-select-option" role="option"
+                      [attr.aria-selected]="form.controls.positionId.value === position.id"
+                      (click)="selectPosition(position.id)">{{ position.title }}</button>
+                  } @empty {
+                    <p class="searchable-select-empty">No positions match your search.</p>
+                  }
+                </div>
+              </div>
             }
-          </select>
+          </div>
           @if (getControlError('positionId'); as error) { <small class="field-error">{{ error }}</small> }
-          @if (filteredPositions.length === 0 && positionSearch) {
-            <small class="form-hint">No positions match your search.</small>
-          }
         </div>
         <div class="col-12">
           <label class="form-label" for="job-description">Description <span class="text-danger">*</span></label>

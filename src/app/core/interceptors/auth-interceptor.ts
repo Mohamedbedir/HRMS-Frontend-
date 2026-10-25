@@ -36,7 +36,6 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>,nex
 
   const isAuthRequest =
     req.url.includes('/Account/Login') ||
-    req.url.includes('/Account/Register') ||
     req.url.includes('/Account/RefreshToken') ||
     req.url.includes('/Account/Logout');
 

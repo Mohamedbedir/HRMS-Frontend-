@@ -53,6 +53,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
+      {
+        path: 'users',
+        title: 'Users',
+        data: { title: 'Users' },
+        loadComponent: () =>
+          import('./features/Users/pages/users/users').then((m) => m.Users),
+      },
 
       {
         path: 'employees',
@@ -188,12 +195,21 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'applications/:id',
+        title: 'Application Details',
+        data: { title: 'Application Details' },
+        loadComponent: () =>
+          import('./features/recruitment/applications/pages/application-details/application-details').then(
+            (m) => m.ApplicationDetails,
+          ),
+      },
+      {
         path: 'applications',
         title: 'Applications',
         data: { title: 'Applications' },
         loadComponent: () =>
-          import('./shared/pages/admin-feature-placeholder/admin-feature-placeholder').then(
-            (m) => m.AdminFeaturePlaceholder,
+          import('./features/recruitment/applications/pages/applications/applications').then(
+            (m) => m.Applications,
           ),
       },
       {

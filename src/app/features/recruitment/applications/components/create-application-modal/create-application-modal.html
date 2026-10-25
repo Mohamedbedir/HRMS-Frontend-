@@ -1,0 +1,74 @@
+<div class="modal-backdrop" (click)="closed.emit()">
+  <section class="application-modal" role="dialog" aria-modal="true" aria-labelledby="create-application-title"
+    (click)="$event.stopPropagation()">
+    <header class="modal-heading">
+      <div>
+        <span class="eyebrow">TALENT ACQUISITION</span>
+        <h2 id="create-application-title">Create application</h2>
+        <p>Choose a candidate and the role they applied for.</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close" [disabled]="isSubmitting" (click)="closed.emit()">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    @if (isLoadingOptions) {
+      <div class="options-loading" role="status">
+        <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
+        Loading candidates and job postings…
+      </div>
+    } @else if (optionsError) {
+      <div class="alert alert-warning" role="alert">
+        Candidates and job postings could not be loaded, or no options are available. Close this window and try again.
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label class="form-label" for="application-candidate">Candidate <span class="text-danger">*</span></label>
+        <select id="application-candidate" class="form-select" formControlName="candidateId">
+          <option [ngValue]="0" disabled>Select a candidate</option>
+          @for (candidate of candidates; track candidate.id) {
+            <option [ngValue]="candidate.id">{{ candidate.firstName }} {{ candidate.lastName }} — {{ candidate.email }}</option>
+          }
+        </select>
+        @if (form.controls.candidateId.touched && form.controls.candidateId.invalid) {
+          <small class="field-error">Please select a candidate.</small>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="application-job-posting">Job posting <span class="text-danger">*</span></label>
+        <select id="application-job-posting" class="form-select" formControlName="jobPostingId">
+          <option [ngValue]="0" disabled>Select a job posting</option>
+          @for (posting of jobPostings; track posting.id) {
+            <option [ngValue]="posting.id">{{ posting.title }} — {{ posting.departmentName }}</option>
+          }
+        </select>
+        @if (form.controls.jobPostingId.touched && form.controls.jobPostingId.invalid) {
+          <small class="field-error">Please select a job posting.</small>
+        }
+      </div>
+
+      <div>
+        <label class="form-label" for="application-notes">Notes</label>
+        <textarea id="application-notes" class="form-control" rows="4" maxlength="2000"
+          formControlName="notes" placeholder="Add any notes about this application"></textarea>
+        @if (form.controls.notes.touched && form.controls.notes.hasError('maxlength')) {
+          <small class="field-error">Notes must be 2000 characters or fewer.</small>
+        }
+      </div>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting" (click)="closed.emit()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || isLoadingOptions || optionsError">
+          @if (isSubmitting) {
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Creating…
+          } @else {
+            <i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Create application
+          }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

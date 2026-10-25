@@ -1,0 +1,11 @@
+.users-page {
+  min-width: 0;
+}
+
+.users-page .table th {
+  white-space: nowrap;
+}
+
+.users-page .table td {
+  min-width: 7rem;
+}

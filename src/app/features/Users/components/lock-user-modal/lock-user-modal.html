@@ -1,0 +1,17 @@
+<div class="user-modal-backdrop" role="presentation" (click)="close()">
+  <section class="user-modal" role="alertdialog" aria-modal="true" aria-labelledby="lock-user-title"
+    (click)="$event.stopPropagation()">
+    <span class="user-modal-icon text-warning" aria-hidden="true"><i class="bi bi-lock"></i></span>
+    <h2 id="lock-user-title" class="h5 fw-bold">Lock this user?</h2>
+    <p class="text-body-secondary">
+      <strong class="text-body">{{ user.fullName || user.userName }}</strong> will no longer be able to access the system.
+    </p>
+    <footer class="user-modal-actions">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isLoading" (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-warning" [disabled]="isLoading" (click)="confirmed.emit()">
+        @if (isLoading) { <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Locking... }
+        @else { <i class="bi bi-lock me-2" aria-hidden="true"></i>Lock user }
+      </button>
+    </footer>
+  </section>
+</div>
