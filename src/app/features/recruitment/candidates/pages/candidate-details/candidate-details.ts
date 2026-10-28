@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CandidateResponse } from '../../models/candidates-response';
@@ -7,13 +7,14 @@ import { EditCandidateModal } from '../../components/edit-candidate-modal/edit-c
 import { DeleteCandidateModal } from '../../components/delete-candidate-modal/delete-candidate-modal';
 
 @Component({
-  imports: [DatePipe, RouterLink, EditCandidateModal, DeleteCandidateModal],
+  imports: [DatePipe, EditCandidateModal, DeleteCandidateModal],
   selector: 'app-candidate-details',
   styleUrl: './candidate-details.css',
   templateUrl: './candidate-details.html',
 })
 export class CandidateDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly loc=inject(Location);
   private readonly router = inject(Router);
   private readonly candidateService = inject(CandidateService);
 
@@ -30,7 +31,9 @@ export class CandidateDetails implements OnInit {
   ngOnInit(): void {
     this.loadCandidate();
   }
-
+  Goback() {
+    this.loc.back();
+  }
   loadCandidate(): void {
     const id = this.candidateId;
     if (!Number.isSafeInteger(id) || id <= 0) {
@@ -42,7 +45,7 @@ export class CandidateDetails implements OnInit {
     this.isLoading.set(true);
     this.hasError.set(false);
     this.candidateService.getCandidateById(id).subscribe({
-      next: response => {
+      next: (response) => {
         this.isLoading.set(false);
         if (!response.succeeded || !response.data) {
           this.hasError.set(true);
@@ -50,7 +53,7 @@ export class CandidateDetails implements OnInit {
         }
         this.candidate.set(response.data);
       },
-      error: error => {
+      error: (error) => {
         console.error('Failed to load candidate details.', error);
         this.isLoading.set(false);
         this.hasError.set(true);

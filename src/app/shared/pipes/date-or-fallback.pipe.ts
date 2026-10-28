@@ -8,11 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DateOrFallbackPipe implements PipeTransform {
   private readonly datePipe = new DatePipe('en-US');
 
-  transform(
-    value: string | null | undefined,
-    fallback = 'Not terminated',
-    format = 'dd MMM yyyy',
-  ): string {
+  transform(value: string | null | undefined,fallback = 'Not terminated',format = 'dd MMM yyyy',): string {
     if (!value) {
       return fallback;
     }

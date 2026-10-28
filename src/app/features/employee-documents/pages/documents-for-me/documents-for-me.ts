@@ -119,7 +119,11 @@ export class DocumentsForMe implements OnInit {
   }
 
   openDetails(id: number): void {
-    const basePath = this.router.url.startsWith('/admin/') ? '/admin/employee-documents' : '/my-documents';
+    const basePath = this.router.url.startsWith('/admin/')
+      ? '/admin/employee-documents'
+      : this.router.url.startsWith('/recruiter/')
+        ? '/recruiter/employee-documents'
+        : '/my-documents';
     this.router.navigate([basePath, id]);
   }
 }

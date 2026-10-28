@@ -64,7 +64,11 @@ export class DocumentDetails implements OnInit {
   }
 
   goBack(): void {
-    const returnPath = this.router.url.startsWith('/admin/') ? '/admin/employee-documents' : '/my-documents';
+    const returnPath = this.router.url.startsWith('/admin/')
+      ? '/admin/employee-documents'
+      : this.router.url.startsWith('/recruiter/')
+        ? '/recruiter/employee-documents'
+        : '/my-documents';
     this.router.navigateByUrl(returnPath);
   }
 

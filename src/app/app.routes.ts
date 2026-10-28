@@ -263,6 +263,101 @@ export const routes: Routes = [
     ],
   },
 
+  // recruiter
+  {
+    path: 'recruiter',
+
+    canActivate: [authGuard, roleGuard],
+
+    data: {
+      roles: [Roles.Recruiter],
+    },
+
+    loadComponent: () => import('./layouts/recruiter-layout/recruiter-layout').then((m) => m.RecruiterLayout),
+
+    children: [
+      {
+        path: 'employee-documents/:id',
+        title: 'Document Details',
+        data: { title: 'Document Details' },
+        loadComponent: () =>
+          import('./features/employee-documents/pages/document-details/document-details').then(
+            (m) => m.DocumentDetails,
+          ),
+      },
+      {
+        path: 'employee-documents',
+        title: 'Employee Documents',
+        data: { title: 'My Documents' },
+        loadComponent: () =>
+          import('./features/employee-documents/pages/documents-for-me/documents-for-me').then(
+            (m) => m.DocumentsForMe,
+          ),
+      },
+      {
+        path: 'applications/:id',
+        title: 'Application Details',
+        data: { title: 'Application Details' },
+        loadComponent: () =>
+          import('./features/recruitment/applications/pages/application-details/application-details').then(
+            (m) => m.ApplicationDetails,
+          ),
+      },
+      {
+        path: 'applications',
+        title: 'Applications',
+        data: { title: 'Applications' },
+        loadComponent: () =>
+          import('./features/recruitment/applications/pages/applications/applications').then(
+            (m) => m.Applications,
+          ),
+      },
+     
+      {
+        path: 'candidates/:id',
+        title: 'Candidate Details',
+        data: { title: 'Candidate Details' },
+        loadComponent: () =>
+          import('./features/recruitment/candidates/pages/candidate-details/candidate-details').then(
+            (m) => m.CandidateDetails,
+          ),
+      },
+      {
+        path: 'candidates',
+        title: 'Candidates',
+        data: { title: 'Candidates' },
+        loadComponent: () =>
+          import('./features/recruitment/candidates/pages/candidates/candidates').then(
+            (m) => m.Candidates,
+          ),
+      },
+      {
+        path: 'job-postings/:id',
+        title: 'Job Posting Details',
+        data: { title: 'Job Posting Details' },
+        loadComponent: () =>
+          import('./features/recruitment/job-postings/pages/job-posting-details/job-posting-details').then(
+            (m) => m.JobPostingDetails,
+          ),
+      },
+      {
+        path: 'job-postings',
+        title: 'Job Postings',
+        data: { title: 'Job Postings' },
+        loadComponent: () =>
+          import('./features/recruitment/job-postings/pages/job-postings/job-postings').then(
+            (m) => m.JobPostings,
+          ),
+      },
+      {
+        path: '',
+        redirectTo: 'applications',
+        pathMatch: 'full',
+      },
+    ],
+  },
+
+
   {
     path: 'unauthorized',
     component: Unauthorized,

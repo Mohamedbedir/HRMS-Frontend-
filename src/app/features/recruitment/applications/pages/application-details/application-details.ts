@@ -1,5 +1,5 @@
-import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { DatePipe, Location } from '@angular/common';
+import { Component, Inject, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApplicationResponse } from '../../models/application-respose';
 import { ApplicationService } from '../../services/application.service';
@@ -14,6 +14,7 @@ import { DeleteApplicationModal } from '../../components/delete-application-moda
 })
 export class ApplicationDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly loc =inject(Location);
   private readonly router = inject(Router);
   private readonly applicationService = inject(ApplicationService);
 
@@ -30,7 +31,9 @@ export class ApplicationDetails implements OnInit {
   ngOnInit(): void {
     this.loadApplication();
   }
-
+  Goback() {
+    this.loc.back();
+  }
   loadApplication(): void {
     const id = this.applicationId;
     if (!Number.isSafeInteger(id) || id <= 0) {
@@ -42,7 +45,7 @@ export class ApplicationDetails implements OnInit {
     this.isLoading.set(true);
     this.hasError.set(false);
     this.applicationService.getApplicationById(id).subscribe({
-      next: response => {
+      next: (response) => {
         this.isLoading.set(false);
         if (!response.succeeded || !response.data) {
           this.hasError.set(true);
@@ -50,7 +53,7 @@ export class ApplicationDetails implements OnInit {
         }
         this.application.set(response.data);
       },
-      error: error => {
+      error: (error) => {
         console.error('Failed to load application details.', error);
         this.isLoading.set(false);
         this.hasError.set(true);

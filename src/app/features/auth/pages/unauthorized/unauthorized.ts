@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,4 +8,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './unauthorized.css',
   templateUrl: './unauthorized.html',
 })
-export class Unauthorized {}
+export class Unauthorized {
+  private readonly loc=inject(Location);
+  Goback(){
+    this.loc.back();
+  }
+}

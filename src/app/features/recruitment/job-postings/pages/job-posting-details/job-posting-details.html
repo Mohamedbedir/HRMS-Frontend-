@@ -1,6 +1,7 @@
 <main class="posting-details-page container-fluid py-4">
-  <a class="back-link" routerLink="/admin/job-postings">
-    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to job postings
+  <!-- <a class="back-link" routerLink="/admin/job-postings"> -->
+  <a class="back-link" (click)="Goback()">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Go back
   </a>
 
   @if (isLoading()) {

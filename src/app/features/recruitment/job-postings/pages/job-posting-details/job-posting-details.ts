@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, Location } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from '@relynn/ngx-toastr';
@@ -8,13 +8,14 @@ import { EditJobPostingsModal } from '../../components/edit-job-postings-modal/e
 import { DeleteJobPostingsModal } from '../../components/delete-job-postings-modal/delete-job-postings-modal';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe, RouterLink, EditJobPostingsModal, DeleteJobPostingsModal],
+  imports: [CurrencyPipe, DatePipe, EditJobPostingsModal, DeleteJobPostingsModal],
   selector: 'app-job-posting-details',
   styleUrl: './job-posting-details.css',
   templateUrl: './job-posting-details.html',
 })
 export class JobPostingDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly loc=inject(Location);
   private readonly router = inject(Router);
   private readonly jobPostingService = inject(JobPostingService);
   private readonly toastr = inject(ToastrService);
@@ -31,6 +32,10 @@ export class JobPostingDetails implements OnInit {
 
   ngOnInit(): void {
     this.loadJobPosting();
+  }
+
+  Goback(){
+    this.loc.back();
   }
 
   loadJobPosting(): void {

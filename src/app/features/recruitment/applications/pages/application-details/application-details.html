@@ -1,6 +1,6 @@
 <main class="application-details-page container-fluid py-4">
-  <a class="back-link" routerLink="/admin/applications">
-    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Back to applications
+  <a class="back-link" (click)="Goback()">
+    <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Go Back
   </a>
 
   @if (isLoading()) {

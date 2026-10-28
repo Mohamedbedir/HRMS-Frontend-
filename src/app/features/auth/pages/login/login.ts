@@ -59,7 +59,9 @@ export class Login {
         this.toastr.success('Login successful!', 'Success');
         const destination = this.authService.hasRole(Roles.Admin)
           ? ['/admin/dashboard']
-          : ['/dashboard'];
+          : this.authService.hasRole(Roles.Recruiter)
+            ? ['/recruiter/applications']
+            : ['/dashboard'];
         this.router.navigate(destination);
       },
       error: (err: HttpErrorResponse) => {
